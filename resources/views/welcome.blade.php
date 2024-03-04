@@ -10,6 +10,12 @@
                     <h2>
                         Ваш персональный толкователь снов.
                     </h2>
+
+                    <div id="ai-form-1">
+                        <div class="spinner-border m-5" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -62,3 +68,20 @@
         </div>
     </div>
 @endsection
+@push('bottom-scripts')
+    <script>
+        const formId = 101;
+        const mainFormTemplate = document.getElementById("ai-form-1");
+
+        fetch(`/api/form/template?id=`+formId+`&state=${Math.floor(Math.random() * 10000)}.${Date.now()}`)
+            .then(response => response.text())
+            .then(html => {
+                mainFormTemplate.innerHTML = html;
+                const scriptMainFormClient = document.createElement("script");
+                scriptMainFormClient.type = "application/javascript";
+                scriptMainFormClient.async = true;
+                scriptMainFormClient.src = `/api/form/js?id=`+formId+`&state=${Math.floor(Math.random() * 10000)}.${Date.now()}`;
+                document.body.appendChild(scriptMainFormClient);
+            }).catch(error => console.log(error));
+    </script>
+@endpush
