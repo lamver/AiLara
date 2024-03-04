@@ -1,0 +1,66 @@
+version: "3"
+services:
+  app:
+    build:
+      args:
+        user: sammy
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    image: ailara
+    container_name: ailara-php
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+      #- ./docker-compose/php/fpm:/usr/local/etc/php-fpm.d
+      - ./docker-compose/php/fpm/www.conf:/usr/local/etc/php-fpm.d/www.conf
+      - ./docker-compose/php/fpm/www.conf.default:/usr/local/etc/php-fpm/www.conf.default
+      - ./docker-compose/php:/usr/local/etc/php/custom.d
+    environment:
+      PHP_INI_SCAN_DIR: "/usr/local/etc/php/custom.d:/usr/local/etc/php/conf.d"
+    networks:
+      - ailara
+    extra_hosts:
+      - "api.aisearch.loc:192.168.1.112"
+  nginx:
+    image: nginx:latest
+    container_name: ailara-nginx
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "${DOCKER_EXTERNAL_PORT_HTTP}:80"
+      - "${DOCKER_EXTERNAL_PORT_HTTPS}:443"
+    volumes:
+      - ./:/var/www
+      #- ./docker-compose/nginx:/etc/nginx
+      - ./docker-compose/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./docker-compose/nginx/conf.d:/etc/nginx/conf.d/
+      - ./docker-compose/nginx/ssl:/etc/nginx/ssl
+
+    networks:
+      - ailara
+  redis:
+    image: 'redis:6.0.6'
+    volumes:
+      - ./docker-compose/redis/data:/data
+    ports:
+      - '127.0.0.1:6381:6379/tcp'
+    healthcheck:
+      test: redis-cli ping
+      interval: 3s
+      timeout: 5s
+      retries: 5
+    networks:
+      - ailara
+
+ # redisinsight:
+ #   image: 'redislabs/redisinsight:latest'
+ #   ports:
+  #    - '127.0.0.1:8001:8001'
+
+networks:
+  ailara:
+    driver: bridge
+
+
