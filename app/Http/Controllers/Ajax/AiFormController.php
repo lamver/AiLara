@@ -3,8 +3,13 @@
 
 namespace App\Http\Controllers\Ajax;
 
+use App\Http\Requests\TaskExecuteRequest;
+use App\Models\AiForm;
+use App\Models\Tasks;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\RateLimiter;
+use JetBrains\PhpStorm\ArrayShape;
 
 /**
  * Class AiFormController
@@ -33,9 +38,70 @@ class AiFormController extends BaseController
         return view('ajax.aiform.v1.js', []);
     }
 
-    public function execute(Request $request)
+    /**
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return array
+     */
+    public function getFormConfig(Request $request)
     {
-        return ['result' => true];
+        return AiForm::getFormConfig();
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return bool[]
+     */
+    public function execute(TaskExecuteRequest $request)
+    {
+        $executed = RateLimiter::attempt(
+            'send-message:'.$request->ip(),
+            $perMinute = 5,
+            function() {
+                // Send message...
+            },
+            $decayRate = 120,
+        );
+
+        if (! $executed) {
+            return $this->resultError('Too many messages sent from your ip address!');
+        }
+
+        $task = Tasks::createTask($request->post());
+
+        $result = [
+            'task_id' => $task->id,
+            'task_url' => "/".Tasks::createSlugFromUserParams($request->post()).'/'.$task->id,
+        ];
+
+        return $this->resultSuccessfull($result);
+    }
+
+    /**
+     * @param $message
+     *
+     * @return array
+     */
+    #[ArrayShape(['result' => "bool", 'message' => "array"])] private function resultSuccessfull(array $data)
+    {
+        return [
+            'result' => true,
+            'data' => $data,
+        ];
+    }
+
+    /**
+     * @param $message
+     *
+     * @return array
+     */
+    #[ArrayShape(['result' => "false", 'message' => ""])] private function resultError($message)
+    {
+        return [
+            'result' => false,
+            'message' => $message,
+        ];
     }
 
 }

@@ -21,7 +21,7 @@
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                     <li>
                         <a href="<?php echo Route::currentRouteName() == 'index' ? '#home' : route('index')?>" class="nav-link px-2 fw-bolder">
-                            <img title="{{ \Illuminate\Support\Facades\Config::get('ailara.logoTitle') }}" alt="Нейросеть для разбора сноведений" width="160" height="28" src="/images/codeflow_logo.png"/>
+                            <img title="{{ \Illuminate\Support\Facades\Config::get('ailara.logoTitle') }}" alt="Нейросеть для разбора сноведений" width="140" height="42" src="/images/logo.png"/>
                         </a>
                     </li>
                 </ul>

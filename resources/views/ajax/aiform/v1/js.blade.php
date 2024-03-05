@@ -7,12 +7,19 @@ fetch(`/api/form/config?id={{ $_GET['id'] }}&state=${Math.floor(Math.random() * 
     .then(response => response.json())
     .then(json => {
         configJson = json;
-        console.log(configJson['tasks']);
+
         const formId = 'ai_form_' + identifier;
         const form = document.getElementById(formId);
 
         let iter = 0;
         let defaultIdTask = 0;
+
+        if (Object.keys(configJson['tasks']).length === 1) {
+            const firstKey = Object.keys(configJson['tasks'])[0];
+            createParamsBlock();
+            loadParams(firstKey);
+            return;
+        }
 
         Object.keys(configJson['tasks']).forEach(function(k, v) {
             if (defaultIdTask === 0) {
@@ -44,15 +51,19 @@ fetch(`/api/form/config?id={{ $_GET['id'] }}&state=${Math.floor(Math.random() * 
             form.appendChild(radioInput);
             form.appendChild(label);
         });
+        createParamsBlock();
+        loadParams(defaultIdTask);
 
+    }).catch(error => console.log(error));
+
+    function createParamsBlock() {
+        const formId = 'ai_form_' + identifier;
+        const form = document.getElementById(formId);
         const paramsBlock = document.createElement('div');
         paramsBlock.classList.add('row');
         paramsBlock.id = 'paramBlock_' + identifier;
         form.appendChild(paramsBlock);
-
-        loadParams(defaultIdTask);
-
-    }).catch(error => console.log(error));
+    }
 
     function loadParams(id) {
         const paramBlockId = 'paramBlock_' + identifier;
@@ -60,15 +71,31 @@ fetch(`/api/form/config?id={{ $_GET['id'] }}&state=${Math.floor(Math.random() * 
         paramBlock.innerHTML = '';
         let params = configJson['tasks'][id]['params'];
 
+        const paramInputFormId = document.createElement('input');
+        paramInputFormId.name = 'form_id';
+        paramInputFormId.value = identifier;
+        paramInputFormId.hidden = true;
+        paramBlock.appendChild(paramInputFormId);
+
+        const paramInputTaskId = document.createElement('input');
+        paramInputTaskId.name = 'task_id';
+        paramInputTaskId.value = id;
+        paramInputTaskId.hidden = true;
+        paramBlock.appendChild(paramInputTaskId);
+
         Object.keys(params).forEach(function(k, v){
-            console.log(params[k]);
+            const paramInputBlock = document.createElement('div');
+            if (params[k]['classListParamBlock']) {
+                paramInputBlock.classList.add(params[k]['classListParamBlock']);
+            }
+            paramBlock.appendChild(paramInputBlock);
 
             if (params[k]['type'] === 'text') {
                 const paramInput = document.createElement('textarea');
                 paramInput.classList.add(params[k]['classList']);
                 paramInput.style = (params[k]['style']);
                 paramInput.name = k;
-                paramInput.rows = 10;
+                paramInput.rows = 5;
                 paramInput.id = 'param_' + k;
                 paramInput.require = params[k]['required'];
                 paramInput.placeholder = params[k]['placeholder'];
@@ -80,7 +107,7 @@ fetch(`/api/form/config?id={{ $_GET['id'] }}&state=${Math.floor(Math.random() * 
                 let counterBlockElm = document.getElementById('counterBlock_' + identifier);
 
                 paramInput.addEventListener('input', function() {
-                    const maxLength = 300;
+                    const maxLength = params[k]['max_limit'];
                     const currentLength = this.value.length;
 
                     if (currentLength > maxLength) {
@@ -89,6 +116,7 @@ fetch(`/api/form/config?id={{ $_GET['id'] }}&state=${Math.floor(Math.random() * 
                     }
 
                     const counter = document.getElementById('charCounter');
+
                     if (!counter) {
                         const counter = document.createElement('div');
                         counter.id = 'charCounter';
@@ -96,13 +124,13 @@ fetch(`/api/form/config?id={{ $_GET['id'] }}&state=${Math.floor(Math.random() * 
                     }
 
                     if (currentLength > 0) {
-                        counterBlockElm.textContent = 'Количество символов: ' + currentLength;
-                    } else if (counter) {
-                        counterBlockElm.removeChild(counter);
+                        counterBlockElm.textContent = 'Количество символов: ' + numberFormat(currentLength) + ' из ' + numberFormat(params[k]['max_limit']);
+                    } else {
+                        counterBlockElm.removeChild(counterBlockElm.firstChild);
                     }
                 });
 
-                paramBlock.appendChild(paramInput);
+                paramInputBlock.appendChild(paramInput);
 
                 return;
             }
@@ -113,17 +141,51 @@ fetch(`/api/form/config?id={{ $_GET['id'] }}&state=${Math.floor(Math.random() * 
                 paramInput.classList.add(params[k]['classList']);
                 paramInput.style = (params[k]['style']);
                 paramInput.name = k;
+                paramInput.max = params[k]['max_limit'];
+                paramInput.min = params[k]['min_limit'];
+                paramInput.id = 'param_' + k;
+                paramInput.require = params[k]['required'];
+                paramInput.placeholder = params[k]['placeholder'];
+                paramInput.addEventListener('input', function() {
+
+                    this.value = this.value.replace(/\D/g, '');
+
+                });
+                paramInputBlock.appendChild(paramInput);
+
+                return;
+            }
+
+            if (params[k]['type'] === 'string') {
+                const paramInput = document.createElement('input');
+                paramInput.type = params[k]['type'];
+                paramInput.classList.add(params[k]['classList']);
+                paramInput.style = (params[k]['style']);
+                paramInput.name = k;
                 paramInput.rows = 10;
                 paramInput.id = 'param_' + k;
                 paramInput.require = params[k]['required'];
                 paramInput.placeholder = params[k]['placeholder'];
+                paramInputBlock.appendChild(paramInput);
+            }
 
-                paramBlock.appendChild(paramInput);
+            if (params[k]['type'] === 'select') {
+                const paramInput = document.createElement('select');
+                paramInput.name = k;
+                paramInput.classList.add(params[k]['classList']);
+                paramInput.style = (params[k]['style']);
+                for (const key in params[k]['options']) {
+                    const optionElement = document.createElement('option');
+                    optionElement.value = key;
+                    optionElement.textContent = params[k]['options'][key];
+                    paramInput.appendChild(optionElement);
+                }
+                paramInputBlock.appendChild(paramInput);
             }
         });
 
         const sendTaskButton = document.createElement('button');
-        sendTaskButton.innerHTML = 'Прокомментируй сон <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16"><path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"></path></svg>';
+        sendTaskButton.innerHTML = configJson['tasks'][id]['btnName'];
         sendTaskButton.setAttribute('class', 'btn btn-primary shadow-sm');
         sendTaskButton.setAttribute('style', 'min-width: 200px;');
         sendTaskButton.setAttribute('title', 'Отправить форму');
@@ -132,6 +194,12 @@ fetch(`/api/form/config?id={{ $_GET['id'] }}&state=${Math.floor(Math.random() * 
         sendTaskButton.id = 'sendTaskButton_' + identifier;
 
         paramBlock.append(sendTaskButton);
+        const formId = 'ai_form_' + identifier;
+        const form = document.getElementById(formId);
+        form.addEventListener('keyup', saveFormData);
+        form.addEventListener('change', saveFormData);
+
+        restoreFormData();
 
         document.getElementById('sendTaskButton_' + identifier).addEventListener('click', function() {
             event.preventDefault();
@@ -151,13 +219,58 @@ fetch(`/api/form/config?id={{ $_GET['id'] }}&state=${Math.floor(Math.random() * 
             })
                 .then(response => response.json())
                 .then(data => {
+                    console.log('ff')
                     console.log(data);
+                    if (data.result) {
+                        location.href = data.data.task_url;
+                    }
                 })
                 .catch(error => {
                     console.error('There has been an error with your fetch operation:', error);
                 });
         });
     }
+
+    function numberFormat(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function fillFormUserData() { console.log('ff');
+        document.addEventListener('DOMContentLoaded', function(){
+            const form = document.getElementById('ai_form_' + identifier);
+
+            form.addEventListener('keyup', saveFormData);
+            form.addEventListener('change', saveFormData);
+
+
+        });
+
+        restoreFormData();
+    }
+
+    function saveFormData() {
+        const formId = 'ai_form_' + identifier;
+        const form = document.getElementById(formId);
+        const formData = new FormData(form);
+        const formDataObj = Object.fromEntries(formData.entries());
+        localStorage.setItem('formState', JSON.stringify(formDataObj));
+    }
+
+    function restoreFormData() {
+        const savedFormData = localStorage.getItem('formState');
+        const formId = 'ai_form_' + identifier;
+        const form = document.getElementById(formId);
+        if(savedFormData) {
+            const parsedFormData = JSON.parse(savedFormData);
+            for(const key in parsedFormData) {
+                const input = form.querySelector(`[name='${key}']`);
+                if(input) {
+                    input.value = parsedFormData[key];
+                }
+            }
+        }
+    }
+
 
 @if(1 === 2)
     </script>
