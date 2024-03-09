@@ -53,6 +53,10 @@ class Tasks extends Model
 
         $taskData['user_params'] = json_encode($userParams);
 
+        if ($promptMask = AiForm::getPromptMask($param['form_id'], $param['task_id'])) {
+            dd($promptMask);
+        }
+
 
 
         return self::create($taskData);

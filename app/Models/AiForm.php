@@ -9,6 +9,15 @@ class AiForm extends Model
 {
     use HasFactory;
 
+    private string $name;
+    private string $form_config;
+
+    protected $fillable = [
+        'id',
+        'name',
+        'form_config',
+    ];
+
     public static function getFormConfig($formId = null, $taskId = null)
     {
         $form = [
@@ -65,7 +74,7 @@ class AiForm extends Model
                             "style" => 'margin: 5px;',
                         ]
                     ],
-                    //'prompt_mask' => 'Расскажи что может означать этот сон: {{params}} для человека {{sex}} по имени {{}name} в возрасте {{age}}',
+                    'prompt_mask' => 'Расскажи что может означать этот сон: {{params}} для человека {{sex}} по имени {{}name} в возрасте {{age}}',
                 ],
                 /*23 => [
                      'name' => 'Очень сложная задача',
@@ -94,5 +103,20 @@ class AiForm extends Model
         }
 
         return $form;
+    }
+
+    public static function getPromptMask($formId = null, $taskId = null)
+    {
+        $form = self::getFormConfig()['tasks'][$taskId];
+        dd($form['tasks'][$taskId]);
+        if (
+            $taskId
+            && isset($form['tasks'][$taskId])
+            && isset($form['tasks'][$taskId]['prompt_mask'])
+        ) {
+            return $form['tasks'][$taskId]['prompt_mask'];
+        }
+
+        return false;
     }
 }

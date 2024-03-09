@@ -3,40 +3,28 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/10.0.1/jsoneditor.css" integrity="sha512-iOFdnlwX6UGb55bU5DL0tjWkS/+9jxRxw2KiRzyHMZARASUSwm0nEXBcdqsYni+t3UKJSK7vrwvlL8792/UMjQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 @endpush
 @section('content')
-    <h2>New form</h2>
+    <h2>Edit form</h2>
 <!--    <a class="btn-link" href="">New form</a>-->
 
-    @if ($allTypesTasks)
-        <div class="row">
-        @foreach($allTypesTasks['types_of_tasks'] as $k => $value)
-            <div class="col-md-2">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="{{ $k }}" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        {{ $value['name'] }}
-                    </label>
-                </div>
-            </div>
-        @endforeach
-        </div>
-    @endif
 <hr>
+
     <form method="post" action="{{ route('admin.ais.aiForms.newFormCreate') }}">
         @csrf
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">{{ _('Name form') }}</label>
-            <input name="name" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+            <input name="name" value="{{ $formConfig->name }}" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
             <div id="emailHelp" class="form-text">{{ _('Name form ') }}</div>
         </div>
         <div id="jsoneditor" style="width: 100%; height: 800px;"></div>
         <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">{{ _('Config form') }}</label>
-            <textarea id="form_config" style="display: none" name="form_config" class="form-control" id="exampleInputPassword1" rows="10">{{ $prototypeForm }}</textarea>
+            <label for="form_config" class="form-label">{{ _('Config form') }}</label>
+            <textarea name="form_config" id="form_config" style="display: none" class="form-control" id="form_config" rows="10">{{ $formConfig->form_config }}</textarea>
         </div>
         <button type="submit" class="btn btn-primary">{{ _('Save')}}</button>
+        <a href="{{ route('admin.ais.aiForms.formDelete', ['formId' => $formConfig->id]) }}" class="btn btn-outline-danger">{{ _('Delete')}}</a>
     </form>
-@endsection
 
+@endsection
 @push('bottom-scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/10.0.1/jsoneditor.min.js" integrity="sha512-bcBrdzrs/vzIDUvJLDTcWCYlHqoup9V6NTopRV1xRZYVIy+IoXu71spBq+TBHGKuEo76e6SIpfd02VqxNscEyw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
@@ -67,7 +55,7 @@
         const editor = new JSONEditor(container, options)
 
         // set json
-        const initialJson = {!! $prototypeForm !!}
+        const initialJson = {!! $formConfig->form_config !!}
         editor.set(initialJson)
 
         // get json

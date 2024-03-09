@@ -3,6 +3,7 @@
 
 namespace App\Http\Controllers\Admin\Integration;
 
+use App\Models\AiForm;
 use App\Services\AiSearchApi;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -46,7 +47,9 @@ class AiSearchController extends BaseController
      */
     public function aiForms(Request $request) : \Illuminate\Foundation\Application|\Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application
     {
-        return view('admin.integration.ais.ai-forms', ['result' => '']);
+        $aiFormsConfig = AiForm::query()->orderBy('id', 'desc')->get();
+//dd($aiFormsConfig);
+        return view('admin.integration.ais.ai-forms', ['aiFormsConfig' => $aiFormsConfig]);
     }
 
     public function newForm(Request $request)
@@ -57,6 +60,39 @@ class AiSearchController extends BaseController
             $allTypesTasks = $e->getMessage();
         }
 
-        return view('admin.integration.ais.new-form', ['allTypesTasks' => $allTypesTasks]);
+        $prototypeFormJson = AiForm::getFormConfig();
+
+        return view('admin.integration.ais.new-form', [
+            'allTypesTasks' => $allTypesTasks,
+            'prototypeForm' => json_encode($prototypeFormJson),
+        ]);
+    }
+
+    public function newFormCreate(Request $request)
+    {
+        $formConfig = $request->post('form_config');
+        $formConfigArray = json_decode($formConfig);
+
+        $aiFormModel = new AiForm();
+        $aiFormModel->name = $request->post('name');
+        $aiFormModel->form_config = json_encode($formConfigArray); //$request->post('form_config');
+        $aiFormModel->save();
+
+        return redirect(route('admin.ais.aiForms'));
+    }
+
+    public function formEdit(Request $request, $formId)
+    {
+        $formConfig = AiForm::query()->where(['id' => $formId])->first();
+        return view('admin.integration.ais.form-edit', ['formConfig' => $formConfig]);
+    }
+
+    public function formDelete(Request $request, $formId)
+    {
+        $res = AiForm::where('id',$formId)->delete();
+        return redirect(route('admin.ais.aiForms'));
+        dd($res);
+        $formConfig = AiForm::query()->where(['id' => $formId])->first();
+        return view('admin.integration.ais.form-edit', ['formConfig' => $formConfig]);
     }
 }

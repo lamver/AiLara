@@ -22,8 +22,13 @@ class AiSearchApi
     public function __construct(string $apiKey, string $apiHost)
     {
         if (empty($apiKey)) {
-            throw new ('fefef');
+            throw new ('$apiKey must be required');
         }
+
+        if (empty($apiHost)) {
+            throw new ('$apiHost must be required');
+        }
+
         $this->apiKey = $apiKey;
         $this->apiHost = $apiHost;
 
