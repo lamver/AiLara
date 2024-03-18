@@ -30,7 +30,7 @@ class Tasks extends Model
     const TYPE_ANSWER_JSON = 2;
     const TYPE_ANSWER_URL_TO_FILE = 3;
 
-    protected array $fillable = [
+    protected $fillable = [
         'form_id',
         'task_id',
         'user_params',
