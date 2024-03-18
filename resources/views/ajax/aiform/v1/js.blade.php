@@ -222,6 +222,7 @@ fetch(`/api/form/config?id={{ $_GET['id'] }}&state=${Math.floor(Math.random() * 
                     console.log('ff')
                     console.log(data);
                     if (data.result) {
+                        localStorage.setItem('taskId',data.data.task_id)
                         location.href = data.data.task_url;
                     }
                 })

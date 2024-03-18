@@ -74,7 +74,7 @@ class AiForm extends Model
                             "style" => 'margin: 5px;',
                         ]
                     ],
-                    'prompt_mask' => 'Расскажи что может означать этот сон: {{params}} для человека {{sex}} по имени {{}name} в возрасте {{age}}',
+                    'prompt_mask' => 'Расскажи что может означать этот сон: {{params}} для человека {{sex}} по имени {{name}} в возрасте {{age}}',
                 ],
                 /*23 => [
                      'name' => 'Очень сложная задача',
@@ -108,7 +108,7 @@ class AiForm extends Model
     public static function getPromptMask($formId = null, $taskId = null)
     {
         $form = self::getFormConfig()['tasks'][$taskId];
-        dd($form['tasks'][$taskId]);
+
         if (
             $taskId
             && isset($form['tasks'][$taskId])

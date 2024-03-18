@@ -24,16 +24,16 @@
     <form method="post" action="{{ route('admin.ais.aiForms.newFormCreate') }}">
         @csrf
         <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">{{ _('Name form') }}</label>
+            <label for="exampleInputEmail1" class="form-label">{{ __('Name form') }}</label>
             <input name="name" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-            <div id="emailHelp" class="form-text">{{ _('Name form ') }}</div>
+            <div id="emailHelp" class="form-text">{{ __('Name form ') }}</div>
         </div>
         <div id="jsoneditor" style="width: 100%; height: 800px;"></div>
         <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">{{ _('Config form') }}</label>
+            <label for="exampleInputPassword1" class="form-label">{{ __('Config form') }}</label>
             <textarea id="form_config" style="display: none" name="form_config" class="form-control" id="exampleInputPassword1" rows="10">{{ $prototypeForm }}</textarea>
         </div>
-        <button type="submit" class="btn btn-primary">{{ _('Save')}}</button>
+        <button type="submit" class="btn btn-primary">{{ __('Save')}}</button>
     </form>
 @endsection
 
