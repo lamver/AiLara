@@ -108,7 +108,7 @@ class AiForm extends Model
     public static function getPromptMask($formId = null, $taskId = null)
     {
         $form = self::getFormConfig()['tasks'][$taskId];
-        dd($form['tasks'][$taskId]);
+
         if (
             $taskId
             && isset($form['tasks'][$taskId])

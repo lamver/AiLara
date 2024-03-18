@@ -3,6 +3,8 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Http;
+
 /**
  * Class AiSearchApi
  *
@@ -126,5 +128,17 @@ class AiSearchApi
         curl_close($curl);
 
         return json_decode($response, true);
+    }
+
+    /**
+     * @param int $taskId
+     *
+     * @return array|null
+     */
+    public function getTaskByTaskId(int $taskId): array|null
+    {
+        return Http::withToken($this->apiKey)->get(
+            $this->apiHost . "/api/services/ai-chats/result?id_task=" . $taskId
+        )->json();
     }
 }
