@@ -105,6 +105,18 @@ class AiForm extends Model
         return $form;
     }
 
+    /**
+     * @param int $id
+     * @return array
+     */
+    public static function getForm(int $id): array
+    {
+        $form = self::find($id)->toArray();
+        $form['form_config'] = json_decode($form['form_config'], true);
+
+        return $form;
+    }
+
     public static function getPromptMask($formId = null, $taskId = null)
     {
         $form = self::getFormConfig()['tasks'][$taskId];

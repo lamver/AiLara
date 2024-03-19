@@ -70,7 +70,7 @@
 @endsection
 @push('bottom-scripts')
     <script>
-        const formId = 101;
+        const formId = 1;
         const mainFormTemplate = document.getElementById("ai-form-1");
 
         fetch(`/api/form/template?id=`+formId+`&state=${Math.floor(Math.random() * 10000)}.${Date.now()}`)

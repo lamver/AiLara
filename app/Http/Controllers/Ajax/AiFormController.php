@@ -48,7 +48,8 @@ class AiFormController extends BaseController
      */
     public function getFormConfig(Request $request)
     {
-        return AiForm::getFormConfig();
+        $form = AiForm::getForm((int)$request->id);
+        return $form['form_config'];
     }
 
     /**
