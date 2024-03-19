@@ -12,9 +12,13 @@ class TaskController extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
-    public function view(Request $request, $taskId)
+    public function view(Request $request, $slug, $id)
     {
-        return view('aisearch.task.view', ['slot' => 'dd']);
+        return view('aisearch.task.view', [
+            'slot' => 'dd',
+            'id'   => $id,
+            'slug' => $slug,
+        ]);
     }
 
 }

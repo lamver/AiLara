@@ -15,7 +15,7 @@
 
 @push('bottom-scripts')
     <script>
-        let id = location.pathname.split('/').pop();
+        let id = {{$id}};
         fetch(`/api/task/get_task?task_id=${id}`)
             .then(response => response.json())
             .then(json => {
