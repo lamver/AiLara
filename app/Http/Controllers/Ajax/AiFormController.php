@@ -19,6 +19,8 @@ use JetBrains\PhpStorm\ArrayShape;
  */
 class AiFormController extends BaseController
 {
+    public string $maskaAi = "Расскажи что может означать этот сон: {{params}} для человека {{sex}} по имени {{name}} в возрасте {{age}}";
+
     /**
      * @param \Illuminate\Http\Request $request
      *
@@ -50,11 +52,11 @@ class AiFormController extends BaseController
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     *
+     * @param TaskExecuteRequest $request
+     * @param AiSearchApi $aiSearchApi
      * @return bool[]
      */
-    public function execute(TaskExecuteRequest $request, AiSearchApi $aiSearchApi)
+    public function execute(TaskExecuteRequest $request, AiSearchApi $aiSearchApi): array
     {
         $executed = RateLimiter::attempt(
             'send-message:'.$request->ip(),
@@ -65,15 +67,22 @@ class AiFormController extends BaseController
             $decayRate = 120,
         );
 
-        if (! $executed) {
+        if (!$executed) {
             return $this->resultError('Too many messages sent from your ip address!');
         }
 
         $task = Tasks::createTask($request->post());
 
-        $resultApi = $aiSearchApi->taskCreate(json_decode($task->user_params,true)['prompt']);
+        $promptMask = strtr($this->maskaAi, [
+            '{{params}}' => $request->prompt,
+            '{{sex}}' => $request->sex,
+            '{{name}}' => $request->name,
+            '{{age}}' => $request->age,
+        ]);
 
-        if ($resultApi['result']) {
+        $resultApi = $aiSearchApi->taskCreate($promptMask);
+
+        if (empty($resultApi) || !$resultApi['result']) {
             return $this->resultError("Result returned false");
         }
 
