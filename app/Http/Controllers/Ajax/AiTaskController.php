@@ -29,7 +29,7 @@ class AiTaskController extends BaseController
     {
         $this->aiSearch = new AiSearchApi(
             Config::get('ailara.api_key_aisearch'),
-            Config::get('ailara.api_aisearch_host')
+            Config::get('ailara.api_host')
         );
     }
 
