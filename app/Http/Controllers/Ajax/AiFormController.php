@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Ajax;
 use App\Http\Requests\TaskExecuteRequest;
 use App\Models\AiForm;
 use App\Models\Tasks;
+use App\Services\AiSearchApi;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\RateLimiter;
@@ -53,7 +54,7 @@ class AiFormController extends BaseController
      *
      * @return bool[]
      */
-    public function execute(TaskExecuteRequest $request)
+    public function execute(TaskExecuteRequest $request, AiSearchApi $aiSearchApi)
     {
         $executed = RateLimiter::attempt(
             'send-message:'.$request->ip(),
@@ -70,8 +71,17 @@ class AiFormController extends BaseController
 
         $task = Tasks::createTask($request->post());
 
+        $resultApi = $aiSearchApi->taskCreate(json_decode($task->user_params,true)['prompt']);
+
+        if ($resultApi['result']) {
+            return $this->resultError("Result returned false");
+        }
+
+        $task->task_id = $resultApi['task_id'];
+        $task->save();
+
         $result = [
-            'task_id' => $task->id,
+            'task_id' => $resultApi['task_id'],
             'task_url' => "/".Tasks::createSlugFromUserParams($request->post()).'/'.$task->id,
         ];
 

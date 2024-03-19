@@ -3,6 +3,7 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 
 /**
@@ -21,18 +22,10 @@ class AiSearchApi
      * @param string $apiKey
      * @param string $apiHost
      */
-    public function __construct(string $apiKey, string $apiHost)
+    public function __construct(string $apiKey = null, string $apiHost = null)
     {
-        if (empty($apiKey)) {
-            throw new ('$apiKey must be required');
-        }
-
-        if (empty($apiHost)) {
-            throw new ('$apiHost must be required');
-        }
-
-        $this->apiKey = $apiKey;
-        $this->apiHost = $apiHost;
+        $this->apiKey  = $apiKey ?? Config::get('ailara.api_key_aisearch');
+        $this->apiHost = $apiHost ?? Config::get('ailara.api_host');
 
         return $this;
     }
@@ -138,7 +131,7 @@ class AiSearchApi
     public function getTaskByTaskId(int $taskId): array|null
     {
         return Http::withToken($this->apiKey)->get(
-            $this->apiHost . "/api/services/ai-chats/result?id_task=" . $taskId
+            'https://' . $this->apiHost . "/api/services/ai-chats/result?id_task=" . $taskId
         )->json();
     }
 }

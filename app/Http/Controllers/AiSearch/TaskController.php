@@ -3,6 +3,7 @@
 
 namespace App\Http\Controllers\AiSearch;
 
+use App\Models\Tasks;
 use App\Services\AiSearchApi;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -14,10 +15,13 @@ class TaskController extends BaseController
 
     public function view(AiSearchApi $aiSearchApi, $slug, $id)
     {
+        $task = Tasks::find((int)$id);
+        $apiResult = $aiSearchApi->getTaskByTaskId($task->task_id);
+
         return view('aisearch.task.view', [
             'id'   => $id,
             'slug' => $slug,
-            'task' => $aiSearchApi->getTaskByTaskId($id),
+            'task' => $apiResult,
         ]);
     }
 
