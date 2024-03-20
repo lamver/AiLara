@@ -8,7 +8,7 @@
 
 <hr>
 
-    <form method="post" action="{{ route('admin.ais.aiForms.newFormCreate') }}">
+    <form method="post" action="{{ route('admin.ais.aiForms.formEdit', $formConfig->id) }}">
         @csrf
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">{{ __('Name form') }}</label>

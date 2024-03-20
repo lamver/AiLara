@@ -83,8 +83,17 @@ class AiSearchController extends BaseController
 
     public function formEdit(Request $request, $formId)
     {
-        $formConfig = AiForm::query()->where(['id' => $formId])->first();
-        return view('admin.integration.ais.form-edit', ['formConfig' => $formConfig]);
+        if ($request->method() === "GET") {
+            $formConfig = AiForm::query()->where(['id' => $formId])->first();
+            return view('admin.integration.ais.form-edit', ['formConfig' => $formConfig]);
+        }
+
+        $aiForm = AiForm::find($formId);
+        $aiForm->name = $request->name;
+        $aiForm->form_config = $request->form_config;
+        $aiForm->save();
+
+        return redirect()->route('admin.ais.aiForms');
     }
 
     public function formDelete(Request $request, $formId)
