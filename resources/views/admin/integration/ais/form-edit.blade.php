@@ -50,6 +50,9 @@
                         'at path ' + JSON.stringify(node.path)
                     )
                 }*/
+            },
+            onChangeJSON: function (json) {
+                getJSON();
             }
         }
         const editor = new JSONEditor(container, options)
@@ -64,9 +67,9 @@
         editor.expandAll();
         // get json
         function getJSON() {
-            var json = editor.get();
+            let json = editor.get();
+
             document.getElementById('form_config').innerText = JSON.stringify(json);
-            //console.log(JSON.stringify(json, null, 2));
         }
 
         console.log('json', initialJson)
