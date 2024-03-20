@@ -5,15 +5,23 @@ namespace App\Http\Controllers\Admin\Integration;
 
 use App\Models\AiForm;
 use App\Services\AiSearchApi;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View as ContractsView;
+use \Illuminate\View\View;
+use Illuminate\Foundation\Application;
+use Illuminate\Contracts\Foundation\Application as ContractApplication;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Config;
 
 class AiSearchController extends BaseController
 {
-    use AuthorizesRequests, ValidatesRequests;
+    use AuthorizesRequests;
+    use ValidatesRequests;
 
     private object $aiSearch;
 
@@ -25,11 +33,10 @@ class AiSearchController extends BaseController
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application
+     * @param Request $request
+     * @return Application|View|Factory
      */
-    public function commonData(Request $request) : \Illuminate\Foundation\Application|\Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application
+    public function commonData(Request $request): Application|View|Factory
     {
         try {
             $result = $this->aiSearch->getUserData();
@@ -41,18 +48,19 @@ class AiSearchController extends BaseController
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application
+     * @return Application|View|Factory
      */
-    public function aiForms(Request $request) : \Illuminate\Foundation\Application|\Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application
+    public function aiForms(): Application|View|Factory
     {
         $aiFormsConfig = AiForm::query()->orderBy('id', 'desc')->get();
-//dd($aiFormsConfig);
+
         return view('admin.integration.ais.ai-forms', ['aiFormsConfig' => $aiFormsConfig]);
     }
 
-    public function newForm(Request $request)
+    /**
+     * @return ContractApplication|Factory|ContractsView|Application|View
+     */
+    public function newForm()
     {
         try {
             $allTypesTasks = $this->aiSearch->getAllTypesTask();
@@ -68,6 +76,10 @@ class AiSearchController extends BaseController
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @return Application|RedirectResponse|Redirector
+     */
     public function newFormCreate(Request $request)
     {
         $formConfig = $request->post('form_config');
@@ -81,6 +93,11 @@ class AiSearchController extends BaseController
         return redirect(route('admin.ais.aiForms'));
     }
 
+    /**
+     * @param Request $request
+     * @param $formId
+     * @return ContractApplication|Factory|ContractsView|Application|RedirectResponse|View
+     */
     public function formEdit(Request $request, $formId)
     {
         if ($request->method() === "GET") {
@@ -96,12 +113,13 @@ class AiSearchController extends BaseController
         return redirect()->route('admin.ais.aiForms');
     }
 
-    public function formDelete(Request $request, $formId)
+    /**
+     * @param $formId
+     * @return ContractApplication|Application|RedirectResponse|Redirector
+     */
+    public function formDelete($formId)
     {
-        $res = AiForm::where('id',$formId)->delete();
+        AiForm::where('id', $formId)->delete();
         return redirect(route('admin.ais.aiForms'));
-        dd($res);
-        $formConfig = AiForm::query()->where(['id' => $formId])->first();
-        return view('admin.integration.ais.form-edit', ['formConfig' => $formConfig]);
     }
 }
