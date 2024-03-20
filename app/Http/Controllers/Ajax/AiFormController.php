@@ -7,6 +7,11 @@ use App\Http\Requests\TaskExecuteRequest;
 use App\Models\AiForm;
 use App\Models\Tasks;
 use App\Services\AiSearchApi;
+use Illuminate\Foundation\Application;
+use Illuminate\Contracts\Foundation\Application as ContractApplication;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View as ContractView;
+use \Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\RateLimiter;
@@ -22,29 +27,24 @@ class AiFormController extends BaseController
     public string $maskaAi = "Расскажи что может означать этот сон: {{params}} для человека {{sex}} по имени {{name}} в возрасте {{age}}";
 
     /**
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application
+     * @return Factory|View|ContractApplication
      */
-    public function template(Request $request) : \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Contracts\Foundation\Application
+    public function template(): Factory|View|ContractApplication
     {
         return view('ajax.aiform.v1.template', []);
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application
+     * @return ContractApplication|Factory|ContractView|Application|View
      */
-    public function js(Request $request) : \Illuminate\Foundation\Application|\Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application
+    public function js()
     {
         return view('ajax.aiform.v1.js', []);
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return array
+     * @param Request $request
+     * @return mixed
      */
     public function getFormConfig(Request $request)
     {
@@ -60,9 +60,9 @@ class AiFormController extends BaseController
     public function execute(TaskExecuteRequest $request, AiSearchApi $aiSearchApi): array
     {
         $executed = RateLimiter::attempt(
-            'send-message:'.$request->ip(),
+            'send-message:' . $request->ip(),
             $perMinute = 5,
-            function() {
+            function () {
                 // Send message...
             },
             $decayRate = 120,
@@ -92,15 +92,14 @@ class AiFormController extends BaseController
 
         $result = [
             'task_id' => $resultApi['task_id'],
-            'task_url' => "/".Tasks::createSlugFromUserParams($request->post()).'/'.$task->id,
+            'task_url' => "/" . Tasks::createSlugFromUserParams($request->post()) . '/' . $task->id,
         ];
 
         return $this->resultSuccessfull($result);
     }
 
     /**
-     * @param $message
-     *
+     * @param array $data
      * @return array
      */
     #[ArrayShape(['result' => "bool", 'message' => "array"])] private function resultSuccessfull(array $data)
