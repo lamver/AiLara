@@ -72,6 +72,20 @@ class AiForm extends Model
                             "classList" => ['form-select'],
                             "classListParamBlock" => ['col-md-6'],
                             "style" => 'margin: 5px;',
+                        ],
+                        "days_of_week" => [
+                            "type" => "select",
+                            "options" => [
+                                'Пн' => 'Пн',
+                                'Вт' => 'Вт',
+                            ],
+                            "min_limit" => 3,
+                            "max_limit" => 100,
+                            "required" => false,
+                            "placeholder" => 'День недели',
+                            "classList" => ['form-select'],
+                            "classListParamBlock" => ['col-md-6'],
+                            "style" => 'margin: 5px;',
                         ]
                     ],
                     'prompt_mask' => 'Расскажи что может означать этот сон: {{params}} для человека {{sex}} по имени {{name}} в возрасте {{age}}',
