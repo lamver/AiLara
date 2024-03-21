@@ -208,6 +208,12 @@
                                     </li>
                                 </ul>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('admin.ais.pages') }}">
+                                    <span data-feather="bar-chart-2"></span>
+                                    Pages
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </nav>
