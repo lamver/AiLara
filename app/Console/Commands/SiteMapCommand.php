@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use App\Models\Tasks;
 use Illuminate\Console\Command;
-use Illuminate\Support\Str;
 use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\Tags\Url;
 
@@ -68,8 +67,15 @@ class SiteMapCommand extends Command
      */
     public function handle(): void
     {
-        $this->createSiteMap($this->siteMapUrls);
-        $this->createFromTaskBb();
+        $start = microtime(true);
+        $this->info("Старт.");
+
+        $fileNames = $this->createSiteMapFromTask();
+        $this->createSiteMapFromArray($this->siteMapUrls, $this->mainFileName);
+        $this->updateMainFile($fileNames);
+
+        $executionTime = microtime(true) - $start;
+        $this->info("Скрипт выполнялся $executionTime секунд");
     }
 
     /**
@@ -79,7 +85,7 @@ class SiteMapCommand extends Command
      * @param string $fileName
      * @return void
      */
-    public function createSiteMap(array $siteMapUrls, string $fileName = '/sitemap.xml'): void
+    public function createSiteMapFromArray(array $siteMapUrls, string $fileName = '/sitemap.xml'): void
     {
         $siteMap = Sitemap::create($this->hostUrl);
 
@@ -91,22 +97,52 @@ class SiteMapCommand extends Command
     }
 
     /**
-     * crate siteMaps from task table, chunk it and add links to the main file
+     * create siteMaps from task
      *
+     * @return array
+     */
+    public function createSiteMapFromTask(): array
+    {
+        $fileNames = [];
+        $fileCounter = 1;
+        $counter = 1;
+
+        Tasks::select('id', 'user_params')
+            ->where('status', Tasks::STATUS_CREATED)
+            ->chunk($this->maxChunk, function ($tasks) use (&$fileCounter, &$fileNames, &$counter) {
+
+                $siteMap = Sitemap::create($this->hostUrl);
+
+                foreach ($tasks as $task) {
+
+                    $siteMap->add(Url::create(Tasks::createSlug($task))->setPriority($this->priorityDefault));
+
+                    $fileNames['task-' . $fileCounter . '.xml'] = 'task-' . $fileCounter . '.xml';
+
+                    if ($counter++ >= $this->maxChunk) {
+                        $siteMap->writeToFile(public_path('task-' . $fileCounter . '.xml'));
+                        $siteMap = Sitemap::create($this->hostUrl);
+                        $fileCounter++;
+                        $counter = 1;
+                    }
+                }
+
+                $siteMap->writeToFile(public_path('task-' . $fileCounter . '.xml'));
+
+            });
+
+        return $fileNames;
+    }
+
+    /**
+     * @param array $fileNames
      * @return void
      */
-    public function createFromTaskBb(): void
+    public function updateMainFile(array $fileNames): void
     {
-        $tasks = Tasks::where('status', Tasks::STATUS_CREATED)->get()->toArray();
+        foreach ($fileNames as $fileName) {
+            $tmp = "<sitemap><loc>" . $this->hostUrl . "/" . $fileName . "</loc></sitemap>\n";
 
-        $urls = $this->createSlug($tasks);
-        $chunks = array_chunk($urls, $this->maxChunk);
-
-        foreach ($chunks as $key => $chunk) {
-            $this->createSiteMap($urls, "/tasks-$key.xml");
-
-            // Add the link to the end of main file
-            $tmp = "<sitemap><loc>" . $this->hostUrl . "/tasks-" . $key . ".xml</loc></sitemap>\n";
             $content = file_get_contents(public_path($this->mainFileName));
             $position = strpos($content, "</urlset>");
 
@@ -116,26 +152,6 @@ class SiteMapCommand extends Command
 
             file_put_contents(public_path($this->mainFileName), $newContent);
         }
-    }
-
-    /**
-     * Create slugs
-     *
-     * @param array $params
-     * @return array
-     */
-    public function createSlug(array $params): array
-    {
-        $returnUrls = [];
-
-        foreach ($params as $key => $param) {
-            $userParams = json_decode($param['user_params'], true);
-            $userParams = array_map(fn($val) => str_replace("\n", "", Str::limit($val, 200)), $userParams);
-            $returnUrls[$key]['url'] = "/" . Str::slug(implode("_", $userParams)) . "/" . $param['id'];
-            $returnUrls[$key]['priority'] = $this->priorityDefault;
-        }
-
-        return $returnUrls;
     }
 
 }
