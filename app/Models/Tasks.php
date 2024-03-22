@@ -88,7 +88,7 @@ class Tasks extends Model
      */
     public static function createSlug(Tasks $params): string
     {
-        $userParams = json_decode($params['user_params'], true);
+        $userParams = json_decode($params->user_params, true);
         $userParams = array_map(fn($val) => str_replace("\n", "", Str::limit($val, 200)), $userParams);
 
         return Str::slug(implode("_", $userParams)) . "/" . $params['id'];
