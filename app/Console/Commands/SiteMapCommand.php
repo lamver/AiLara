@@ -109,6 +109,7 @@ class SiteMapCommand extends Command
 
         Tasks::select('id', 'user_params')
             ->where('status', Tasks::STATUS_CREATED)
+            ->where("access_type", Tasks::ACCESS_TYPE_PUBLIC)
             ->chunk($this->maxChunk, function ($tasks) use (&$fileCounter, &$fileNames, &$counter) {
 
                 $siteMap = Sitemap::create($this->hostUrl);
