@@ -12,6 +12,7 @@
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
+        "spatie/laravel-sitemap": "^7.2",
         "wnikk/laravel-access-rules": "^2.0",
         "wnikk/laravel-access-ui": "^1.3"
     },
