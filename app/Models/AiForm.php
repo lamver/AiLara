@@ -18,7 +18,7 @@ class AiForm extends Model
         'form_config',
     ];
 
-    public static function getFormConfig($formId = null, $taskId = null)
+    public static function getFormConfig($formId = null, $taskId = null): array
     {
         $form = [
             'result' => true,
@@ -49,16 +49,6 @@ class AiForm extends Model
                             "classListParamBlock" => ['col-md-2'],
                             "style" => 'margin: 5px;',
                         ],
-                        "name" => [
-                            "type" => "string",
-                            "min_limit" => 3,
-                            "max_limit" => 100,
-                            "required" => false,
-                            "placeholder" => 'Ваше имя',
-                            "classList" => ['form-control'],
-                            "classListParamBlock" => ['col-md-4'],
-                            "style" => 'margin: 5px;',
-                        ],
                         "sex" => [
                             "type" => "select",
                             "options" => [
@@ -86,26 +76,20 @@ class AiForm extends Model
                             "classList" => ['form-select'],
                             "classListParamBlock" => ['col-md-6'],
                             "style" => 'margin: 5px;',
-                        ]
+                        ],
+                        "name" => [
+                            "type" => "string",
+                            "min_limit" => 3,
+                            "max_limit" => 100,
+                            "required" => false,
+                            "placeholder" => 'Ваше имя',
+                            "classList" => ['form-control'],
+                            "classListParamBlock" => ['col-md-4'],
+                            "style" => 'margin: 5px;',
+                        ],
                     ],
-                    'prompt_mask' => 'Расскажи что может означать этот сон: {{params}} для человека {{sex}} по имени {{name}} в возрасте {{age}}',
+                    'prompt_mask' => 'Расскажи что может означать этот сон: {{prompt}} для человека {{sex}} по имени {{name}} в возрасте {{age}}',
                 ],
-                /*23 => [
-                     'name' => 'Очень сложная задача',
-                     "id" => 23,
-                     "price" => 0.006,
-                     "params" => [
-                         "prompt" => [
-                             "type" => "text",
-                             "min_limit" => 3,
-                             "max_limit" => 10000,
-                             "required" => true,
-                             "placeholder" => 'ferf453454erf',
-                             "classList" => ['form-control'],
-                             "style" => 'margin: 5px;',
-                         ]
-                     ]
-                 ],*/
             ],
         ];
 
