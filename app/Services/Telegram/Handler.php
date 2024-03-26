@@ -152,13 +152,11 @@ class  Handler extends WebhookHandler
             sleep($this->sleepSeconds);
             $theAnswer = $AiSearchApi->getTaskByTaskId($result['task_id']);
 
-            if ($theAnswer['result'] === true) {
-                if ($theAnswer['answer']['status'] !== Tasks::STATUS_CREATED && ($this->recursionCounter++) <= $this->recursionTries) {
-                    return $this->getAnswerFromApi($promptMask, $result, $this->recursionCounter);
-                }
-
-                $message = $theAnswer['answer']['answer'];
+            if ($theAnswer['result'] === true && $theAnswer['answer']['status'] !== Tasks::STATUS_CREATED && ($this->recursionCounter++) <= $this->recursionTries) {
+                return $this->getAnswerFromApi($promptMask, $result, $this->recursionCounter);
             }
+
+            $message = $theAnswer['answer']['answer'];
         }
 
         Telegraph::html($message)->send();
