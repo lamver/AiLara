@@ -8,6 +8,18 @@
 
 <hr>
 
+    <div class="mb-12">
+        @if($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+    </div>
+
     <form method="post" action="{{ route('admin.ais.aiForms.formEdit', $formConfig->id) }}">
         @csrf
         <div class="mb-3">
@@ -20,8 +32,10 @@
             <label for="form_config" class="form-label">{{ __('Config form') }}</label>
             <textarea name="form_config" id="form_config" style="display: none" class="form-control" id="form_config" rows="10">{{ $formConfig->form_config }}</textarea>
         </div>
-        <button type="submit" class="btn btn-primary">{{ __('Save')}}</button>
-        <a href="{{ route('admin.ais.aiForms.formDelete', ['formId' => $formConfig->id]) }}" class="btn btn-outline-danger">{{ __('Delete')}}</a>
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary">{{ __('Save')}}</button>
+            <a href="{{ route('admin.ais.aiForms.formDelete', ['formId' => $formConfig->id]) }}" class="btn btn-outline-danger">{{ __('Delete')}}</a>
+        </div>
     </form>
 
 @endsection

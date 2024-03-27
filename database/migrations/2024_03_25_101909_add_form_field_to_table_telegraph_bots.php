@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('telegraph_bots', function (Blueprint $table) {
-            $table->integer('form_id')->nullable(); // Change the data type and other column modifiers as needed
+            $table->unsignedBigInteger('form_id')->nullable();
+            $table->foreign('form_id')->references('id')->on('ai_forms')->onDelete('restrict');
         });
     }
 };
