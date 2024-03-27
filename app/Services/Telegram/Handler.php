@@ -34,6 +34,18 @@ class  Handler extends WebhookHandler
     protected int $sleepSeconds = 5;
 
     /**
+     * A form from db
+     * @var array
+     */
+    protected array $theForm = [];
+
+    /**
+     * Params form Handler::theForm
+     * @var array
+     */
+    protected array $theParams = [];
+
+    /**
      * @return void
      */
     public function start(): void
@@ -60,61 +72,86 @@ class  Handler extends WebhookHandler
     {
         $form = json_decode($this->bot->aiFrom->form_config, true);
         // Структура формы в БД такая ['tasks'][12]
-        $form = $form['tasks'][12];
+        $this->theForm = $form['tasks'][12];
         $userStep = $this->chat->user_step;
-        $params = $form['params'];
+        $this->theParams = $this->theForm['params'];
 
-        $this->steps($userStep, $text, $form, $params);
+        $this->steps($userStep, $text);
     }
 
     /**
-     * @param $userStep
-     * @param $text
-     * @param $form
-     * @param $params
+     * @param int|null $userStep
+     * @param string $text
      * @return void
      * @throws KeyboardException
      */
-    public function steps($userStep, $text, $form, $params): void
+    public function steps(int|null $userStep, string $text): void
     {
-        if (is_null($userStep) && Str::limit(trim($text), 32) === Str::limit(trim($form['btnName']), 32)) {
-            $this->saveStep(0, []);
-            AnswerType::getButtons(current($params));
-        } elseif ($userStep >= 0 && isset(array_keys($params)[$userStep])) {
-            try {
-                $nameOfFieldSave = array_keys($params)[$userStep];
-                $userStep += 1;
+        $limitText = Str::limit(trim($text), 32);
+        $limitBtnName = Str::limit(trim($this->theForm ['btnName']), 32);
+        match (true) {
+            (is_null($userStep) && $limitText === $limitBtnName) => $this->firstStep(),
+            ($userStep >= 0 && isset(array_keys($this->theParams)[$userStep])) => $this->nextStep($userStep, $text),
+            default => $this->defaultStep()
+        };
+    }
 
-                $this->saveStep(
-                    $userStep,
-                    array_merge(json_decode($this->chat->user_input, true), [$nameOfFieldSave => $text])
-                );
+    /**
+     * @return void
+     */
+    public function defaultStep(): void
+    {
+        $this->chat->html("Чтобы начать, пожалуйста, выполните комманду /start")->send();
+    }
 
-                $nameOfFieldShow = array_keys($params)[$userStep];
-                $input = $params[$nameOfFieldShow];
+    /**
+     * @return void
+     * @throws KeyboardException
+     */
+    public function firstStep(): void
+    {
+        $this->saveStep(0, []);
+        AnswerType::getButtons(current($this->theParams));
+    }
 
-                AnswerType::getButtons($input);
-            } catch (\Throwable) {
-                $promptMask = $this->createMask($form['prompt_mask']);
-                $this->saveStep(null, []);
-                $this->chat->html($promptMask)->send();
+    /**
+     * @param int $userStep
+     * @param string $text
+     * @return void
+     */
+    public function nextStep(int $userStep, string $text): void
+    {
+        try {
+            $nameOfFieldSave = array_keys($this->theParams)[$userStep];
+            $userStep += 1;
 
-                $this->getAnswerFromApi($promptMask);
-            }
-        } else {
-            $this->chat->html("Чтобы начать, пожалуйста, выполните комманду /start")->send();
+            $this->saveStep(
+                $userStep,
+                array_merge(json_decode($this->chat->user_input, true), [$nameOfFieldSave => $text])
+            );
+
+            $nameOfFieldShow = array_keys($this->theParams)[$userStep];
+            $input = $this->theParams[$nameOfFieldShow];
+
+            AnswerType::getButtons($input);
+        } catch (\Throwable) {
+            $promptMask = $this->createMask($this->theForm['prompt_mask']);
+            $this->saveStep(null, []);
+            $this->chat->html($promptMask)->send();
+
+            $this->getAnswerFromApi($promptMask);
         }
     }
 
     /**
-     * @param int|null $step
+     * @param int|null $userStep
      * @param array $data
      * @return void
      */
-    public function saveStep(int|null $step, array $data): void
+    public function saveStep(int|null $userStep, array $data): void
     {
         $this->chat->user_input = json_encode($data);
-        $this->chat->user_step = $step;
+        $this->chat->user_step = $userStep;
         $this->chat->save();
     }
 
