@@ -85,10 +85,11 @@ class  Handler extends WebhookHandler
      * @return void
      * @throws KeyboardException
      */
-    public function steps(int|null $userStep, string $text): void
+    public function steps(?int $userStep, string $text): void
     {
         $limitText = Str::limit(trim($text), 32);
-        $limitBtnName = Str::limit(trim($this->theForm ['btnName']), 32);
+        $limitBtnName = Str::limit(trim($this->theForm['btnName']), 32);
+
         match (true) {
             (is_null($userStep) && $limitText === $limitBtnName) => $this->firstStep(),
             ($userStep >= 0 && isset(array_keys($this->theParams)[$userStep])) => $this->nextStep($userStep, $text),
@@ -122,23 +123,28 @@ class  Handler extends WebhookHandler
     public function nextStep(int $userStep, string $text): void
     {
         try {
+            // Get the name of the field to save
             $nameOfFieldSave = array_keys($this->theParams)[$userStep];
             $userStep += 1;
 
-            $this->saveStep(
-                $userStep,
-                array_merge(json_decode($this->chat->user_input, true), [$nameOfFieldSave => $text])
-            );
+            // Save user input
+            $userInput = json_decode($this->chat->user_input, true);
+            $userInput[$nameOfFieldSave] = $text;
+            $this->saveStep($userStep, $userInput);
 
+            // Get the name of the field to show
             $nameOfFieldShow = array_keys($this->theParams)[$userStep];
             $input = $this->theParams[$nameOfFieldShow];
 
+            // Display buttons based on input type
             AnswerType::getButtons($input);
         } catch (\Throwable) {
+            // Handle exceptions
             $promptMask = $this->createMask($this->theForm['prompt_mask']);
             $this->saveStep(null, []);
             $this->chat->html($promptMask)->send();
 
+            // Fetch answer from API
             $this->getAnswerFromApi($promptMask);
         }
     }
@@ -175,22 +181,23 @@ class  Handler extends WebhookHandler
      * @param array $result
      * @param int $steps
      */
-    public function getAnswerFromApi(string $promptMask, array $result = [], int $steps = 0)
+    public function getAnswerFromApi(string $promptMask, array $result = [], int $steps = 0): void
     {
-        $AiSearchApi = new AiSearchApi();
+        $aiSearchApi = new AiSearchApi();
         $message = "";
 
         if ($steps === 0) {
-            $result = $AiSearchApi->taskCreate($promptMask);
+            $result = $aiSearchApi->taskCreate($promptMask);
             $message = $result['message'] ?? "";
         }
 
         if ($result['result'] === true) {
             sleep($this->sleepSeconds);
-            $theAnswer = $AiSearchApi->getTaskByTaskId($result['task_id']);
+            $theAnswer = $aiSearchApi->getTaskByTaskId($result['task_id']);
 
             if ($theAnswer['result'] === true && $theAnswer['answer']['status'] !== Tasks::STATUS_CREATED && ($this->recursionCounter++) <= $this->recursionTries) {
-                return $this->getAnswerFromApi($promptMask, $result, $this->recursionCounter);
+                $this->getAnswerFromApi($promptMask, $result, $this->recursionCounter);
+                return;
             }
 
             $message = $theAnswer['answer']['answer'];
