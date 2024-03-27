@@ -47,6 +47,17 @@ class AiSearchController extends BaseController
         return view('admin.integration.ais.common-data', ['result' => $result]);
     }
 
+    public function pages(Request $request): Application|View|Factory
+    {
+        try {
+            $result = $this->aiSearch->getUserData();
+        } catch (\Exception $e) {
+            $result = $e->getMessage();
+        }
+
+        return view('admin.integration.pages', ['result' => $result]);
+    }
+
     /**
      * @return Application|View|Factory
      */

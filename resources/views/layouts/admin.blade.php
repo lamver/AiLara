@@ -213,6 +213,10 @@
                                     <span data-feather="bar-chart-2"></span>
                                     Telegram bots
                                 </a>
+                                <a class="nav-link" href="{{ route('admin.ais.pages') }}">
+                                    <span data-feather="bar-chart-2"></span>
+                                    Pages
+                                </a>
                             </li>
                         </ul>
                     </div>
