@@ -51,8 +51,7 @@ class  Handler extends WebhookHandler
     public function start(): void
     {
         $form = json_decode($this->bot->aiFrom->form_config, true);
-        // Структура формы в БД такая ['tasks'][12]
-        $form = $form['tasks'][12];
+        $form = current($form['tasks']);
         $this->saveStep(null, []);
         Telegraph::message($form['name'])
             ->replyKeyboard(
@@ -71,8 +70,7 @@ class  Handler extends WebhookHandler
     protected function handleChatMessage($text): void
     {
         $form = json_decode($this->bot->aiFrom->form_config, true);
-        // Структура формы в БД такая ['tasks'][12]
-        $this->theForm = $form['tasks'][12];
+        $this->theForm = current($form['tasks']);
         $userStep = $this->chat->user_step;
         $this->theParams = $this->theForm['params'];
 
