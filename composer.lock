@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "264445e803ecb92262f941e71a731705",
+    "content-hash": "03bec80fa188d66b3163588cfe7813a6",
     "packages": [
         {
             "name": "artesaos/seotools",
@@ -201,6 +201,101 @@
                 }
             ],
             "time": "2023-12-11T17:09:12+00:00"
+        },
+        {
+            "name": "defstudio/telegraph",
+            "version": "v1.42.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/defstudio/telegraph.git",
+                "reference": "ea31f1298bc130f4f2e8dd5610682491b6eee0e7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/defstudio/telegraph/zipball/ea31f1298bc130f4f2e8dd5610682491b6eee0e7",
+                "reference": "ea31f1298bc130f4f2e8dd5610682491b6eee0e7",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/contracts": "^10.0 | ^11.0",
+                "illuminate/http": "^10.0 | ^11.0",
+                "illuminate/support": "^10.0 | ^11.0",
+                "php": "^8.1",
+                "spatie/laravel-package-tools": "^1.12.1"
+            },
+            "require-dev": {
+                "defstudio/pest-plugin-laravel-expectations": "^v2.1.2",
+                "ext-sqlite3": "*",
+                "friendsofphp/php-cs-fixer": "^v3.13.0",
+                "guzzlehttp/guzzle": "^7.5.0",
+                "larastan/larastan": "^1.0.4 | ^2.4.0",
+                "nunomaduro/collision": "^v7.10.0 | ^v8.1.1",
+                "orchestra/testbench": "^8.0 | ^9.0",
+                "pestphp/pest": "^v2.34.2",
+                "pestphp/pest-plugin-laravel": "^v2.3.0",
+                "pestphp/pest-plugin-mock": "^v2.0.0",
+                "phpstan/extension-installer": "^1.2.0",
+                "phpstan/phpstan-deprecation-rules": "^1.0.0",
+                "phpstan/phpstan-phpunit": "^1.2.2",
+                "spatie/laravel-ray": "^1.31.0",
+                "spatie/pest-plugin-snapshots": "^2.1.0",
+                "spatie/pest-plugin-test-time": "^2.1.0",
+                "spatie/x-ray": "dev-main"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "DefStudio\\Telegraph\\TelegraphServiceProvider"
+                    ],
+                    "aliases": {
+                        "Telegraph": "DefStudio\\Telegraph\\Facades\\Telegraph"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "DefStudio\\Telegraph\\": "src",
+                    "DefStudio\\Telegraph\\Database\\Factories\\": "database/factories"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabio Ivona",
+                    "email": "fabio.ivona@defstudio.it",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A laravel facade to interact with Telegram Bots",
+            "homepage": "https://github.com/defstudio/telegraph",
+            "keywords": [
+                "defstudio",
+                "laravel",
+                "telegraph"
+            ],
+            "support": {
+                "issues": "https://github.com/defstudio/telegraph/issues",
+                "source": "https://github.com/defstudio/telegraph/tree/v1.42.0"
+            },
+            "funding": [
+                {
+                    "url": "https://paypal.me/bdmstore",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/defstudio",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/fabio-ivona",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-03-14T11:44:50+00:00"
         },
         {
             "name": "dflydev/dot-access-data",
