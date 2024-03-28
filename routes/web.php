@@ -37,11 +37,12 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
-  
+
     Route::get('/', [MainController::class, 'index'])->name('admin.index');
     Route::get('/configuration', [MainController::class, 'configuration'])->name('admin.configuration');
     Route::post('/configuration', [MainController::class, 'configuration'])->name('admin.configuration.save');
     Route::get('/ais/common-data', [AiSearchController::class, 'commonData'])->name('admin.ais.commonData');
+    Route::get('/admin/ais/pages', [AiSearchController::class, 'pages'])->name('admin.ais.pages');
     Route::get('/ais/ai-forms', [AiSearchController::class, 'aiForms'])->name('admin.ais.aiForms');
     Route::get('/ais/ai-forms/new-form', [AiSearchController::class, 'newForm'])->name('admin.ais.aiForms.newForm');
     Route::post('/ais/ai-forms/new-form-create', [AiSearchController::class, 'newFormCreate'])->name('admin.ais.aiForms.newFormCreate');
