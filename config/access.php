@@ -1,5 +1,7 @@
 <?php
 
+use App\Services\Rbac\RbacAccess;
+
 return [
     /**
      * List of user types.
@@ -10,9 +12,8 @@ return [
      * after the appointment of rights it is undesirable to change
      */
     'owner_types' => [
-        App\Models\User::class,
-        'Group',
-        'Role',
+        RbacAccess::RULE_ADMIN['name'],
+        RbacAccess::RULE_USER['name'],
     ],
 
     /*

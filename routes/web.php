@@ -33,12 +33,14 @@ Route::middleware('auth')->group(function () {
 
 });
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/admin', [MainController::class, 'index'])->name('admin.index');
-    Route::get('/admin/configuration', [MainController::class, 'configuration'])->name('admin.configuration');
-    Route::post('/admin/configuration', [MainController::class, 'configuration'])->name('admin.configuration.save');
-    Route::get('/admin/ais/common-data', [AiSearchController::class, 'commonData'])->name('admin.ais.commonData');
-    Route::get('/admin/pages', [\App\Http\Controllers\Admin\Integration\AiSearchController::class, 'pages'])->name('admin.ais.pages');
+
+Route::middleware(['auth', 'verified', 'rbac:admin'])->group(function () {
+    Route::get('/admin', [\App\Http\Controllers\Admin\MainController::class, 'index'])->name('admin.index');
+    Route::get('/admin/configuration', [\App\Http\Controllers\Admin\MainController::class, 'configuration'])->name('admin.configuration');
+    Route::post('/admin/configuration', [\App\Http\Controllers\Admin\MainController::class, 'configuration'])->name('admin.configuration.save');
+    Route::get('/admin/ais/common-data', [\App\Http\Controllers\Admin\Integration\AiSearchController::class, 'commonData'])->name('admin.ais.commonData');
+    Route::get('/admin/ais/pages', [\App\Http\Controllers\Admin\Integration\AiSearchController::class, 'pages'])->name('admin.ais.pages');
+
     Route::get('/admin/ais/ai-forms', [\App\Http\Controllers\Admin\Integration\AiSearchController::class, 'aiForms'])->name('admin.ais.aiForms');
     Route::get('/admin/ais/ai-forms/new-form', [\App\Http\Controllers\Admin\Integration\AiSearchController::class, 'newForm'])->name('admin.ais.aiForms.newForm');
     Route::post('/admin/ais/ai-forms/new-form-create', [\App\Http\Controllers\Admin\Integration\AiSearchController::class, 'newFormCreate'])->name('admin.ais.aiForms.newFormCreate');
