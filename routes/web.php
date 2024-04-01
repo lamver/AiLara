@@ -31,7 +31,7 @@ Route::middleware('auth')->group(function () {
 
 });
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'rbac:admin'])->group(function () {
     Route::get('/admin', [\App\Http\Controllers\Admin\MainController::class, 'index'])->name('admin.index');
     Route::get('/admin/configuration', [\App\Http\Controllers\Admin\MainController::class, 'configuration'])->name('admin.configuration');
     Route::post('/admin/configuration', [\App\Http\Controllers\Admin\MainController::class, 'configuration'])->name('admin.configuration.save');
