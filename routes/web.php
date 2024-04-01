@@ -24,8 +24,6 @@ Route::get('/', [Controller::class, 'index'])->name('index');
 Route::get('/auth/btn.html', [UserStateController::class, 'authBtn'])
      ->name('ajax.auth-btn');
 
-
-
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
