@@ -7,6 +7,7 @@ use App\Models\AiForm;
 use App\Services\AiSearchApi;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View as ContractsView;
+use Illuminate\Database\QueryException;
 use \Illuminate\View\View;
 use Illuminate\Foundation\Application;
 use Illuminate\Contracts\Foundation\Application as ContractApplication;
@@ -130,7 +131,12 @@ class AiSearchController extends BaseController
      */
     public function formDelete($formId)
     {
-        AiForm::where('id', $formId)->delete();
-        return redirect(route('admin.ais.aiForms'));
+        try {
+            AiForm::where('id', $formId)->delete();
+            return redirect(route('admin.ais.aiForms'));
+        } catch (QueryException $e) {
+            return redirect()->back()->withErrors(['error' => end($e->errorInfo)])->withInput();
+        }
+
     }
 }

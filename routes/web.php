@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Controllers\Admin\Integration\AdminTelegramBotController;
+use App\Http\Controllers\Admin\Integration\AiSearchController;
+use App\Http\Controllers\Admin\MainController;
+use App\Http\Controllers\AiSearch\TaskController;
+use App\Http\Controllers\Ajax\UserStateController;
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Controller;
-use \App\Http\Controllers\Admin\MainController;
-use \App\Http\Controllers\Admin\Integration\AiSearchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,10 +21,8 @@ use \App\Http\Controllers\Admin\Integration\AiSearchController;
 */
 
 Route::get('/', [Controller::class, 'index'])->name('index');
-Route::get('/auth/btn.html', [\App\Http\Controllers\Ajax\UserStateController::class, 'authBtn'])
+Route::get('/auth/btn.html', [UserStateController::class, 'authBtn'])
      ->name('ajax.auth-btn');
-
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -32,7 +33,6 @@ Route::middleware('auth')->group(function () {
     })->middleware(['auth', 'verified'])->name('dashboard');
 
 });
-
 
 Route::middleware(['auth', 'verified', 'rbac:admin'])->group(function () {
     Route::get('/admin', [\App\Http\Controllers\Admin\MainController::class, 'index'])->name('admin.index');
@@ -47,14 +47,17 @@ Route::middleware(['auth', 'verified', 'rbac:admin'])->group(function () {
     Route::any('/admin/ais/ai-forms/form-edit/{formId}', [\App\Http\Controllers\Admin\Integration\AiSearchController::class, 'formEdit'])
          ->name('admin.ais.aiForms.formEdit')
          ->where('formId', '[0-9]+');
-    Route::get('/admin/ais/ai-forms/form-delete/{formId}', [\App\Http\Controllers\Admin\Integration\AiSearchController::class, 'formDelete'])
+    Route::get('/ais/ai-forms/form-delete/{formId}', [AiSearchController::class, 'formDelete'])
          ->name('admin.ais.aiForms.formDelete')
          ->where('formId', '[0-9]+');
+
+    Route::resource("/telegram-bots", AdminTelegramBotController::class)->except('show');
+
 });
 
 require __DIR__.'/auth.php';
 
-Route::get('/{slug}/{id}', [\App\Http\Controllers\AiSearch\TaskController::class, 'view'])
+Route::get('/{slug}/{id}', [TaskController::class, 'view'])
      ->name('task.view')
      ->where('id', '[0-9]+');
 
