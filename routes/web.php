@@ -1,13 +1,13 @@
 <?php
 
-use App\Http\Controllers\Admin\Integration\AdminTelegramBotController;
-use App\Http\Controllers\Admin\Integration\AiSearchController;
-use App\Http\Controllers\Admin\MainController;
-use App\Http\Controllers\AiSearch\TaskController;
-use App\Http\Controllers\Ajax\UserStateController;
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\MainController;
+use App\Http\Controllers\Admin\Integration\AiSearchController;
+use App\Http\Controllers\AiSearch\ControlPanel\SeoPages;
+use App\Http\Controllers\AiSearch\TaskController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [Controller::class, 'index'])->name('index');
-Route::get('/auth/btn.html', [UserStateController::class, 'authBtn'])
+Route::get('/auth/btn.html', [\App\Http\Controllers\Ajax\UserStateController::class, 'authBtn'])
      ->name('ajax.auth-btn');
 
 Route::middleware('auth')->group(function () {
@@ -31,28 +31,31 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->middleware(['auth', 'verified'])->name('dashboard');
-
 });
 
-Route::middleware(['auth', 'verified', 'rbac:admin'])->group(function () {
-    Route::get('/admin', [\App\Http\Controllers\Admin\MainController::class, 'index'])->name('admin.index');
-    Route::get('/admin/configuration', [\App\Http\Controllers\Admin\MainController::class, 'configuration'])->name('admin.configuration');
-    Route::post('/admin/configuration', [\App\Http\Controllers\Admin\MainController::class, 'configuration'])->name('admin.configuration.save');
-    Route::get('/admin/ais/common-data', [\App\Http\Controllers\Admin\Integration\AiSearchController::class, 'commonData'])->name('admin.ais.commonData');
-    Route::get('/admin/ais/pages', [\App\Http\Controllers\Admin\Integration\AiSearchController::class, 'pages'])->name('admin.ais.pages');
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/admin', [MainController::class, 'index'])->name('admin.index');
+    Route::get('/admin/configuration', [MainController::class, 'configuration'])->name('admin.configuration');
+    Route::post('/admin/configuration', [MainController::class, 'configuration'])->name('admin.configuration.save');
 
-    Route::get('/admin/ais/ai-forms', [\App\Http\Controllers\Admin\Integration\AiSearchController::class, 'aiForms'])->name('admin.ais.aiForms');
-    Route::get('/admin/ais/ai-forms/new-form', [\App\Http\Controllers\Admin\Integration\AiSearchController::class, 'newForm'])->name('admin.ais.aiForms.newForm');
-    Route::post('/admin/ais/ai-forms/new-form-create', [\App\Http\Controllers\Admin\Integration\AiSearchController::class, 'newFormCreate'])->name('admin.ais.aiForms.newFormCreate');
-    Route::any('/admin/ais/ai-forms/form-edit/{formId}', [\App\Http\Controllers\Admin\Integration\AiSearchController::class, 'formEdit'])
+    Route::get('/admin/ais/common-data', [AiSearchController::class, 'commonData'])->name('admin.ais.commonData');
+
+    Route::get('/admin/pages', [SeoPages::class, 'seoPagesList'])->name('admin.ais.pages');
+    Route::get('/admin/page-edit/{id}', [SeoPages::class, 'seoPageEdit'])->name('admin.ais.page.edit');
+    Route::post('/admin/page-save/{id}', [SeoPages::class, 'seoPageSave'])->name('admin.ais.page.save');
+
+    Route::get('/admin/ais/ai-forms', [AiSearchController::class, 'aiForms'])
+        ->name('admin.ais.aiForms');
+    Route::get('/admin/ais/ai-forms/new-form', [AiSearchController::class, 'newForm'])
+        ->name('admin.ais.aiForms.newForm');
+    Route::post('/admin/ais/ai-forms/new-form-create', [AiSearchController::class, 'newFormCreate'])
+        ->name('admin.ais.aiForms.newFormCreate');
+    Route::any('/admin/ais/ai-forms/form-edit/{formId}', [AiSearchController::class, 'formEdit'])
          ->name('admin.ais.aiForms.formEdit')
          ->where('formId', '[0-9]+');
-    Route::get('/ais/ai-forms/form-delete/{formId}', [AiSearchController::class, 'formDelete'])
+    Route::get('/admin/ais/ai-forms/form-delete/{formId}', [AiSearchController::class, 'formDelete'])
          ->name('admin.ais.aiForms.formDelete')
          ->where('formId', '[0-9]+');
-
-    Route::resource("/telegram-bots", AdminTelegramBotController::class)->except('show');
-
 });
 
 require __DIR__.'/auth.php';
