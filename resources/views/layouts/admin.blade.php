@@ -209,7 +209,7 @@
                                 </ul>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link active" href="{{ route('telegram-bots.index') }}">
+                                <a class="nav-link" href="{{ route('telegram-bots.index') }}">
                                     <span data-feather="bar-chart-2"></span>
                                     Telegram bots
                                 </a>
