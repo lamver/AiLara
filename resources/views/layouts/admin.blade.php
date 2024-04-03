@@ -12,7 +12,8 @@
 
         <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/dashboard/">
         @stack('top-scripts')
-
+        @yield('stylesheet')
+        @stack('styles')
 
         <!-- Bootstrap core CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
@@ -26,6 +27,7 @@
         <link rel="mask-icon" href="/docs/5.0/assets/img/favicons/safari-pinned-tab.svg" color="#7952b3">
         <link rel="icon" href="/docs/5.0/assets/img/favicons/favicon.ico">
         <meta name="theme-color" content="#7952b3">
+
         @yield('stylesheet')
         <style>
             .bd-placeholder-img {
@@ -148,7 +150,7 @@
 
 
         <!-- Custom styles for this template -->
-        <link href="dashboard.css" rel="stylesheet">
+        <!-- <link href="dashboard.css" rel="stylesheet"> -->
     </head>
     <body>
 
@@ -164,14 +166,13 @@
                 </div>
             </div>
         </header>
-
         <div class="container-fluid">
             <div class="row">
                 <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
                     <div class="position-sticky pt-3">
                         <ul class="nav flex-column">
                             <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="/admin">
+                                <a class="nav-link active" aria-current="page" href="/admin" {{\Illuminate\Support\Facades\Route::is('admin.index') ? 'disable' : ''}}>
                                     <span data-feather="home"></span>
                                     Dashboard
                                 </a>
@@ -183,7 +184,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('admin.configuration') }}">
+                                <a class="nav-link" href="{{ route('admin.configuration') }} ">
                                     <span data-feather="shopping-cart"></span>
                                     Configuration
                                 </a>
@@ -201,7 +202,7 @@
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('admin.ais.aiForms') }}">
+                                        <a class="nav-link active" href="{{ route('admin.ais.aiForms') }}">
                                             <span data-feather="bar-chart-2"></span>
                                             Ai Forms
                                         </a>
@@ -209,10 +210,6 @@
                                 </ul>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link active" href="{{ route('telegram-bots.index') }}">
-                                    <span data-feather="bar-chart-2"></span>
-                                    Telegram bots
-                                </a>
                                 <a class="nav-link" href="{{ route('admin.ais.pages') }}">
                                     <span data-feather="bar-chart-2"></span>
                                     Pages
@@ -373,17 +370,11 @@
             </div>
         </div>
 
-
-        <script src="/docs/5.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+        @stack('bottom-scripts')
+      {{--  <script src="/docs/5.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
         <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script><script src="dashboard.js"></script>
-        <script>
-            let requestUri = location.pathname;
-            let link = document.querySelector(`#sidebarMenu .nav-item a[href*="${requestUri}"]`);
-            link.classList.add('active');
-
-        </script>
-        @stack('bottom-scripts')
+--}}
 
     </body>
 </html>
