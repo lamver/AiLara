@@ -14,6 +14,7 @@
         @php $previousStepError = 'The update archive was error unpacked'; @endphp
     @endif
 
+    <div style="max-height: 300px; overflow-y: scroll">
     @if(
     !$previousStepError
     && is_array($filesCandidateUpdate = \App\Services\Update\Update::getFileToCandidateUpdate())
@@ -32,6 +33,18 @@
     @else
         {{ $previousStepError }}
         @php $previousStepError = 'Files candidate to update error'; @endphp
+    @endif
+    </div>
+
+    @if(!$previousStepError)
+        @php exec('composer install', $output, $return); @endphp
+        @if($return !== 0)
+            Composer install executed successfully
+        @else
+            @php $previousStepError = 'Error executing composer install'; @endphp
+        @endif
+    @else
+        {{ $previousStepError }}
     @endif
 
 
