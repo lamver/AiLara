@@ -35,18 +35,15 @@ class Update
 
     static public function updateFile($fileCandidate)
     {
-/*        if (file_exists($fileCandidate['path'])) {
-            echo 'ff';
-        }
-        if (file_exists($fileCandidate['pathWithoutDirExtract'])) {
-            echo 'ff55';
-        }
-        dd($fileCandidate['path'], $fileCandidate['pathWithoutDirExtract']);*/
 
         try {
             chmod($fileCandidate['pathWithoutDirExtract'], 0744);
 
-            return copy($fileCandidate['path'], $fileCandidate['pathWithoutDirExtract']);
+            if (stripos(url()->current(), 'localhost')) {
+                return true;
+            } else {
+                return copy($fileCandidate['path'], $fileCandidate['pathWithoutDirExtract']);
+            }
         } catch (\Exception $e) {
             return $e->getMessage();
         }
