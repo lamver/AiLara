@@ -13,6 +13,10 @@ class Update
 
     static public function downloadArchiveRepository()
     {
+        if (stripos(url()->current(), 'localhost')) {
+            return true;
+        }
+
         $r = file_get_contents('https://github.com/lamver/AiLara/archive/refs/heads/main.zip');
 
         return Storage::put('update/main.zip', $r);
