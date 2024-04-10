@@ -2,6 +2,7 @@
 
 namespace App\Services\Update;
 
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
 
 class Update
@@ -13,6 +14,10 @@ class Update
 
     static public function downloadArchiveRepository()
     {
+        if (stripos(url()->current(), 'localhost')) {
+            return true;
+        }
+
         $r = file_get_contents('https://github.com/lamver/AiLara/archive/refs/heads/main.zip');
 
         return Storage::put('update/main.zip', $r);
@@ -48,6 +53,27 @@ class Update
             return $e->getMessage();
         }
 
+    }
+
+    static public function composerUpdate()
+    {
+        chdir(base_path());
+        exec('composer install', $output, $return);
+        // Получаем вывод работы команды
+        // Выводим результат
+        return $output;
+    }
+
+    /**
+     * @return string
+     */
+    static public function migrate()
+    {
+        chdir(base_path());
+        Artisan::call('migrate');
+        // Получаем вывод работы команды
+        // Выводим результат
+        return Artisan::output();
     }
 
     static public function getFileSize($url)
