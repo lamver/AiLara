@@ -35,19 +35,22 @@
         @php $previousStepError = 'Files candidate to update error'; @endphp
     @endif
     </div>
-    <div style="max-height: 300px; overflow-y: scroll"> {{ getcwd() }}
+    <div style="max-height: 300px; overflow-y: scroll">
     @if(!$previousStepError)
-        @php exec('cd ../'); exec('composer install', $output, $return); @endphp
-        @if($return !== 0)
-            @foreach($output as $result)
-                {{ $result }}<br>
-            @endforeach
-            Composer install executed successfully
-        @else
-            @php $previousStepError = 'Error executing composer install'; @endphp
-        @endif
+        @php $output =  \App\Services\Update\Update::composerUpdate(); @endphp
+        @foreach($output as $outputRow)
+            {{ $outputRow }} <br>
+        @endforeach
     @else
         {{ $previousStepError }}
     @endif
+    </div>
+    <div style="max-height: 300px; overflow-y: scroll">
+        @if(!$previousStepError)
+            @php $output =  \App\Services\Update\Update::migrate(); @endphp
+            {{ $output }}
+        @else
+            {{ $previousStepError }}
+        @endif
     </div>
 @endsection
