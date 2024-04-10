@@ -220,7 +220,7 @@
                                 </a>
                                 <a class="nav-link" href="{{ route('admin.update') }}">
                                     <span data-feather="bar-chart-2"></span>
-                                    Update
+                                    Update app
                                 </a>
                             </li>
                         </ul>
