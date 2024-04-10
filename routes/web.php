@@ -56,6 +56,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/admin/ais/ai-forms/form-delete/{formId}', [AiSearchController::class, 'formDelete'])
          ->name('admin.ais.aiForms.formDelete')
          ->where('formId', '[0-9]+');
+    Route::get('/admin/update', [\App\Http\Controllers\Admin\UpdateController::class, 'index'])->name('admin.update');
 });
 
 require __DIR__.'/auth.php';
