@@ -11,7 +11,7 @@
                         Ваш персональный толкователь снов.
                     </h2>
 
-                    <div id="ai-form-1">
+                    <div id="ai-form-container">
                         <div class="spinner-border m-5" role="status">
                             <span class="visually-hidden">Loading...</span>
                         </div>
@@ -71,7 +71,9 @@
 @push('bottom-scripts')
     <script>
         const formId = 1;
-        const mainFormTemplate = document.getElementById("ai-form-1");
+        const aiFormContainer = 'ai-form-container';
+
+        const mainFormTemplate = document.getElementById("ai-form-" + formId);
 
         fetch(`/api/form/template?id=`+formId+`&state=${Math.floor(Math.random() * 10000)}.${Date.now()}`)
             .then(response => response.text())

@@ -29,10 +29,7 @@ class SeoPages extends Controller
     public function seoPagesList(Request $request)
     {
         $routes = collect(Route::getRoutes())->filter(function($route) {
-
-
             return in_array('GET', $route->methods());
-
         })->map(function($route) {
             $existingPage = SeoPagesModel::where('uri', $route->uri())->first();
 

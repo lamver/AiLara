@@ -74,16 +74,9 @@ class AiSearchController extends BaseController
      */
     public function newForm()
     {
-        try {
-            $allTypesTasks = $this->aiSearch->getAllTypesTask();
-        } catch (\Exception $e) {
-            $allTypesTasks = $e->getMessage();
-        }
-
         $prototypeFormJson = AiForm::getFormConfig();
 
         return view('admin.integration.ais.new-form', [
-            'allTypesTasks' => $allTypesTasks,
             'prototypeForm' => json_encode($prototypeFormJson),
         ]);
     }
