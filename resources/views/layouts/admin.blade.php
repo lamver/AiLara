@@ -218,6 +218,10 @@
                                     <span data-feather="bar-chart-2"></span>
                                     Pages
                                 </a>
+                                <a class="nav-link" href="{{ route('admin.update') }}">
+                                    <span data-feather="bar-chart-2"></span>
+                                    Update app
+                                </a>
                             </li>
                         </ul>
                     </div>
