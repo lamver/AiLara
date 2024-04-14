@@ -45,7 +45,8 @@ class Update
             if (file_exists($fileCandidate['pathWithoutDirExtract'])) {
                 chmod($fileCandidate['pathWithoutDirExtract'], 0744);
             } else {
-                Storage::put($fileCandidate['pathWithoutDirExtract'], '');
+                //Storage::put($fileCandidate['pathWithoutDirExtract'], '');
+                file_put_contents($fileCandidate['pathWithoutDirExtract'], '');
                 chmod($fileCandidate['pathWithoutDirExtract'], 0744);
             }
 
