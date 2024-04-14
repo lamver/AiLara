@@ -42,13 +42,19 @@ class Update
     {
 
         try {
-            chmod($fileCandidate['pathWithoutDirExtract'], 0744);
+            if (file_exists($fileCandidate['pathWithoutDirExtract'])) {
+                chmod($fileCandidate['pathWithoutDirExtract'], 0744);
+            } else {
+                Storage::put($fileCandidate['pathWithoutDirExtract'], '');
+                chmod($fileCandidate['pathWithoutDirExtract'], 0744);
+            }
 
             if (stripos(url()->current(), 'localhost')) {
                 return true;
             } else {
                 return copy($fileCandidate['path'], $fileCandidate['pathWithoutDirExtract']);
             }
+
         } catch (\Exception $e) {
             return $e->getMessage();
         }
