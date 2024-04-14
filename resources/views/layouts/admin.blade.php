@@ -210,6 +210,26 @@
                                 </ul>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    <span data-feather="users"></span>
+                                    Modules
+                                </a>
+                                <ul>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{ route('admin.ais.commonData') }}">
+                                            <span data-feather="bar-chart-2"></span>
+                                            Configuration
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{ route('admin.blog.post.debit.index') }}">
+                                            <span data-feather="bar-chart-2"></span>
+                                            Blog
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" href="{{--{{ route('telegram-bots.index') }}--}}">
                                     <span data-feather="bar-chart-2"></span>
                                     Telegram bots

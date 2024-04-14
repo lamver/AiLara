@@ -18,7 +18,7 @@ class Update
             return true;
         }
 
-        $r = file_get_contents('https://github.com/lamver/AiLara/archive/refs/heads/main.zip');
+        $r = file_get_contents(self::URL_REPOSITORY);
 
         return Storage::put('update/main.zip', $r);
     }
