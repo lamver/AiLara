@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-$routNamePrefix = 'blog';
+$moduleName = 'blog';
 
 //Route::get('/blog', [Controller::class, 'index'])->name($routNamePrefix . 'index');
 
@@ -34,3 +34,6 @@ Route::middleware(['auth', 'verified'])->prefix(\Illuminate\Support\Facades\Conf
 });
 
 /** web routes */
+Route::prefix(\Illuminate\Support\Facades\Config::get('modules.blog.route_prefix'))->group(function () {
+    Route::get('/', [\App\Http\Controllers\Modules\Blog\PostsController::class, 'index'])->name('blog.post.index');
+});

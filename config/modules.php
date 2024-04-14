@@ -3,12 +3,12 @@
       'name' => 'Blog',
       'controller' => \App\Http\Controllers\Modules\Blog\PostsController::class,
       'action' => 'index',
-      'route_prefix' => '/',
+      'route_prefix' => '/blog',
       ],
   'aiform' => [
       'name' => 'Ai form',
       'controller' => \App\Http\Controllers\Modules\Task\TaskController::class,
       'action' => 'index',
-      'route_prefix' => '/task',
+      'route_prefix' => '/task1',
   ]
 ];

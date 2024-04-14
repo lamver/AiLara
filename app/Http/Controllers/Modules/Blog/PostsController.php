@@ -14,7 +14,7 @@ class PostsController extends Controller
      */
     public function index(Request $request)
     {
-        dd('post here');
+        dd('post here44');
     }
 
     /**
