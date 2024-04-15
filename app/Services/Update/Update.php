@@ -40,8 +40,15 @@ class Update
         }
     }
 
+    /**
+     * @param $fileCandidate
+     * @return bool|string
+     */
     static public function updateFile($fileCandidate)
     {
+        $directoryPath = pathinfo($fileCandidate['pathWithoutDirExtract'])['dirname'];
+        Log::channel('update')->log('debug', '$directoryPath: ' . $directoryPath);
+
         Log::channel('update')->log('debug', $fileCandidate['pathWithoutDirExtract']);
         try {
             if (file_exists($fileCandidate['pathWithoutDirExtract'])) {
