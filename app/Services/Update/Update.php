@@ -49,7 +49,7 @@ class Update
             } else {
 
                 $directoryPath = pathinfo($fileCandidate['pathWithoutDirExtract'])['dirname'];
-                Log::channel('update')->log('debug', $directoryPath);
+                Log::channel('update')->log('debug', '$directoryPath: ' . $directoryPath);
                 if (!is_dir($directoryPath)) {
                     try {
                         mkdir($directoryPath, 0744);
