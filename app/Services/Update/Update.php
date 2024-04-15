@@ -3,6 +3,7 @@
 namespace App\Services\Update;
 
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class Update
@@ -19,6 +20,7 @@ class Update
         }
 
         $r = file_get_contents(self::URL_REPOSITORY);
+
 
         return Storage::put('update/main.zip', $r);
     }
@@ -40,6 +42,7 @@ class Update
 
     static public function updateFile($fileCandidate)
     {
+        Log::channel('update')->log('debug', $fileCandidate['pathWithoutDirExtract']);
         try {
             if (file_exists($fileCandidate['pathWithoutDirExtract'])) {
                 chmod($fileCandidate['pathWithoutDirExtract'], 0744);
@@ -48,12 +51,18 @@ class Update
                 $directoryPath = pathinfo($fileCandidate['pathWithoutDirExtract'])['dirname'];
 
                 if (!is_dir($directoryPath)) {
-                    mkdir($directoryPath, 0744);
+                    try {
+                        mkdir($directoryPath, 0744);
+                    } catch (\Exception $e) {
+                        Log::channel('update')->log('debug', $e->getMessage());
+                    }
                 }
 
                 file_put_contents($fileCandidate['pathWithoutDirExtract'], '');
                 chmod($fileCandidate['pathWithoutDirExtract'], 0744);
             }
+
+
 
             if (stripos(url()->current(), 'localhost')) {
                 return true;
