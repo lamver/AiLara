@@ -40,12 +40,17 @@ class Update
 
     static public function updateFile($fileCandidate)
     {
-
         try {
             if (file_exists($fileCandidate['pathWithoutDirExtract'])) {
                 chmod($fileCandidate['pathWithoutDirExtract'], 0744);
             } else {
-                //Storage::put($fileCandidate['pathWithoutDirExtract'], '');
+
+                $directoryPath = pathinfo($fileCandidate['pathWithoutDirExtract'])['dirname'];
+
+                if (!is_dir($directoryPath)) {
+                    mkdir($directoryPath, 0744);
+                }
+
                 file_put_contents($fileCandidate['pathWithoutDirExtract'], '');
                 chmod($fileCandidate['pathWithoutDirExtract'], 0744);
             }

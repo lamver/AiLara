@@ -19,16 +19,16 @@ $moduleName = 'blog';
 
 /** Admin routes */
 Route::middleware(['auth', 'verified'])->prefix(\Illuminate\Support\Facades\Config::get('ailara.admin_prefix') . '/module')->group(function () {
-    Route::resource('blog', \App\Http\Controllers\Admin\Blog\PostsController::class, [
+    Route::resource('posts', \App\Http\Controllers\Admin\Blog\PostsController::class, [
 /*        'except' => ['show', 'destroy'],*/
         'names' => [
-            'index' => 'admin.blog.post.debit.index',
-            'create' => 'admin.blog.post.debit.create',
-            'store' => 'admin.blog.post.debit.store',
-            'edit' => 'admin.blog.post.debit.edit',
-            'update' => 'admin.blog.post.debit.update',
-            'show' => 'admin.blog.post.debit.show',
-            'destroy' => 'admin.blog.post.debit.destroy',
+            'index' => 'admin.blog.post.index',
+            'create' => 'admin.blog.post.create',
+            'store' => 'admin.blog.post.store',
+            'edit' => 'admin.blog.post.edit',
+            'update' => 'admin.blog.post.update',
+            'show' => 'admin.blog.post.show',
+            'destroy' => 'admin.blog.post.destroy',
         ],
     ]);
 });

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Modules\Blog;
 
 use App\Http\Controllers\Controller;
-use App\Models\Posts;
+use App\Models\Modules\Blog\Posts;
 use Illuminate\Http\Request;
 
 class PostsController extends Controller
