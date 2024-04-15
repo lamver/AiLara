@@ -44,4 +44,5 @@ Route::middleware(['auth', 'verified'])->prefix(\Illuminate\Support\Facades\Conf
         ->name('admin.ais.aiForms.formDelete')
         ->where('formId', '[0-9]+');
     Route::get('/update', [\App\Http\Controllers\Admin\UpdateController::class, 'index'])->name('admin.update');
+    Route::get('/logs', [\App\Http\Controllers\Admin\LogsController::class, 'index'])->name('admin.logs');
 });
