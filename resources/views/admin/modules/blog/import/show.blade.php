@@ -5,7 +5,7 @@
 @section('page_options')
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group me-2">
-            <a href="{{ route('admin.blog.import.create') }}" type="button" class="btn btn-sm btn-outline-success">Add</a>
+            <a href="{{ route('admin.blog.import.edit', $import) }}" type="button" class="btn btn-sm btn-outline-success">Edit</a>
         </div>
     </div>
 @endsection
