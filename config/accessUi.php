@@ -15,7 +15,7 @@ return [
      * This is the Domain Laratrust panel for roles and permissions
      * will be accessible from.
      */
-    'domain' => env('ACCESSUI_PANEL_DOMAIN', (app()->runningInConsole() === false) ? request()->getHost() : 'localhost'),
+    'domain' => '',//env('ACCESSUI_PANEL_DOMAIN', (app()->runningInConsole() === false) ? request()->getHost() : 'localhost'),
 
     /**
      * Panel Path
@@ -23,7 +23,7 @@ return [
      * This is the URI path where Laratrust panel for roles and permissions
      * will be accessible from.
      */
-    'path' => 'admin/accessui',
+    'path' => 'admin/access-ui',
 
     /**
      * Panel Route Middleware
