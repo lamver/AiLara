@@ -1,11 +1,11 @@
 @extends('layouts.admin')
 @section('page_title')
-    Posts
+    Blog / Imports
 @endsection
 @section('page_options')
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group me-2">
-            <a href="{{ route('admin.blog.post.create') }}" type="button" class="btn btn-sm btn-outline-success">Add</a>
+            <a href="{{ route('admin.blog.import.create') }}" type="button" class="btn btn-sm btn-outline-success">Add</a>
         </div>
     </div>
 @endsection
@@ -20,7 +20,7 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($posts as $postData)
+            @foreach($imports as $postData)
                 <tr>
                     @foreach($columns as $column)
                         @if($column->Key == 'PRI')
@@ -35,7 +35,7 @@
                             </td>
                             @continue
                         @endif
-                    <td>{{ $postData->{$column->Field} }}</td>
+                        <td>{{ $postData->{$column->Field} }}</td>
                     @endforeach
                 </tr>
             @endforeach

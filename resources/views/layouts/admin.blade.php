@@ -222,10 +222,31 @@
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('admin.blog.post.index') }}">
-                                            <span data-feather="bar-chart-2"></span>
+                                        <a class="nav-link" href="#">
+                                            <span data-feather="users"></span>
                                             Blog
                                         </a>
+                                        <ul>
+                                            <li>
+                                                <a class="nav-link" href="{{ route('admin.blog.post.index') }}">
+                                                    <span data-feather="bar-chart-2"></span>
+                                                    Posts
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="nav-link" href="{{ route('admin.blog.category.index') }}">
+                                                    <span data-feather="bar-chart-2"></span>
+                                                    Category
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="nav-link" href="{{ route('admin.blog.import.index') }}">
+                                                    <span data-feather="bar-chart-2"></span>
+                                                    Import
+                                                </a>
+                                            </li>
+                                        </ul>
+
                                     </li>
                                 </ul>
                             </li>
@@ -253,10 +274,14 @@
 
                 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                        <h1 class="h2">Dashboard</h1>
+                        <h1 class="h2">@yield('page_title')</h1>
                         @yield('page_options')
                     </div>
-
+                    @if (session()->has('message_warning'))
+                        <div class="alert alert-warning">
+                            {{ session('message_warning') }}
+                        </div>
+                    @endif
                     <div id="main_content"></div>
                     @yield('content')
                     <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>

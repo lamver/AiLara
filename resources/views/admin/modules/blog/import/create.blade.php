@@ -1,11 +1,8 @@
 @extends('layouts.admin')
-@section('page_title')
-    Blog / Posts / Create
-@endsection
 @section('page_options')
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group me-2">
-            <a href="{{ route('admin.blog.post.index') }}" type="button" class="btn btn-sm btn-outline-success">All posts</a>
+            <a href="{{ route('admin.blog.import.index') }}" type="button" class="btn btn-sm btn-outline-success">All imports job</a>
 {{--            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>--}}
         </div>
 {{--        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
@@ -39,8 +36,8 @@
         @if($param->Field == 'status')
             <label for="label_{{ $param->Field }}">{{ $param->Field }}</label>
             <select id="label_{{ $param->Field }}" name="{{ $param->Field }}" class="form form-control">
-                @foreach(\App\Models\Modules\Blog\Posts::STATUS as $postStatus)
-                    <option @if(isset($post) && $post->{$param->Field} ==  $postStatus) selected @endif value="{{ $postStatus }}">{{ $postStatus }}</option>
+                @foreach(\App\Models\Modules\Blog\Import::IMPORT_STATUS as $importStatus)
+                    <option @if(isset($post) && $post->{$param->Field} ==  $importStatus) selected @endif value="{{ $importStatus }}">{{ $importStatus }}</option>
                 @endforeach
             </select>
             @continue

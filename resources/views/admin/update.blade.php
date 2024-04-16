@@ -53,4 +53,12 @@
             {{ $previousStepError }}
         @endif
     </div>
+    <div style="max-height: 300px; overflow-y: scroll">
+        @if(!$previousStepError)
+            @php $output =  \App\Services\Update\Update::optimize(); @endphp
+            {!! str_replace("\n", "<br>", $output) !!}
+        @else
+            {{ $previousStepError }}
+        @endif
+    </div>
 @endsection
