@@ -40,7 +40,11 @@ class ImportController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if (Import::store($request->post())) {
+            return redirect(route('admin.blog.import.index'));
+        }
+
+        return redirect(route('admin.blog.import.create'));
     }
 
     /**
@@ -48,7 +52,12 @@ class ImportController extends Controller
      */
     public function show(Import $import)
     {
-        //
+        $modelParams = Import::getModelParams();
+        $categories = Category::where('parent_id', '=', null)->get();
+        $allCategories = Category::pluck('title','id')->all();
+        $categoryTree = compact('categories','allCategories');
+
+        return view('admin.modules.blog.import.show', ['modelParams' => $modelParams, 'import' => $import, 'categoryTree' => $categoryTree]);
     }
 
     /**
@@ -56,7 +65,13 @@ class ImportController extends Controller
      */
     public function edit(Import $import)
     {
-        //
+        $modelParams = Import::getModelParams();
+        $categories = Category::where('parent_id', '=', null)->get();
+        $allCategories = Category::pluck('title','id')->all();
+        $categoryTree = compact('categories','allCategories');
+
+        return view('admin.modules.blog.import.create', ['modelParams' => $modelParams, 'import' => $import, 'categoryTree' => $categoryTree]);
+
     }
 
     /**
@@ -64,7 +79,11 @@ class ImportController extends Controller
      */
     public function update(Request $request, Import $import)
     {
-        //
+        if (Import::updatePost($import, $request->post())) {
+            return redirect(route('admin.blog.import.index'));
+        }
+
+        return redirect(route('admin.blog.import.edit', ['post' => $import]));
     }
 
     /**
@@ -72,6 +91,10 @@ class ImportController extends Controller
      */
     public function destroy(Import $import)
     {
-        //
+        if (!$import->delete()) {
+            session()->flash('message_warning', 'There are descendants, you need to delete them first');
+        }
+
+        return redirect(route('admin.blog.import.index'));
     }
 }

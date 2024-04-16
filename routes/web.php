@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\Integration\AdminTelegramBotController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -31,6 +32,8 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 Route::get('/', [\App\Http\Controllers\Modules\ModuleController::class, 'index'])->name('index');
+
+Route::resource("/telegram-bots", AdminTelegramBotController::class)->except('show');
 
 /*Route::get('/{slug}/{id}', [TaskController::class, 'view'])
      ->name('task.view')

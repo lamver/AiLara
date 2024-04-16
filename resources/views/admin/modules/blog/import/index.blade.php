@@ -25,12 +25,12 @@
                     @foreach($columns as $column)
                         @if($column->Key == 'PRI')
                             <td>{{ $postData->{$column->Field} }}
-                                <a href="{{ route('admin.blog.post.edit', ['post' => $postData->{$column->Field}]) }}">Edit</a>
-                                <a href="{{ route('admin.blog.post.show', ['post' => $postData->{$column->Field}]) }}">View</a>
-                                <form action="{{ route('admin.blog.post.destroy', $postData) }}" method="POST">
+                                <a href="{{ route('admin.blog.import.edit', ['import' => $postData->{$column->Field}]) }}">Edit</a>
+                                <a href="{{ route('admin.blog.import.show', ['import' => $postData->{$column->Field}]) }}">View</a>
+                                <form action="{{ route('admin.blog.import.destroy', $postData) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-link" type="submit">Delete</button>
+                                    <button class="btn btn-link" type="submit" onclick="return confirm('Are you sure?')">Delete</button>
                                 </form>
                             </td>
                             @continue
