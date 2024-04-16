@@ -99,9 +99,34 @@ class Update
     {
         chdir(base_path());
         Artisan::call('migrate');
-        // Получаем вывод работы команды
-        // Выводим результат
         return Artisan::output();
+    }
+
+    /**
+     * @return string
+     */
+    static public function optimize(): string
+    {
+        chdir(base_path());
+
+        $output = '';
+
+        Artisan::call('cache:clear');
+        $output .= Artisan::output();
+
+        Artisan::call('config:clear');
+        $output .= Artisan::output();
+
+        //Artisan::call('config:cache');
+        //$output .= "\n" . Artisan::output();
+
+        //Artisan::call('route:clear');
+        //$output .= "\n" . Artisan::output();
+
+        //Artisan::call('route:cache');
+        //$output .= "\n" . Artisan::output();
+
+        return $output;
     }
 
     static public function getFileSize($url)

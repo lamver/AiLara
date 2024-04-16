@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Blog;
 
 use App\Http\Controllers\Controller;
+use App\Models\Modules\Blog\Category;
 use App\Models\Modules\Blog\Posts;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -20,8 +21,7 @@ class PostsController extends Controller
     public function index(Request $request): \Illuminate\Foundation\Application|View|Factory|Application
     {
         $posts = Posts::loadPostsList();
-
-        $columns = Posts::getModelParams();// Schema::getColumnListing((new Posts)->getTable());
+        $columns = Posts::getModelParams();
 
         return view('admin.modules.blog.index', ['posts' => $posts, 'columns' => $columns]);
     }
@@ -32,8 +32,11 @@ class PostsController extends Controller
     public function create()
     {
         $modelParams = Posts::getModelParams();
+        $categories = Category::where('parent_id', '=', null)->get();
+        $allCategories = Category::pluck('title','id')->all();
+        $categoryTree = compact('categories','allCategories');
 
-        return view('admin.modules.blog.create', ['modelParams' => $modelParams]);
+        return view('admin.modules.blog.create', ['modelParams' => $modelParams, 'categoryTree' => $categoryTree]);
     }
 
     /**
@@ -66,8 +69,11 @@ class PostsController extends Controller
         }
 
         $modelParams = Posts::getModelParams();
+        $categories = Category::where('parent_id', '=', null)->get();
+        $allCategories = Category::pluck('title','id')->all();
+        $categoryTree = compact('categories','allCategories');
 
-        return view('admin.modules.blog.create', ['modelParams' => $modelParams, 'post' => $post]);
+        return view('admin.modules.blog.create', ['modelParams' => $modelParams, 'post' => $post, 'categoryTree' => $categoryTree]);
     }
 
     /**
@@ -81,7 +87,7 @@ class PostsController extends Controller
             return redirect(route('admin.blog.post.index'));
         }
 
-        return redirect(route('admin.blog.post.edit', ['post' => $posts]));
+        return redirect(route('admin.blog.post.debit.edit', ['post' => $posts]));
     }
 
     /**
@@ -89,6 +95,7 @@ class PostsController extends Controller
      */
     public function destroy(Posts $posts)
     {
+        $posts->delete();
         dd($posts);
     }
 }
