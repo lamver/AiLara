@@ -240,7 +240,7 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="nav-link" href="{{ route('admin.blog.post.index') }}">
+                                                <a class="nav-link" href="{{ route('admin.blog.import.index') }}">
                                                     <span data-feather="bar-chart-2"></span>
                                                     Import
                                                 </a>

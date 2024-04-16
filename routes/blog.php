@@ -26,6 +26,7 @@ Route::middleware(['auth', 'verified'])->prefix(\Illuminate\Support\Facades\Conf
             'destroy' => 'admin.blog.post.destroy',
         ],
     ]);
+
     Route::resource('category', \App\Http\Controllers\Admin\Blog\CategoryController::class, [
         'names' => [
             'index' => 'admin.blog.category.index',
@@ -35,6 +36,18 @@ Route::middleware(['auth', 'verified'])->prefix(\Illuminate\Support\Facades\Conf
             'update' => 'admin.blog.category.update',
             'show' => 'admin.blog.category.show',
             'destroy' => 'admin.blog.category.destroy',
+        ],
+    ]);
+
+    Route::resource('import', \App\Http\Controllers\Admin\Blog\ImportController::class, [
+        'names' => [
+            'index' => 'admin.blog.import.index',
+            'create' => 'admin.blog.import.create',
+            'store' => 'admin.blog.import.store',
+            'edit' => 'admin.blog.import.edit',
+            'update' => 'admin.blog.import.update',
+            'show' => 'admin.blog.import.show',
+            'destroy' => 'admin.blog.import.destroy',
         ],
     ]);
 });
