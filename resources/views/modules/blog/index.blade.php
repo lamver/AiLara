@@ -35,7 +35,7 @@
                 <div class="col-md-6">
                     <div class="shadow-sm rounded info-block-top" style="height: 520px; background-image: url('https://aisearch.ru/cdn-cgi/image/fit=contain,width=1024,height=1024,compression=fast/files/0/544222/logotip_bloga_pro_neironnye_seti_i_iskusstvennyi_intelekt_544222.png'); box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); ">
                         <h2 style="position: absolute">
-                            <a class="stretched-link" href="#">{{ $topFourPosts[0]->title }}</a>
+                            <a class="stretched-link" href="{{ $topFourPosts[0]->urlToPost }}">{{ $topFourPosts[0]->title }}</a>
                         </h2>
                         <div style="position: absolute; bottom: 20%; left: 5%; color: white; font-size: 1.8em;">
                             {{ \Illuminate\Support\Str::limit(strip_tags($topFourPosts[0]->content)) }}
@@ -49,7 +49,7 @@
                         <div class="col-md-12">
                             <div class="shadow-sm rounded info-block-top" style="height: 250px; background-image: url('https://aisearch.ru/cdn-cgi/image/fit=contain,width=1024,height=1024,compression=fast/files/0/520726/muzcina_banshhik_s_venikom_520726.png')">
                                 <h2 style="position: absolute">
-                                    <a class="stretched-link" href="#">{{ $topFourPosts[1]->title }}</a>
+                                    <a class="stretched-link" href="{{ $topFourPosts[1]->urlToPost }}">{{ $topFourPosts[1]->title }}</a>
                                 </h2>
                                 <div style="position: absolute; bottom: 20%; left: 5%; color: white; font-size: 1.2em;">
                                     {{ \Illuminate\Support\Str::limit(strip_tags($topFourPosts[1]->content)) }}
@@ -62,7 +62,7 @@
                         <div class="col-md-6">
                             <div class="shadow-sm rounded info-block-top" style="height: 250px; background-image: url('https://aisearch.ru/cdn-cgi/image/fit=contain,width=1024,height=1024,compression=fast/files/0/530841/spyashhii_mesyac_s_podsvecnikom_530841.png')">
                                 <h2 style="font-size: 1.2em">
-                                    <a class="stretched-link" href="#">{{ $topFourPosts[2]->title }}</a>
+                                    <a class="stretched-link" href="{{ $topFourPosts[2]->urlToPost }}">{{ $topFourPosts[2]->title }}</a>
                                 </h2>
                                 <div style="position: absolute; bottom: 20%; left: 5%; color: white; font-size: 0.8em;">
                                     {{ \Illuminate\Support\Str::limit(strip_tags($topFourPosts[2]->content)) }}
@@ -74,7 +74,7 @@
                         <div class="col-md-6">
                             <div class="shadow-sm rounded info-block-top" style="height: 250px; background-image: url('https://aisearch.ru/cdn-cgi/image/fit=contain,width=1024,height=1024,compression=fast/files/0/532194/8_marta_mezdunarodnyi_zenskii_den_narisui_lending_532194.png')">
                                 <h2 style="position: absolute; font-size: 1.2em">
-                                    <a class="stretched-link" href="#">{{ $topFourPosts[3]->title }}</a>
+                                    <a class="stretched-link" href="{{ $topFourPosts[3]->urlToPost }}">{{ $topFourPosts[3]->title }}</a>
                                 </h2>
                                 <div style="position: absolute; bottom: 20%; left: 5%; color: white; font-size: 0.8em;">
                                     {{ \Illuminate\Support\Str::limit(strip_tags($topFourPosts[3]->content)) }}
@@ -98,7 +98,8 @@
                                 <div class="card-body">
                                     <h5 class="card-title">{{ $post->title }}</h5>
                                     <p class="card-text">{{ \Illuminate\Support\Str::limit(strip_tags($post->content)) }}</p>
-                                    <a href="#" class="stretched-link btn btn-link">читать</a>
+                                    {{--{{ \App\Models\Modules\Blog\Posts::getUrlPostById($post->id) }}--}}
+                                    <a href="{{ $post->urlToPost }}" class="stretched-link btn btn-link">читать</a>
                                     <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
                                 </div>
                             </div>

@@ -11,13 +11,14 @@
         <link rel="shortcut icon" href="/images/codeflow_favicon.png" type="image/png">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
         @yield('stylesheet')
+        @stack('meta_noindex')
         @stack('styles')
         @stack('top-scripts')
         @yield('breadcrumbs-json-ld')
     </head>
     <body>
     @yield('header-navbar')
-        <div class="container">
+{{--        <div class="container">
             <header class="d-flex flex-wrap justify-content-center py-3 mb-4">
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                     <li>
@@ -48,7 +49,7 @@
                     </li>
                 </ul>
             </header>
-        </div>
+        </div>--}}
         <div class="container">
             @yield('breadcrumbs')
         </div>
