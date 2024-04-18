@@ -81,21 +81,26 @@ class PostsController extends Controller
      */
     public function update(Request $request, $posts)
     {
-        //dd($request->post(), $posts);
-
         if (Posts::updatePost($posts, $request->post())) {
             return redirect(route('admin.blog.post.index'));
         }
 
-        return redirect(route('admin.blog.post.debit.edit', ['post' => $posts]));
+        return redirect(route('admin.blog.post.edit', ['post' => $posts]));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Posts $posts)
+    public function destroy(Posts $posts, $postId)
     {
-        $posts->delete();
-        dd($posts);
+        if (!$postModel = Posts::query()->where(['id' => $postId])->first()) {
+            return abort('404');
+        }
+
+        if (!$postModel->delete()) {
+            session()->flash('message_warning', 'Post delete error');
+        }
+
+        return redirect(route('admin.blog.post.index'));
     }
 }

@@ -30,6 +30,7 @@ class AiLaraConfig
      */
     private function fillValues() : array
     {
+        Artisan::call('config:clear');
         $currentConfigValues = Config::get('ailara');
         $configFill = [];
 

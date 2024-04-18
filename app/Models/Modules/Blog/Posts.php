@@ -86,6 +86,23 @@ class Posts extends Model
 
             return false;
         }
+    }
 
+    static public function topFourPosts()
+    {
+        return self::select('id', 'post_category_id', 'title', 'content')
+            ->distinct('category_id')
+            ->inRandomOrder()
+            ->limit(4)
+            ->get();
+    }
+
+    static public function topPostsDifferentCategories()
+    {
+        return self::select('id', 'post_category_id', 'title', 'content')
+            ->distinct('category_id')
+            ->inRandomOrder()
+            ->limit(20)
+            ->get();
     }
 }

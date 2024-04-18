@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin\Blog;
 use App\Http\Controllers\Controller;
 use App\Models\Modules\Blog\Category;
 use App\Models\Modules\Blog\Import;
-use App\Models\Modules\Blog\Posts;
 use Illuminate\Http\Request;
 
 class ImportController extends Controller
@@ -52,6 +51,10 @@ class ImportController extends Controller
      */
     public function show(Import $import)
     {
+        if (request()->get('execute')) {
+            Import::execute($import);
+        }
+
         $modelParams = Import::getModelParams();
         $categories = Category::where('parent_id', '=', null)->get();
         $allCategories = Category::pluck('title','id')->all();

@@ -30,12 +30,12 @@
                                 <form action="{{ route('admin.blog.post.destroy', $postData) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-link" type="submit">Delete</button>
+                                    <button class="btn btn-link" type="submit" onclick="return confirm('Are you sure?')">Delete</button>
                                 </form>
                             </td>
                             @continue
                         @endif
-                    <td>{{ $postData->{$column->Field} }}</td>
+                    <td>{{ \Illuminate\Support\Str::limit(strip_tags($postData->{$column->Field}), 50) }}</td>
                     @endforeach
                 </tr>
             @endforeach

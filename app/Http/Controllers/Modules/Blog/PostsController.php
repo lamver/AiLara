@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Modules\Blog;
 
 use App\Http\Controllers\Controller;
+use App\Models\Modules\Blog\Category;
 use App\Models\Modules\Blog\Posts;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 class PostsController extends Controller
 {
@@ -14,7 +16,14 @@ class PostsController extends Controller
      */
     public function index(Request $request)
     {
-        dd('post here44');
+        $topFourPosts = Posts::topFourPosts();
+        $topPostsDifferentCategories = Posts::topPostsDifferentCategories();
+
+        //dd($topFourPosts);
+        return view('modules.blog.index', [
+            'topFourPosts' => $topFourPosts,
+            'topPostsDifferentCategories' => $topPostsDifferentCategories
+        ]);
     }
 
     /**
@@ -64,4 +73,16 @@ class PostsController extends Controller
     {
         //
     }
+
+    public function category(Request $request)
+    {
+        if (is_null($categoryId = Category::findCategoryIdByUrl(Route::current()->uri()))) {
+            return abort('404');
+        }
+
+        $posts = Posts::query()->where(['post_category_id' => $categoryId])->paginate();
+
+        return view('modules.blog.category', ['posts' => $posts/*, 'columns' => $columns*/]);
+    }
+
 }

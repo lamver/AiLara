@@ -3,7 +3,7 @@
       'name' => 'Blog',
       'controller' => \App\Http\Controllers\Modules\Blog\PostsController::class,
       'action' => 'index',
-      'route_prefix' => '/blog',
+      'route_prefix' => '/',
       ],
   'aiform' => [
       'name' => 'Ai form',

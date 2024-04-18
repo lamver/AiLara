@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
+Route::get('/', [\App\Http\Controllers\Modules\ModuleController::class, 'index'])->name('index');
 
 Route::get('/auth/btn.html', [\App\Http\Controllers\Ajax\UserStateController::class, 'authBtn'])
      ->name('ajax.auth-btn');
@@ -31,7 +31,7 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::get('/', [\App\Http\Controllers\Modules\ModuleController::class, 'index'])->name('index');
+
 
 Route::resource("/telegram-bots", AdminTelegramBotController::class)->except('show');
 

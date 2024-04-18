@@ -169,6 +169,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Wnikk\LaravelAccessRules\AccessRulesServiceProvider::class,
+        willvincent\Feeds\FeedsServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -184,6 +185,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
+        'Feeds'    => willvincent\Feeds\Facades\FeedsFacade::class,
     ])->toArray(),
 
 ];

@@ -19,6 +19,8 @@ services:
       - ./docker-compose/php:/usr/local/etc/php/custom.d
     environment:
       PHP_INI_SCAN_DIR: "/usr/local/etc/php/custom.d:/usr/local/etc/php/conf.d"
+      HTTP_PROXY: "http://0KdURt:cuUhXG@185.239.138.10:8000"
+      HTTPS_PROXY: "http://0KdURt:cuUhXG@185.239.138.10:8000"
     networks:
       - ailara
     extra_hosts:
