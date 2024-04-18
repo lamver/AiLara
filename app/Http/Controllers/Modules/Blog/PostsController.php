@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Modules\Blog;
 use App\Http\Controllers\Controller;
 use App\Models\Modules\Blog\Category;
 use App\Models\Modules\Blog\Posts;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,7 +22,6 @@ class PostsController extends Controller
         $topFourPosts = Posts::topFourPosts();
         $topPostsDifferentCategories = Posts::topPostsDifferentCategories();
 
-        //dd($topFourPosts);
         return view('modules.blog.index', [
             'topFourPosts' => $topFourPosts,
             'topPostsDifferentCategories' => $topPostsDifferentCategories
@@ -80,9 +82,37 @@ class PostsController extends Controller
             return abort('404');
         }
 
-        $posts = Posts::query()->where(['post_category_id' => $categoryId])->paginate();
+        $posts = Posts::getPostsByCategoryId($categoryId);
 
         return view('modules.blog.category', ['posts' => $posts/*, 'columns' => $columns*/]);
+    }
+
+    /**
+     * @param Request $request
+     * @param $slug
+     * @param $id
+     * @return Application|Factory|View|\Illuminate\Foundation\Application|never
+     */
+    public function view(Request $request, $slug, $id)
+    {
+        if (is_null($post = Posts::query()->find($id))) {
+            return abort(404);
+        }
+
+        return view('modules.blog.view', [
+            'post' => $post,
+            //'topPostsDifferentCategories' => $topPostsDifferentCategories
+        ]);
+    }
+
+    public function rss(Request $request)
+    {
+        if (is_null($categoryId = Category::findCategoryIdByUrl(Route::current()->uri()))) {
+            return abort('404');
+        }
+
+        $feed = Posts::getFeedItems(); //query()->where(['post_category_id' => $categoryId])->get()->toFeedItem();
+        dd($feed, $categoryId, 'rss');
     }
 
 }

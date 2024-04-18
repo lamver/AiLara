@@ -4,7 +4,7 @@
 @else
     <ul class="nav nav-pills">
         <li class="nav-item">
-            <a href="{{ route('dashboard') }}" class="navbar-btn btn btn-light btn-sm">
+            <a href="{{ route('dashboard') }}" class="navbar-btn btn btn-sm">
                 @if (empty($user->avatar))
                     <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
                         <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>

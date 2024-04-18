@@ -142,10 +142,10 @@ class Category extends Model
     /**
      * @return array
      */
-    static public function getFullUrlsToAllCategory($child = null, $paths = [])
+    static public function getFullUrlsToAllCategory($child = null, $paths = []): array
     {
-
         $data = self::query()->select(['id', 'parent_id','slug'])->get()->toArray();
+
         return self::buildSlugs($data);
     }
 
@@ -208,5 +208,38 @@ class Category extends Model
         }
 
         return implode('/', $path);
+    }
+
+    /**
+     * @return array[]
+     */
+    static public function getBreadCrumbsByUri($uri): array
+    {
+        $urlsCategory = self::getFullUrlsToAllCategory();
+
+        $uriToUri = explode("/", $uri);
+
+        $uriConcat = '';
+
+        $data = [];
+
+        foreach ($uriToUri as $url) {
+            if ($uriConcat == '') {
+                $uriConcat .= $url;
+            } else {
+                $uriConcat .= '/' . $url;
+            }
+
+            $category = self::findCategoryIdByUrl($uriConcat);
+
+            $category = self::query()->select(['id', 'parent_id','slug', 'title'])->where(['id' => $category])->first();
+
+            $data[] = [
+                'name' => $category->title, 'uri' => '/'.$uriConcat,
+            ];
+
+        }
+
+        return $data;
     }
 }
