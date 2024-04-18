@@ -40,7 +40,16 @@
             <label for="label_{{ $param->Field }}" class="form-label">{{ $param->Field }}</label>
             <select id="label_{{ $param->Field }}" name="{{ $param->Field }}" class="form form-control">
                 @foreach(\App\Models\Modules\Blog\Import::IMPORT_STATUS as $importStatus)
-                    <option @if(isset($import) && $import->{$param->Field} ==  $importStatus) selected @endif value="{{ $importStatus }}">{{ \App\Models\Modules\Blog\Import::getStatusName($importStatus) }}</option>
+                    <option @if(isset($import) && $import->{$param->Field} == $importStatus) selected @endif value="{{ $importStatus }}">{{ \App\Models\Modules\Blog\Import::getStatusName($importStatus) }}</option>
+                @endforeach
+            </select>
+            @continue
+        @endif
+        @if($param->Field == 'author_id')
+            <label for="label_{{ $param->Field }}" class="form-label">{{ $param->Field }}</label>
+            <select id="label_{{ $param->Field }}" name="{{ $param->Field }}" class="form form-control">
+                @foreach(\App\Models\User::getAuthors() as $author)
+                    <option @if(isset($import) && $import->{$param->Field} == $author->id) selected @endif value="{{ $author->id }}">{{ $author->name }}</option>
                 @endforeach
             </select>
             @continue
@@ -76,8 +85,8 @@
             <select id="label_{{ $param->Field }}" name="{{ $param->Field }}" class="form form-control">
                 @foreach($categoryTree['categories'] as $category)
                     <option @if(isset($import) && $import->{$param->Field} ==  $category->id) selected @endif value="{{$category->id}}">{{$category->id}} {{$category->title}}</option>
-                    @if(count($category->childs)) {{--{{ print_r($category->childs[0]->title) }}--}}
-                    @include('admin.modules.blog.category.select-categories', ['childs' => $category->childs, 'value' => isset($import) ?? $import->{$param->Field}])
+                    @if(count($category->childs))
+                        @include('admin.modules.blog.category.select-categories', ['childs' => $category->childs, 'value' => isset($import) ?? $import->{$param->Field}])
                     @endif
                 @endforeach
             </select>

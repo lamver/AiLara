@@ -16,12 +16,13 @@
         @yield('breadcrumbs-json-ld')
     </head>
     <body>
+    @yield('header-navbar')
         <div class="container">
-            <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+            <header class="d-flex flex-wrap justify-content-center py-3 mb-4">
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                     <li>
                         <a href="<?php echo Route::currentRouteName() == 'index' ? '#home' : route('index')?>" class="nav-link px-2 fw-bolder">
-                            <img title="{{ \Illuminate\Support\Facades\Config::get('ailara.logoTitle') }}" alt="Нейросеть для разбора сноведений" width="140" height="42" src="/images/logo.png"/>
+                            <img title="{{ \Illuminate\Support\Facades\Config::get('ailara.logoTitle') }}" alt="Нейросеть для разбора сноведений" width="{{ \Illuminate\Support\Facades\Config::get('ailara.logoWidthPx') }}" height="{{ \Illuminate\Support\Facades\Config::get('ailara.logoHeightPx') }}" src="{{ \Illuminate\Support\Facades\Config::get('ailara.logoPath') }}"/>
                         </a>
                     </li>
                 </ul>
@@ -53,17 +54,14 @@
         </div>
         @yield('content')
         <div class="container">
-
             <footer class="py-3 my-4">
-                <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+                <ul class="nav justify-content-center pb-3 mb-3">
                 </ul>
                 <p class="text-center text-muted">© @php echo date("Y", time()) @endphp Powered by <a target="_blank" href="https://aisearch.ru">AiSearch TECH</a>, Inc</p>
             </footer>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
         <script>
-
             const html = document.querySelector('html');
 
             const iconLightMode = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-brightness-high-fill" viewBox="0 0 16 16">' +
@@ -168,7 +166,5 @@
         </script>
         @stack('bottom-scripts')
     </body>
-
     {!! \Illuminate\Support\Facades\Config::get('ailara.counterExternalCode') !!}
-
 </html>

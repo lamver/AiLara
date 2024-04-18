@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Blog;
 
 use App\Http\Controllers\Controller;
 use App\Models\Modules\Blog\Category;
+use App\Models\Modules\Blog\Import;
 use App\Models\Modules\Blog\Posts;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -63,7 +64,12 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        dd('edit');
+        $modelParams = Category::getModelParams();
+        $categories = Category::where('parent_id', '=', null)->get();
+        $allCategories = Category::pluck('title','id')->all();
+        $categoryTree = compact('categories','allCategories');
+
+        return view('admin.modules.blog.category.create', ['modelParams' => $modelParams, 'model' => $category,  'categoryTree' => $categoryTree]);
     }
 
     /**
@@ -71,7 +77,11 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        if (Category::updateCategory($category, $request->post())) {
+            return redirect(route('admin.blog.category.index'));
+        }
+
+        return redirect(route('admin.blog.category.edit', ['post' => $category]));
     }
 
     /**

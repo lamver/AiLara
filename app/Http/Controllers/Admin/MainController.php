@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Artisan;
 
 class MainController extends BaseController
 {
@@ -21,6 +22,8 @@ class MainController extends BaseController
 
     public function configuration(Request $request)
     {
+
+        Artisan::call('cache:clear');
         $aiLaraConfig = new AiLaraConfig();
 
         if (!empty($request->post())) {

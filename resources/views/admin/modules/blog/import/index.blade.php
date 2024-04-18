@@ -35,7 +35,7 @@
                             </td>
                             @continue
                         @endif
-                        <td>{{ $postData->{$column->Field} }}</td>
+                        <td>{{ \Illuminate\Support\Str::limit(strip_tags($postData->{$column->Field}), 50) }}</td>
                     @endforeach
                 </tr>
             @endforeach

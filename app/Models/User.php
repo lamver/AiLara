@@ -43,4 +43,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * @return array
+     */
+    static public function getAuthors()
+    {
+        return self::query()->get();
+    }
 }
