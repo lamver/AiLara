@@ -169,6 +169,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Wnikk\LaravelAccessRules\AccessRulesServiceProvider::class,
+        Barryvdh\TranslationManager\TranslationServiceProvider::class,
     ])->toArray(),
 
     /*

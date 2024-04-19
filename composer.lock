@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "03bec80fa188d66b3163588cfe7813a6",
+    "content-hash": "df20f9545a0ee9a18ac65f2a2859c2d0",
     "packages": [
         {
             "name": "artesaos/seotools",
@@ -77,6 +77,70 @@
                 "source": "https://github.com/artesaos/seotools"
             },
             "time": "2024-03-16T09:54:59+00:00"
+        },
+        {
+            "name": "barryvdh/laravel-translation-manager",
+            "version": "v0.6.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/barryvdh/laravel-translation-manager.git",
+                "reference": "fef5b8e6318d8cab0b2a082ed222a8b72c071ee2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/barryvdh/laravel-translation-manager/zipball/fef5b8e6318d8cab0b2a082ed222a8b72c071ee2",
+                "reference": "fef5b8e6318d8cab0b2a082ed222a8b72c071ee2",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^9|^10|^11",
+                "illuminate/translation": "^9|^10|^11",
+                "php": ">=7.2",
+                "symfony/finder": "^6|^7"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^7|^8|^9"
+            },
+            "suggest": {
+                "tanmuhittin/laravel-google-translate": "If you want to translate using Google API"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.6-dev"
+                },
+                "laravel": {
+                    "providers": [
+                        "Barryvdh\\TranslationManager\\ManagerServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Barryvdh\\TranslationManager\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Barry vd. Heuvel",
+                    "email": "barryvdh@gmail.com"
+                }
+            ],
+            "description": "Manage Laravel Translations",
+            "keywords": [
+                "laravel",
+                "translations",
+                "translator"
+            ],
+            "support": {
+                "issues": "https://github.com/barryvdh/laravel-translation-manager/issues",
+                "source": "https://github.com/barryvdh/laravel-translation-manager/tree/v0.6.6"
+            },
+            "time": "2024-03-09T19:36:22+00:00"
         },
         {
             "name": "brick/math",
@@ -9078,5 +9142,5 @@
         "php": "^8.1"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
