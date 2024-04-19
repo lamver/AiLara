@@ -172,19 +172,19 @@
                     <div class="position-sticky pt-3">
                         <ul class="nav flex-column">
                             <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="{{route('admin.index', $langLink)}}" {{\Illuminate\Support\Facades\Route::is('admin.index') ? 'disable' : ''}}>
+                                <a class="nav-link" aria-current="page" href="{{route('admin.index')}}" {{\Illuminate\Support\Facades\Route::is('admin.index') ? 'disable' : ''}}>
                                     <span data-feather="home"></span>
                                     {{ __('admin.dashboard') }}
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('accessUi.', $langLink) }}">
+                                <a class="nav-link" href="{{ route('accessUi.') }}">
                                     <span data-feather="file"></span>
                                     {{ __('admin.RBAC') }}
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('admin.configuration', $langLink) }} ">
+                                <a class="nav-link" href="{{ route('admin.configuration') }} ">
                                     <span data-feather="shopping-cart"></span>
                                     {{ __('admin.configuration') }}
                                 </a>
@@ -196,13 +196,13 @@
                                 </a>
                                 <ul>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('admin.ais.commonData', $langLink) }}">
+                                        <a class="nav-link" href="{{ route('admin.ais.commonData') }}">
                                             <span data-feather="bar-chart-2"></span>
                                             {{ __('admin.common_data') }}
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('admin.ais.aiForms', $langLink) }}">
+                                        <a class="nav-link" href="{{ route('admin.ais.aiForms') }}">
                                             <span data-feather="bar-chart-2"></span>
                                             {{ __('admin.ai_forms') }}
                                         </a>
@@ -216,7 +216,7 @@
                                 </a>
                                 <ul>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('admin.ais.commonData', $langLink) }}">
+                                        <a class="nav-link" href="{{ route('admin.ais.commonData') }}">
                                             <span data-feather="bar-chart-2"></span>
                                             {{ __('admin.configuration') }}
                                         </a>
@@ -228,19 +228,19 @@
                                         </a>
                                         <ul>
                                             <li>
-                                                <a class="nav-link" href="{{ route('admin.blog.post.index', $langLink) }}">
+                                                <a class="nav-link" href="{{ route('admin.blog.post.index') }}">
                                                     <span data-feather="bar-chart-2"></span>
                                                     {{ __('admin.posts') }}
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="nav-link" href="{{ route('admin.blog.category.index', $langLink) }}">
+                                                <a class="nav-link" href="{{ route('admin.blog.category.index') }}">
                                                     <span data-feather="bar-chart-2"></span>
                                                     {{ __('admin.category') }}
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="nav-link" href="{{ route('admin.blog.import.index', $langLink) }}">
+                                                <a class="nav-link" href="{{ route('admin.blog.import.index') }}">
                                                     <span data-feather="bar-chart-2"></span>
                                                     {{ __('admin.import') }}
                                                 </a>
@@ -251,25 +251,25 @@
                                 </ul>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('telegram-bots.index', $langLink) }}">
+                                <a class="nav-link" href="{{ route('telegram-bots.index') }}">
                                     <span data-feather="bar-chart-2"></span>
                                     {{ __('admin.telegram_bots') }}
                                 </a>
-                                <a class="nav-link" href="{{ route('admin.ais.pages', $langLink) }}">
+                                <a class="nav-link" href="{{ route('admin.ais.pages') }}">
                                     <span data-feather="bar-chart-2"></span>
                                     {{ __('admin.pages') }}
                                 </a>
-                                <a class="nav-link" href="{{ route('admin.update', $langLink) }}">
+                                <a class="nav-link" href="{{ route('admin.update') }}">
                                     <span data-feather="bar-chart-2"></span>
                                     {{ __('admin.update_app') }}
                                 </a>
-                                <a class="nav-link" href="{{ route('admin.logs', $langLink) }}">
+                                <a class="nav-link" href="{{ route('admin.logs') }}">
                                     <span data-feather="bar-chart-2"></span>
                                     {{ __('admin.Logs') }}
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/admin/translations/{{$langLink}}">
+                                <a class="nav-link" href="/admin/translations">
                                     <span data-feather="bar-chart-2"></span>
                                     {{ __('admin.Managing transfers') }}
                                 </a>
@@ -445,20 +445,18 @@
             let setLang = document.getElementById('setLang');
             setLang.addEventListener('change', function (){
                 fetch('/admin/setLang/'+ this.value).then(()=> {
-                    let pathName = location.pathname;
+                    let href = location.href;
                     let lang = this.value;
-
-                    // Если уже в конце стр. - удаляем.
                     let languages = {!! json_encode($languages) !!};
+
                     for (let item of languages) {
-                        let regex = new RegExp('/' + item + '/?$');
-                        if(regex.test(pathName)) {
-                            pathName = pathName.replace(regex, "")
+                        let regex = new RegExp('/' + item + '/');
+                        if(regex.test(href)) {
+                            href = href.replace(regex, `/${lang}/`)
                         }
                     }
 
-                    let l = location;
-                    l.href = `${l.origin}${pathName}/${lang}${l.search}${l.hash}`
+                    location.href = href;
                 });
             });
         </script>

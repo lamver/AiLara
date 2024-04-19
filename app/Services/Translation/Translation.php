@@ -24,11 +24,18 @@ class Translation
         return $transistor->getLocales();
     }
 
-    public static function getLinkLocale()
+    /**
+     * Check if the current route has a language prefix.
+     *
+     * @return string|null The language prefix if present, null otherwise.
+     */
+    public static function checkRoutePrefix(): ?string
     {
-        $transistor = App::make(Manager::class);
-        $local = $transistor->getLocales();
-        dd($local);
-        return "4444";
+        if (in_array(request()->segment(1), self::getLanguages())) {
+            return request()->segment(1);
+        }
+
+        return null;
+
     }
 }
