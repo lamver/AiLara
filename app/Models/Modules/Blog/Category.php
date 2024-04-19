@@ -215,8 +215,6 @@ class Category extends Model
      */
     static public function getBreadCrumbsByUri($uri): array
     {
-        $urlsCategory = self::getFullUrlsToAllCategory();
-
         $uriToUri = explode("/", $uri);
 
         $uriConcat = '';
@@ -237,7 +235,6 @@ class Category extends Model
             $data[] = [
                 'name' => $category->title, 'uri' => '/'.$uriConcat,
             ];
-
         }
 
         return $data;
