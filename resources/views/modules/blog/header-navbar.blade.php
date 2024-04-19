@@ -14,7 +14,7 @@
             @foreach($categoryTree['categories'] as $category)
                     @if(count($category->childs))
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="/{{ \App\Models\Modules\Blog\Category::getCategoryUrlById($category->id) }}" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" title="{{ $category->seo_description }}" href="/{{ \App\Models\Modules\Blog\Category::getCategoryUrlById($category->id) }}" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 {{ $category->title }}
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -22,7 +22,9 @@
                             </ul>
                         </li>
                     @else
-                        <li><a href="/{{ \App\Models\Modules\Blog\Category::getCategoryUrlById($category->id) }}" class="nav-link px-2 link-secondary">{{ $category->title }}</a></li>
+                        <li>
+                            <a title="{{ $category->seo_description }}" href="/{{ \App\Models\Modules\Blog\Category::getCategoryUrlById($category->id) }}" class="nav-link px-2 link-secondary">{{ $category->title }}</a>
+                        </li>
                     @endif
             @endforeach
                 <div class="d-flex" id="auth-btn"></div>

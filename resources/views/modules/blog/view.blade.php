@@ -1,4 +1,6 @@
 @extends('layouts.app')
+@section('breadcrumbs', Breadcrumbs::render('index', $breadcrumbs))
+@section('breadcrumbs-json-ld', Breadcrumbs::view('breadcrumbs::json-ld', 'index', $breadcrumbs))
 @section('header-navbar')
     @include('modules.blog.header-navbar')
 @endsection
