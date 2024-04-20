@@ -271,6 +271,7 @@ class Installer {
 }
 
 if (isset($_GET['step'])) {
+    session_start();
     if ($_GET['step'] == 0) {
         header("Refresh:2; url=/install.php?step=1");
         echo 'step #0' . '<br>';
@@ -341,7 +342,10 @@ if (isset($_GET['step'])) {
             if (Installer::checkDbConnection($_POST['DB_HOST'], $_POST['DB_PORT'], $_POST['DB_DATABASE'], $_POST['DB_USERNAME'], $_POST['DB_PASSWORD'])) {
                 Installer::createEnv($_POST);
                 echo 'DB connections success' . '<br>';
-                header("Refresh:2; url=/install_session5454t4t5t");
+
+                $_SESSION['route_install'] = Installer::generateRandomString(10);
+
+                header("Refresh:2; url=/install_" . $_SESSION['route_install']);
                 exit;
             } else {
                 echo 'Error DB connections' . '<br>';

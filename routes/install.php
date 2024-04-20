@@ -18,7 +18,8 @@ use Illuminate\Support\Facades\Config;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::get('/install_session5454t4t5t', function () {
+
+Route::get('/install_'.$_SESSION['route_install'], function () {
     Artisan::call('key:generate');
     Artisan::call('config:clear');
     Artisan::call('cache:clear');
@@ -27,7 +28,9 @@ Route::get('/install_session5454t4t5t', function () {
 
     foreach ($tables as $table) {
         $tableName = reset($table);
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists($tableName);
+        Schema::enableForeignKeyConstraints();
 
         echo 'Delete table:' . $tableName . '<br>';
     }
