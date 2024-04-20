@@ -27,7 +27,9 @@ Route::get('/install_session5454t4t5t', function () {
 
     foreach ($tables as $table) {
         $tableName = reset($table);
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists($tableName);
+        Schema::enableForeignKeyConstraints();
 
         echo 'Delete table:' . $tableName . '<br>';
     }
