@@ -21,7 +21,6 @@ use Illuminate\Support\Facades\Config;
 
 session_start();
 
-
 $route_install = md5(rand(100, 90000));
 
 if (isset($_SESSION['route_install'])) {
@@ -45,6 +44,7 @@ Route::get('/install_'.$route_install, function () {
     }
 
     Artisan::call('migrate');
+    Artisan::call('route:clear');
 
     $user = new \App\Models\User();
     $userPassword = \Illuminate\Support\Str::random(10);
