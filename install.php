@@ -15,7 +15,10 @@ class Installer {
     const APP_PATH_TO_UPDATE_ARCHIVE = 'update/main.zip';
     const APP_PATH_TO_UPDATE_ARCHIVE_EXTRACT_FILES = 'update/extract_files';
 
-    static public function downloadArchiveRepository()
+    /**
+     * @return bool
+     */
+    static public function downloadArchiveRepository(): bool
     {
         $url = self::URL_REPOSITORY;
 
@@ -97,12 +100,15 @@ class Installer {
             return false;
         }
 
-        $files = glob($sourceDir . '/*');
+        $files = glob($sourceDir . '/{,.}[!.,!..]*', GLOB_BRACE);
+
+        //print_r($files); die();
 
         foreach ($files as $file) {
             if (is_file($file)) {
                 $fileName = basename($file);
                 $destFile = $destDir . '/' . $fileName;
+                //echo 'copy: ' . $fileName . ' to: ' . $destFile .'<br>';
                 if (!rename($file, $destFile)) {
                     return false;
                 }
@@ -110,6 +116,7 @@ class Installer {
                 $dirName = basename($file);
                 $newDestDir = $destDir . '/' . $dirName;
                 if (!is_dir($newDestDir)) {
+                    //echo 'create dir: ' . $newDestDir . ' from: ' . $dirName .'<br>';
                     mkdir($newDestDir);
                 }
                 if (!self::moveFiles($file, $newDestDir)) {
@@ -127,19 +134,19 @@ class Installer {
     static public function composerInstall(): bool
     {
 
-        $composerDir = getcwd();
+/*        $composerDir = getcwd();
 
-        $composerDir = str_replace('public/' , '', $composerDir);
+        $composerDir = str_replace('public' , '', $composerDir);
 
         chdir($composerDir);
 
         $output = shell_exec('composer install');
         echo "<pre>composer result: $output</pre>";
 
-        return true;
+        return true;*/
 
         // Название папки для распаковки
-/*        $extractPath = getcwd();
+        $extractPath = getcwd();
 
         $extractPath = str_replace('public' , '', $extractPath);
 
@@ -148,19 +155,22 @@ class Installer {
 
         $zipfile = $extractPath . '/vendor.zip';
 
-        return self::unzipFile($zipfile, $extractPath);*/
+        return self::unzipFile($zipfile, $extractPath);
     }
 
+    /**
+     * @return string
+     */
     static public function getHomeDir(): string
     {
         return dirname(getcwd(), 2);
     }
 
     /**
-     * @param $data
+     * @param array $data
      * @return bool
      */
-    static public function createEnv($data = [])
+    static public function createEnv(array $data = []): bool
     {
         $env = [
             'APP_NAME' => 'AiLara',
@@ -216,7 +226,9 @@ class Installer {
 
         $anvFile = '';
 
-        $data['APP_KEY'] = self::generateRandomString(32);
+        $appKey = self::generateRandomString(32);
+        $_SESSION['app_key'] = md5($appKey);
+        $data['APP_KEY'] = $appKey;
         $data['APP_URL'] = self::getProtocolHostPort();
         $data['FRONTEND_URL'] = self::getProtocolHostPort();
 
@@ -384,9 +396,8 @@ if (isset($_GET['step'])) {
                 Installer::createEnv($_POST);
                 echo 'DB connections success' . '<br>';
 
-                $_SESSION['route_install'] = Installer::generateRandomString(10);
-                echo 'Sess install: ' . $_SESSION['route_install'] . '<br>';
-                header("Refresh:5; url=/install_"/* . $_SESSION['route_install']*/);
+                echo 'Sess install: ' . $_SESSION['app_key'] . '<br>';
+                header("Refresh:5; url=/install_?appKey=" . $_SESSION['app_key']);
                 exit;
             } else {
                 echo 'Error DB connections' . '<br>';
@@ -407,12 +418,6 @@ if (isset($_GET['step'])) {
         echo '<button type="submit">Apply</button>' . '<br>';
         echo '</form>';
 
-/*        if (Installer::composerInstall()) {
-            header("Refresh:2; url=/install.php?step=5");
-            exit;
-        }*/
-
-        //echo 'Move files error!' . '<br>';
     }
 
     if ($_GET['step'] == 20) {
@@ -477,7 +482,7 @@ if (isset($_GET['step'])) {
 <body>
 
 <iframe style="z-index: 10000; color: white" src="?step=0"></iframe>
-<canvas width="1680" height="560"></canvas>
+<canvas style="background-color: white" width="1680" height="560"></canvas>
 
 <script>
     jQuery(function ($) {
