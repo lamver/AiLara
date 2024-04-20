@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\Config;
 |
 */
 
+session_start();
+
 Route::get('/install_'.$_SESSION['route_install'], function () {
     Artisan::call('key:generate');
     Artisan::call('config:clear');
