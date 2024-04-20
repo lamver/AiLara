@@ -252,6 +252,9 @@ class Import extends Model
         $fileContent = curl_exec($curl);
 
         if ($fileContent !== false) {
+            if (!is_dir($savePath)) {
+                mkdir($savePath, 755, true);
+            }
             file_put_contents($savePath . '/' . $tmpFileName, $fileContent);
             return true;
         } else {
