@@ -21,6 +21,10 @@ use Illuminate\Support\Facades\Config;
 
 session_start();
 
+if (!isset($_SESSION['route_install'])) {
+    die();
+}
+
 Route::get('/install_'.$_SESSION['route_install'], function () {
     Artisan::call('key:generate');
     Artisan::call('config:clear');
@@ -47,10 +51,10 @@ Route::get('/install_'.$_SESSION['route_install'], function () {
     $user->name = 'Admin Root';
     $user->save();
 
-    echo 'Your login: ' . $userLogin . '<br>';
-    echo 'Your password: ' . $userPassword . '<br>';
-    echo 'Front: <a target="_blank" href="/"</a><br>';
-    echo 'Dashboard: <a target="_blank" href="/' . Config::get('ailara.admin_prefix') . '"</a><br>';
+    echo 'Your login: <b>' . $userLogin . '</b><br>';
+    echo 'Your password: <b>' . $userPassword . '</b><br>';
+    echo 'Front: <a target="_blank" href="/">Front</a><br>';
+    echo 'Admin Dashboard: <a target="_blank" href="/' . Config::get('ailara.admin_prefix') . '">'.Config::get('ailara.admin_prefix').'</a><br>';
 
 
     return str_replace("\n", "<br>", Artisan::output());
