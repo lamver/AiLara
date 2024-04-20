@@ -87,6 +87,11 @@ class Installer {
         }
     }
 
+    /**
+     * @param $sourceDir
+     * @param $destDir
+     * @return bool
+     */
     static public function moveFiles($sourceDir, $destDir) {
         if (!is_dir($sourceDir) || !is_dir($destDir)) {
             return false;
@@ -116,10 +121,25 @@ class Installer {
         return true;
     }
 
-    static public function composerInstall()
+    /**
+     * @return true
+     */
+    static public function composerInstall(): bool
     {
+
+        $composerDir = getcwd();
+
+        $composerDir = str_replace('public/' , '', $composerDir);
+
+        chdir($composerDir);
+
+        $output = shell_exec('composer install');
+        echo "<pre>composer result: $output</pre>";
+
+        return true;
+
         // Название папки для распаковки
-        $extractPath = getcwd();
+/*        $extractPath = getcwd();
 
         $extractPath = str_replace('public' , '', $extractPath);
 
@@ -128,7 +148,7 @@ class Installer {
 
         $zipfile = $extractPath . '/vendor.zip';
 
-        return self::unzipFile($zipfile, $extractPath);
+        return self::unzipFile($zipfile, $extractPath);*/
     }
 
     static public function getHomeDir(): string
