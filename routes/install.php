@@ -19,15 +19,15 @@ use Illuminate\Support\Facades\Config;
 |
 */
 
-session_start();
+/*session_start();
 
 $route_install = md5(rand(100, 90000));
 
 if (isset($_SESSION['route_install'])) {
     $route_install = $_SESSION['route_install'];
 }
-echo $route_install;
-Route::get('/install_'.$_SESSION['route_install'], function () {
+echo $route_install;*/
+Route::get('/install_', function () {
     Artisan::call('key:generate');
     Artisan::call('config:clear');
     Artisan::call('cache:clear');
