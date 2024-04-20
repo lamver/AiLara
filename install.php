@@ -147,6 +147,8 @@ class Installer {
             'APP_ENV' => 'local',
             'APP_KEY' => '',
             'APP_DEBUG' => 'true',
+            'APP_URL' => '',
+            'FRONTEND_URL' => '',
             'LOG_LEVEL' => 'debug',
             'DB_CONNECTION' => 'mysql',
             'DB_HOST' => '127.0.0.1',
@@ -194,6 +196,10 @@ class Installer {
 
         $anvFile = '';
 
+        $data['APP_KEY'] = self::generateRandomString(32);
+        $data['APP_URL'] = self::getProtocolHostPort();
+        $data['FRONTEND_URL'] = self::getProtocolHostPort();
+
         foreach ($env as $envKey => $envValue) {
             if (isset($data[$envKey])) {
                 $anvFile .= $envKey.'='.$data[$envKey] . PHP_EOL;
@@ -235,6 +241,32 @@ class Installer {
             $conn->close();
             return true;
         }
+    }
+
+    /**
+     * @param $length
+     * @return string
+     */
+    public static function generateRandomString($length): string
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, strlen($characters) - 1)];
+        }
+        return $randomString;
+    }
+
+    /**
+     * @return string
+     */
+    static public function getProtocolHostPort(): string
+    {
+        $host = $_SERVER['HTTP_HOST'];
+        $protocol = isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) ? 'https' : 'http';
+        $port = $_SERVER['SERVER_PORT'];
+
+        return $protocol . '://' . $host . ($port != ':80' && $port != '443' ? ':'.$port.'/' : '/');
     }
 }
 
@@ -383,7 +415,9 @@ if (isset($_GET['step'])) {
     </style>
 </head>
 <body>
+
 <iframe src="?step=0"></iframe>
+<script type="application/javascript"> тут содержимое </script>
 </body>
 </html>
 

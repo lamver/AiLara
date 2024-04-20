@@ -4,6 +4,9 @@ use App\Http\Controllers\Admin\Integration\AdminTelegramBotController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Config;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,18 +19,31 @@ use Illuminate\Support\Facades\Artisan;
 |
 */
 Route::get('/install_session5454t4t5t', function () {
-
     Artisan::call('key:generate');
     Artisan::call('config:clear');
     Artisan::call('cache:clear');
+
+    DB::statement('SET foreign_key_checks=0');
+    Schema::dropIfExists(DB::getConnection()->getDatabaseName() . '.*');
+    DB::statement('SET foreign_key_checks=1');
+
+    echo 'Все таблицы в базе данных успешно удалены' . '<br>';
+
     Artisan::call('migrate');
 
-
     $user = new \App\Models\User();
-    $user->password = \Illuminate\Support\Facades\Hash::make('ThePowerPassword');
-    $user->email = 'root@'.request()->getHttpHost();
+    $userPassword = \Illuminate\Support\Str::random(10);
+    $user->password = \Illuminate\Support\Facades\Hash::make($userPassword);
+    $userLogin = 'root@'.request()->getHttpHost();
+    $user->email = $userLogin;
     $user->name = 'Admin Root';
     $user->save();
 
-    return Artisan::output();
+    echo 'Your login: ' . $userLogin . '<br>';
+    echo 'Your password: ' . $userPassword . '<br>';
+    echo 'Front: <a target="_blank" href="/"</a><br>';
+    echo 'Dashboard: <a target="_blank" href="/' . Config::get('ailara.admin_prefix') . '"</a><br>';
+
+
+    return str_replace("\n", "<br>", Artisan::output());
 });
