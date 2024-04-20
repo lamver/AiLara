@@ -53,7 +53,11 @@ class Installer {
 
         $zipfile = getcwd() . '/'.self::ARCHIVE_FILE_ZIP_NAME;
 
-        return self::unzipFile($zipfile, $extractPath);
+        $resultExtract = self::unzipFile($zipfile, $extractPath);
+
+        unlink($zipfile);
+
+        return $resultExtract;
     }
 
     /**
@@ -132,6 +136,10 @@ class Installer {
         return dirname(getcwd(), 2);
     }
 
+    /**
+     * @param $data
+     * @return bool
+     */
     static public function createEnv($data = [])
     {
         $env = [
@@ -299,6 +307,7 @@ if (isset($_GET['step'])) {
             && isset($_POST['DB_PASSWORD'])
         ) {
             if (Installer::checkDbConnection($_POST['DB_HOST'], $_POST['DB_PORT'], $_POST['DB_DATABASE'], $_POST['DB_USERNAME'], $_POST['DB_PASSWORD'])) {
+                Installer::createEnv($_POST);
                 echo 'DB connections success' . '<br>';
                 header("Refresh:2; url=/install_session5454t4t5t");
                 exit;
