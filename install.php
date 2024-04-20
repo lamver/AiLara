@@ -345,7 +345,7 @@ if (isset($_GET['step'])) {
 
                 $_SESSION['route_install'] = Installer::generateRandomString(10);
                 echo 'Sess install: ' . $_SESSION['route_install'] . '<br>';
-                header("Refresh:2; url=/install_" . $_SESSION['route_install']);
+                header("Refresh:5; url=/install_" . $_SESSION['route_install']);
                 exit;
             } else {
                 echo 'Error DB connections' . '<br>';
