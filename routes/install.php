@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Artisan;
 |
 */
 Route::get('/install_session5454t4t5t', function () {
+
+    Artisan::call('clear');
     Artisan::call('migrate');
     return Artisan::output();
 });

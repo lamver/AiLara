@@ -144,7 +144,11 @@ class Category extends Model
      */
     static public function getFullUrlsToAllCategory($child = null, $paths = []): array
     {
-        $data = self::query()->select(['id', 'parent_id','slug'])->get()->toArray();
+        try {
+            $data = self::query()->select(['id', 'parent_id','slug'])->get()->toArray();
+        } catch (\Exception $e) {
+            $data = [];
+        }
 
         return self::buildSlugs($data);
     }
