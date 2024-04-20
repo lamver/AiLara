@@ -23,11 +23,14 @@ Route::get('/install_session5454t4t5t', function () {
     Artisan::call('config:clear');
     Artisan::call('cache:clear');
 
-    DB::statement('SET foreign_key_checks=0');
-    Schema::dropIfExists(DB::getConnection()->getDatabaseName() . '.*');
-    DB::statement('SET foreign_key_checks=1');
+    $tables = DB::select('SHOW TABLES');
 
-    echo 'Все таблицы в базе данных успешно удалены' . '<br>';
+    foreach ($tables as $table) {
+        $tableName = reset($table);
+        Schema::dropIfExists($tableName);
+
+        echo 'Delete table:' . $tableName . '<br>';
+    }
 
     Artisan::call('migrate');
 
