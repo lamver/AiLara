@@ -421,7 +421,6 @@ if (isset($_GET['step'])) {
 <body>
 
 <iframe src="?step=0"></iframe>
-<script type="application/javascript"> тут содержимое </script>
 </body>
 </html>
 
