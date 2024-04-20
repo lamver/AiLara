@@ -37,4 +37,26 @@ class MainController extends BaseController
         return view('admin.configuration', ['config' => $config]);
     }
 
+    public function robotsTxt(Request $request)
+    {
+        $robotsTxtPath = base_path().'/public/robots.txt';
+
+        if (!file_exists($robotsTxtPath)) {
+            $content = 'User-agent: *' . PHP_EOL;
+            $content .= 'Disallow: /' . PHP_EOL;
+
+            file_put_contents($robotsTxtPath, $content);
+        }
+
+        if ($request->post('robotsTxtContent') !== null) {
+            file_put_contents($robotsTxtPath, $request->post('robotsTxtContent'));
+            redirect(route('admin.configuration.robots_txt'));
+        }
+
+
+        $robotsTxtContent = file_get_contents($robotsTxtPath);
+
+        return view('admin.robots-txt', ['robotsTxtContent' => $robotsTxtContent]);
+    }
+
 }

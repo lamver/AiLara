@@ -7,9 +7,7 @@
         <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
         <meta name="generator" content="Hugo 0.84.0">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-
-        <title>Dashboard Template · Bootstrap v5.0</title>
-
+        <title>AiLara dashboard</title>
         <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/dashboard/">
         @stack('top-scripts')
         @yield('stylesheet')
@@ -188,6 +186,14 @@
                                     <span data-feather="shopping-cart"></span>
                                     Configuration
                                 </a>
+                                <ul>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{ route('admin.configuration.robots_txt') }}">
+                                            <span data-feather="bar-chart-2"></span>
+                                            Robots TXT
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#">

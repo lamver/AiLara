@@ -24,6 +24,8 @@ Route::middleware(['auth', 'verified'])->prefix(\Illuminate\Support\Facades\Conf
     Route::get('/', [MainController::class, 'index'])->name('admin.index');
     Route::get('/configuration', [MainController::class, 'configuration'])->name('admin.configuration');
     Route::post('/configuration', [MainController::class, 'configuration'])->name('admin.configuration.save');
+    Route::get('/configuration/robots_txt', [MainController::class, 'robotsTxt'])->name('admin.configuration.robots_txt');
+    Route::post('/configuration/robots_txt', [MainController::class, 'robotsTxt'])->name('admin.configuration.robots_txt.save');
 
     Route::get('/ais/common-data', [AiSearchController::class, 'commonData'])->name('admin.ais.commonData');
 
