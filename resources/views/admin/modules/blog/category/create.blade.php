@@ -45,14 +45,14 @@
 
         @if($param->Field == 'parent_id')
             <select id="label_{{ $param->Field }}" name="{{ $param->Field }}" class="form form-control">
-                <option value=""> - no parent cat -</option>
+                <option value="0"> - no parent cat -</option>
                 @foreach($categoryTree['categories'] as $category)
                     @if(isset($model) && $category->id == $model->id)
                         @continue
                     @endif
-                    <option @if(isset($model) && $category->id == $model->parent_id) selected @endif value="{{$category->id}}">{{$category->id}} {{$category->title}}</option>
+                    <option @if(isset($model) && $category->id == $model->parent_id) selected @endif value="{{$category->id}}">{{$category->id}} {{$category->title}} {{--{{ $model->id }}--}}</option>
                     @if(count($category->childs))
-                        @include('admin.modules.blog.category.select-categories', ['childs' => $category->childs, 'value' => isset($model->id) ?? null])
+                        @include('admin.modules.blog.category.select-categories', ['childs' => $category->childs, 'model' => isset($model) ? $model : null ])
                     @endif
                 @endforeach
             </select>

@@ -37,9 +37,9 @@
                         <div class="col-md-4">
                             {{--           <h4>{{ $post->title }}</h4>--}}
                             <div class="card mb-3">
-                                <img src="https://aisearch.ru/cdn-cgi/image/fit=contain,width=400,height=400,compression=fast/files/0/532194/8_marta_mezdunarodnyi_zenskii_den_narisui_lending_532194.png" class="card-img-top" alt="...">
+                                <img src="{{ $post->image }}" class="card-img-top" alt="...">
                                 <div class="card-body">
-                                    <h2 class="card-title">{{ $post->title }}</h2>
+                                    <h2 style="font-size: 18px" class="card-title">{{ $post->title }}</h2>
                                     <p class="card-text">{{ \Illuminate\Support\Str::limit(strip_tags($post->content)) }}</p>
                                     {{--{{ \App\Models\Modules\Blog\Posts::getUrlPostById($post->id) }}--}}
                                     <a href="{{ $post->urlToPost }}" class="stretched-link btn btn-link">читать</a>

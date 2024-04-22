@@ -10,8 +10,9 @@ class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
+     * @param Request $request
      */
-    public function index()
+    public function index(Request $request)
     {
         //
     }

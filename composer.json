@@ -7,7 +7,6 @@
     "require": {
         "php": "^8.1",
         "artesaos/seotools": "^1.2",
-        "binshops/laravel-blog": "^9.3",
         "davejamesmiller/laravel-breadcrumbs": "^5.3",
         "defstudio/telegraph": "^1.42",
         "guzzlehttp/guzzle": "^7.2",

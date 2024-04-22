@@ -52,7 +52,7 @@
                 @foreach($categoryTree['categories'] as $category)
                     <option @if(isset($post) && $post->{$param->Field} ==  $category->id) selected @endif value="{{$category->id}}">{{$category->id}} {{$category->title}}</option>
                     @if(count($category->childs)) {{--{{ print_r($category->childs[0]->title) }}--}}
-                    @include('admin.modules.blog.category.select-categories', ['childs' => $category->childs, 'value' => isset($post) ?? $post->{$param->Field}])
+                    @include('admin.modules.blog.category.select-categories', ['childs' => $category->childs, 'model' => isset($post) ? $post : null])
                     @endif
                 @endforeach
             </select>

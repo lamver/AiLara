@@ -2,6 +2,7 @@
 
 namespace App\Models\Modules\Blog;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -24,7 +25,8 @@ class Posts extends Model implements Feedable
     protected $table = 'blog_posts';
 
     protected $fillable = [
-        'title'
+        'title',
+        'author_id',
     ];
 
     public string $urlToPost;
@@ -107,7 +109,8 @@ class Posts extends Model implements Feedable
      */
     static public function topPostsDifferentCategories(): mixed
     {
-        return self::createUrlToPosts(self::select('id', 'post_category_id', 'title', 'content')
+        return self::createUrlToPosts(self::select('id', 'post_category_id', 'title', 'content', 'image')
+            ->where(['status' => 'Published'])
             ->distinct('category_id')
             ->inRandomOrder()
             ->limit(20)
@@ -116,7 +119,7 @@ class Posts extends Model implements Feedable
 
     static public function getPostsByCategoryId($categoryId)
     {
-        return self::createUrlToPosts(Posts::query()->where(['post_category_id' => $categoryId])->orderBy('id', 'DESC')->paginate(30));
+        return self::createUrlToPosts(Posts::query()->where(['post_category_id' => $categoryId])->where(['status' => 'Published'])->orderBy('id', 'DESC')->paginate(30));
     }
 
     /**
@@ -162,5 +165,15 @@ class Posts extends Model implements Feedable
     public static function getFeedItems()
     {
         return self::all();
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'author_id', 'id');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'post_category_id', 'id');
     }
 }

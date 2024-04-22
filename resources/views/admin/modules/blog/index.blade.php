@@ -35,11 +35,22 @@
                             </td>
                             @continue
                         @endif
-                    <td>{{ \Illuminate\Support\Str::limit(strip_tags($postData->{$column->Field}), 50) }}</td>
+                        @if($column->Field == 'author_id')
+                           <td> {{ $postData->user->name }}</td>
+                                @continue
+                        @endif
+                        @if($column->Field == 'post_category_id')
+                            <td> {{ $postData->category->title }}</td>
+                                @continue
+                        @endif
+                        <td>
+                            {{ \Illuminate\Support\Str::limit(strip_tags($postData->{$column->Field}), 50) }}
+                        </td>
                     @endforeach
                 </tr>
             @endforeach
             </tbody>
         </table>
+        {{ $posts->links('pagination.default') }}
     </div>
 @endsection
