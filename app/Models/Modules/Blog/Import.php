@@ -229,7 +229,7 @@ class Import extends Model
             }
         }
 
-        if (is_dir($tempPathToRss)) {
+        if (file_exists($tempPathToRss)) {
             if (!unlink($tempPathToRss)) {
                 $logLastExecute .= 'error delete file: ' . $tempPathToRss . PHP_EOL;
             }
