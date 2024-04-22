@@ -229,8 +229,10 @@ class Import extends Model
             }
         }
 
-        if (!unlink($tempPathToRss)) {
-            $logLastExecute .= 'error delete file: ' . $tempPathToRss . PHP_EOL;
+        if (file_exists($tempPathToRss)) {
+            if (!unlink($tempPathToRss)) {
+                $logLastExecute .= 'error delete file: ' . $tempPathToRss . PHP_EOL;
+            }
         }
 
         $import->log_last_execute = 'Import ' . $countCreatePosts . ' from ' . $totalCandidateToImport . PHP_EOL . $logLastExecute;
