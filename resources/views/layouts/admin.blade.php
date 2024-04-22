@@ -444,21 +444,33 @@
 
             let setLang = document.getElementById('setLang');
             setLang.addEventListener('change', function (){
-                fetch('/admin/setLang/'+ this.value).then(()=> {
-                    let href = location.href;
-                    let lang = this.value;
-                    let languages = {!! json_encode($languages) !!};
+                let selectedLang = this.value;
+                fetch(`/admin/setLang/${selectedLang}`)
+                    .then(() => {
+                        updateLanguageInUrl(selectedLang);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
 
-                    for (let item of languages) {
-                        let regex = new RegExp('/' + item + '/');
-                        if(regex.test(href)) {
-                            href = href.replace(regex, `/${lang}/`)
-                        }
-                    }
-
-                    location.href = href;
-                });
             });
+
+            function updateLanguageInUrl(newLang) {
+                let href = location.href;
+                let languages = {!! json_encode($languages) !!};
+                let langRegex = new RegExp('/(' + languages.join('|') + ')/');
+
+                if (langRegex.test(href)) {
+                    href = href.replace(langRegex, '/' + newLang + '/');
+                } else if (newLang !== 'en') {
+                    href = `${location.origin}/${newLang}${location.pathname}`;
+                }
+
+                // Remove any occurrence of 'en/' from the URL
+                href = href.replace(/en\//, '');
+
+                location.href = href;
+            }
         </script>
 
     </body>

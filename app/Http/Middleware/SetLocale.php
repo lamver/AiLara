@@ -22,13 +22,11 @@ class SetLocale
 
         $langs = Translation::getLanguages();
         View::share(['languages' => $langs]);
-
-
-        if (!$routeLocale) {
+        $this->setLocale($routeLocale ?? config('app.locale'));
+        if (!!$routeLocale && $this->getLocale() !== $routeLocale) {
+            $this->setLocale($routeLocale);
             return redirect($this->localizedUrl($request->path()));
         }
-
-        $this->setLocale($routeLocale);
 
         return $next($request);
     }
@@ -42,7 +40,14 @@ class SetLocale
     private function localizedUrl(string $path): string
     {
         $locale = $this->getLocale();
-        return url(trim($locale . '/' . $path, '/'));
+        $newPath = $path;
+
+        if (request()->segment(1) !== $locale && $locale !== config('app.locale')) {
+            $newPath = $locale . '/' . $path;
+        }
+
+        return url(trim($newPath, '/'));
+
     }
 
     /**

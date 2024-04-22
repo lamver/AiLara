@@ -31,7 +31,8 @@ class Translation
      */
     public static function checkRoutePrefix(): ?string
     {
-        if (in_array(request()->segment(1), self::getLanguages())) {
+        $firstSegment = request()->segment(1);
+        if (in_array($firstSegment, self::getLanguages()) && $firstSegment !== config('app.locale') ) {
             return request()->segment(1);
         }
 
