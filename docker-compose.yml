@@ -24,7 +24,7 @@ services:
     networks:
       - ailara
     extra_hosts:
-      - "api.aisearch.loc:192.168.1.112"
+      - "api.aisearch.loc:192.168.1.141"
   nginx:
     image: nginx:latest
     container_name: ailara-nginx

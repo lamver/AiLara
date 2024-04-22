@@ -7,6 +7,7 @@ use App\Services\Proxy\Proxy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use willvincent\Feeds\Facades\FeedsFacade;
 
@@ -185,8 +186,15 @@ class Import extends Model
 
         $tempPathToRss = $tmpFilePath . $tmpFileNameRss;
 
-        $feed = FeedsFacade::make($tempPathToRss);
+        $tempPathToRssUrl = request()->getSchemeAndHttpHost() . '/temp_import_rss?temp_file=' . base64_encode($tempPathToRss);
 
+        if (request()->getHttpHost() == 'localhost:4434') {
+            $tempPathToRssUrl = $tempPathToRss;
+        }
+
+//dd(request()->getSchemeAndHttpHost(), $tempPathToRssUrl);
+        $feed = FeedsFacade::make($tempPathToRssUrl, true);
+        //dd($feed->get_items(), $feed, $tempPathToRss);
         $totalCandidateToImport = count($feed->get_items());
         $countCreatePosts = 0;
         $logLastExecute = '';
@@ -206,7 +214,6 @@ class Import extends Model
             if ($import->what_are_we_doing == self::DOING_TRANSLATE) {
                 $result = ImportScenario::translate($item->get_permalink(), true);
             }
-
 
             $dataToPost = [
                 'post_category_id' => $import->category_id,
@@ -270,17 +277,19 @@ class Import extends Model
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
         $fileContent = curl_exec($curl);
-
+        Log::channel('import')->log('warning', 'curl_exec '.$fileContent);
         if ($fileContent !== false) {
             if (!is_dir($savePath)) {
                 mkdir($savePath, 755, true);
             }
             file_put_contents($savePath . '/' . $tmpFileName, $fileContent);
+            Log::channel('import')->log('warning', 'file_put_contents true');
             return true;
         } else {
+            Log::channel('import')->log('warning', 'file_put_contents true');
             return false;
         }
-
+        Log::channel('import')->log('warning', 'here');
         curl_close($curl);
     }
 
