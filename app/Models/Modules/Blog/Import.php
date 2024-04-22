@@ -3,6 +3,7 @@
 namespace App\Models\Modules\Blog;
 
 use App\Models\User;
+use App\Services\Proxy\Proxy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -264,7 +265,7 @@ class Import extends Model
         $fileUrl = $fileUrl;
         $savePath = Storage::path(self::TEMP_LOC_PATH_RSS); // Путь для сохранения файла
 
-        //curl_setopt($curl, CURLOPT_PROXY, $proxy);
+        curl_setopt($curl, CURLOPT_PROXY, Proxy::getProxyString());
         curl_setopt($curl, CURLOPT_URL, $fileUrl);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
