@@ -27,14 +27,19 @@ class AiSearchApi
         $this->apiKey  = $apiKey ?? Config::get('ailara.api_key_aisearch');
         $this->apiHost = $apiHost ?? Config::get('ailara.api_host');
 
+/*        dd($this);*/
         return $this;
     }
 
-    public function taskCreate(string $prompt)
+    /**
+     * @param string $prompt
+     * @return mixed
+     */
+    public function taskCreate($param = [])
     {
         $curl = curl_init();
 
-        curl_setopt_array($curl, array(
+        $curlParam = [
             CURLOPT_URL => 'https://'.$this->apiHost.'/api/v1/task/create',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
@@ -48,8 +53,11 @@ class AiSearchApi
             ),
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_SSL_VERIFYHOST => false,
-            CURLOPT_POSTFIELDS => array('prompt' => $prompt),
-        ));
+            CURLOPT_POSTFIELDS => $param,
+        ];
+
+
+        curl_setopt_array($curl, $curlParam);
 
         $response = curl_exec($curl);
 
@@ -122,6 +130,7 @@ class AiSearchApi
 
         return json_decode($response, true);
     }
+
 
     /**
      * @param int $taskId

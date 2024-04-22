@@ -28,6 +28,7 @@
         <div class="row">
             <div class="col-md-8 post_block">
                 <h1>{{ $post->title }}</h1>
+                <img alt="{{ $post->seo_title }}" src="{!! $post->image !!}"/>
                 {!! $post->content !!}
             </div>
         </div>

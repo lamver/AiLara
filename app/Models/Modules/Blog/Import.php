@@ -2,6 +2,7 @@
 
 namespace App\Models\Modules\Blog;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -165,6 +166,10 @@ class Import extends Model
         }
     }
 
+    /**
+     * @param Import $import
+     * @return true
+     */
     static public function executeRss(Import $import)
     {
         $tmpFileNameRss = self::getTmpFileNameRss();
@@ -193,15 +198,27 @@ class Import extends Model
                 continue;
             }
 
+            if ($import->what_are_we_doing == self::DOING_REWRITE) {
+                $result = ImportScenario::rewrite($item->get_permalink(), true);
+            }
+
+            if ($import->what_are_we_doing == self::DOING_TRANSLATE) {
+                $result = ImportScenario::translate($item->get_permalink(), true);
+            }
+
+
             $dataToPost = [
                 'post_category_id' => $import->category_id,
                 'author_id' => $import->author_id,
-                'title' => $item->get_title(),
-                'seo_title' => $item->get_title(),
-                'seo_description' => $item->get_description(),
-                'content' => $item->get_content(),
-                'description' => $item->get_description(),
+                'title' => $result['title'], //$item->get_title(),
+                'seo_title' => $result['seo_title'], //$item->get_title(),
+                'seo_description' => $result['seo_description'], //$item->get_description(),
+                'content' => $result['content'], //$item->get_content(),
+                'description' => $result['description'], //$item->get_description(),
+                'image' => $result['image'],
                 'unique_id_after_import' => $uniqueIdAfterImport,
+                'status' => $result['result'] ? 'Published' : 'Draft',
+                'source_url' => $item->get_permalink(),
             ];
 
             if (Posts::store($dataToPost)) {
@@ -267,6 +284,16 @@ class Import extends Model
     static public function getTmpFileNameRss()
     {
         return rand(10000, 90000) . '.rss';
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'author_id', 'id');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id', 'id');
     }
 
 

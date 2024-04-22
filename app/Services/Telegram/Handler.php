@@ -185,7 +185,7 @@ class  Handler extends WebhookHandler
         $message = "";
 
         if ($steps === 0) {
-            $result = $aiSearchApi->taskCreate($promptMask);
+            $result = $aiSearchApi->taskCreate(['prompt' => $promptMask]);
             $message = $result['message'] ?? "";
         }
 
