@@ -44,7 +44,7 @@ echo PHP_EOL;
 
         $imports = Import::query()
             ->where(['cron' => 1])
-            ->where(['id' => 3])
+/*            ->where(['id' => 3])*/
             ->get();
 
         //dd($imports);
