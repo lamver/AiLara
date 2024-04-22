@@ -160,7 +160,7 @@
             <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
             <div class="navbar-nav">
                 <div class="nav-item text-nowrap">
-                    <a class="nav-link px-3" href="#">Sign out</a>
+                    <a class="nav-link px-3" href="{{route('logout')}}">Sign out</a>
                 </div>
             </div>
         </header>
