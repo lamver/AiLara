@@ -243,4 +243,12 @@ class Category extends Model
 
         return $data;
     }
+
+    static public function columnName($column = '')
+    {
+        $column = str_replace("_", " ", $column);
+        $column = ucfirst($column);
+
+        return $column;
+    }
 }

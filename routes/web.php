@@ -38,3 +38,7 @@ Route::resource("/telegram-bots", AdminTelegramBotController::class)->except('sh
 /*Route::get('/{slug}/{id}', [TaskController::class, 'view'])
      ->name('task.view')
      ->where('id', '[0-9]+');*/
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
