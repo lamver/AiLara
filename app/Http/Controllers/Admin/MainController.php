@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Models\AiLaraConfig;
+use App\Settings\SettingGeneral;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
@@ -15,13 +16,27 @@ class MainController extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
+
     public function index(Request $request)
     {
         return view('admin.index', ['slot' => 'dd']);
     }
 
-    public function configuration(Request $request)
+    public function __invoke(SettingGeneral $settings){
+        return view('index', [
+            'site_name' => $settings->site_name,
+        ]);
+    }
+
+    public function configuration(Request $request, SettingGeneral $settings)
     {
+        //dd($settings->toArray());
+        //$settings = new SettingGeneral();
+
+/*        dd($settings->toArray());
+
+        app(SettingGeneral::class)->site_name;*/
+        //echo $settings->site_name;
 
         Artisan::call('cache:clear');
         $aiLaraConfig = new AiLaraConfig();
