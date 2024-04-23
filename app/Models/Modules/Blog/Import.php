@@ -186,15 +186,8 @@ class Import extends Model
 
         $tempPathToRss = $tmpFilePath . $tmpFileNameRss;
 
-        $tempPathToRssUrl = request()->getSchemeAndHttpHost() . '/temp_import_rss?temp_file=' . base64_encode($tempPathToRss);
+        $feed = FeedsFacade::make($tempPathToRss, true);
 
-        if (request()->getHttpHost() == 'localhost:4434') {
-            $tempPathToRssUrl = $tempPathToRss;
-        }
-
-//dd(request()->getSchemeAndHttpHost(), $tempPathToRssUrl);
-        $feed = FeedsFacade::make($tempPathToRssUrl, true);
-        //dd($feed->get_items(), $feed, $tempPathToRss);
         $totalCandidateToImport = count($feed->get_items());
         $countCreatePosts = 0;
         $logLastExecute = '';
@@ -267,30 +260,36 @@ class Import extends Model
      */
     static public function downloadRssFeed($fileUrl, $tmpFileName)
     {
-        $curl = curl_init();
-        //$proxy = 'socks5://proxy_ip:proxy_port'; // Замените на реальные данные прокси
-        $fileUrl = $fileUrl;
-        $savePath = Storage::path(self::TEMP_LOC_PATH_RSS); // Путь для сохранения файла
+        $curlOptions = [
+            CURLOPT_URL => $fileUrl,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER => false,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_CONNECTTIMEOUT => 10
+        ];
 
-        curl_setopt($curl, CURLOPT_PROXY, Proxy::getProxyString());
-        curl_setopt($curl, CURLOPT_URL, $fileUrl);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        $result = Proxy::curl($curlOptions);
+        $result = json_decode($result, true);
 
-        $fileContent = curl_exec($curl);
-        Log::channel('import')->log('warning', 'curl_exec '.$fileContent);
+        if (!$result['result']) {
+            return true;
+        }
+
+        $fileContent = $result['answer'][0];
+        $savePath = Storage::path(self::TEMP_LOC_PATH_RSS);
+
         if ($fileContent !== false) {
             if (!is_dir($savePath)) {
                 mkdir($savePath, 755, true);
             }
+
             file_put_contents($savePath . '/' . $tmpFileName, $fileContent);
-            Log::channel('import')->log('warning', 'file_put_contents true');
+
             return true;
         } else {
-            Log::channel('import')->log('warning', 'file_put_contents true');
             return false;
         }
-        Log::channel('import')->log('warning', 'here');
-        curl_close($curl);
     }
 
     static public function getTmpFileNameRss()
