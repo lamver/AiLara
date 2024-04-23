@@ -25,11 +25,11 @@
         }
 
         .text-overlay {
-            background-color: rgba(0, 0, 0, 0.6);
+/*            background-color: rgba(0, 0, 0, 0.6);
             color: white;
             padding: 10px;
             border-radius: 5px;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);*/
         }
     </style>
 @endpush
@@ -39,7 +39,7 @@
 @section('content')
     <div class="container">
         <div class="row">
-            @if(isset($topFourPosts[0]))
+            @if(isset($topFourPosts[0]) && !empty($topFourPosts[0]->title))
                 <div class="col-md-6">
                     <div class="shadow-sm rounded info-block-top" style="height: 520px; background-image: url('{{ $topFourPosts[0]->image }}'); box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); ">
                         <h2 class="text-overlay" style="position: absolute">
@@ -53,7 +53,7 @@
             @endif
             <div class="col-md-6">
                 <div class="row">
-                    @if(isset($topFourPosts[1]))
+                    @if(isset($topFourPosts[1]) && !empty($topFourPosts[0]->title))
                         <div class="col-md-12 top-four-post">
                             <div class="shadow-sm rounded info-block-top" style="height: 250px; background-image: url('{{ $topFourPosts[1]->image }}')">
                                 <h2 class="text-overlay" style="position: absolute; font-size: 1.6em">
@@ -65,7 +65,7 @@
                             </div>
                         </div>
                     @endif
-                    @if(isset($topFourPosts[2]))
+                    @if(isset($topFourPosts[2]) && !empty($topFourPosts[0]->title))
                         <div class="col-md-6 top-four-post">
                             <div class="shadow-sm rounded info-block-top" style="height: 250px; background-image: url('{{ $topFourPosts[2]->image }}')">
                                 <h2 class="text-overlay" style="font-size: 1.2em">
@@ -77,7 +77,7 @@
                             </div>
                         </div>
                     @endif
-                    @if(isset($topFourPosts[3]))
+                    @if(isset($topFourPosts[3]) && !empty($topFourPosts[0]->title))
                         <div class="col-md-6 top-four-post">
                             <div class="shadow-sm rounded info-block-top" style="height: 250px; background-image: url('{{ $topFourPosts[3]->image }}')">
                                 <h2 class="text-overlay" style="position: absolute; font-size: 1.2em">
