@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\Modules\Blog;
 
+use App\Helpers\ImageMaster;
 use App\Helpers\SeoTools;
 use App\Http\Controllers\Controller;
 use App\Models\Modules\Blog\Category;
 use App\Models\Modules\Blog\Posts;
+use App\Settings\SettingGeneral;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,9 +26,12 @@ class PostsController extends Controller
         $topFourPosts = Posts::topFourPosts();
         $topPostsDifferentCategories = Posts::topPostsDifferentCategories();
 
+        $settings = new SettingGeneral();
+
         return view('modules.blog.index', [
             'topFourPosts' => $topFourPosts,
-            'topPostsDifferentCategories' => $topPostsDifferentCategories
+            'topPostsDifferentCategories' => $topPostsDifferentCategories,
+            'settings' => $settings,
         ]);
     }
 
@@ -112,24 +118,43 @@ class PostsController extends Controller
      * @param $id
      * @return \Illuminate\Foundation\Application|View|Factory|Application
      */
-    public function view(Request $request, $slug, $id): \Illuminate\Foundation\Application|View|Factory|Application
+    public function view(Request $request, $slug, $id): \Illuminate\Foundation\Application|View|Factory|Application|RedirectResponse
     {
         if (is_null($post = Posts::query()->find($id))) {
             return abort(404);
+        }
+
+        if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
+            $ifModified = strtotime(substr($_SERVER['HTTP_IF_MODIFIED_SINCE'] ?? '', 5));
+            $lastModified = strtotime($post->updated_at);
+            if ($ifModified && $ifModified >= $lastModified) {
+                header($_SERVER['SERVER_PROTOCOL'] . ' 304 Not Modified');
+                exit;
+            }
         }
 
         $uri = str_replace('/' . $slug . '_' . $id, '', $request->path());
 
         $breadcrumbs = \App\Models\Modules\Blog\Category::getBreadCrumbsByUri($uri);
 
-        $breadcrumbs[] = ['name' => $post->title, 'uri' => 'erffre'];
+        $canonicalUrl = Posts::createUrlFromPost($post);
+
+        if ('/' . request()->path() != $canonicalUrl) {
+            return redirect($canonicalUrl, 301);
+        }
+
+        $breadcrumbs[] = ['name' => $post->title, 'uri' => ''];
 
         $param = [
             'title'         => $post->seo_title,
             'description'   => $post->seo_description,
-            'canonicalUrl'  => Url()->current(),
+            'canonicalUrl'  => $canonicalUrl,
             'type'          => 'articles',
         ];
+
+        if (!empty($post->image)) {
+            $param['image'] = ImageMaster::resizeImgFromCdn($post->image, 300, 300);
+        }
 
         SeoTools::setSeoParam($param);
 

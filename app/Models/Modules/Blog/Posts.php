@@ -97,7 +97,7 @@ class Posts extends Model implements Feedable
 
     static public function topFourPosts()
     {
-        return self::createUrlToPosts(self::select('id', 'post_category_id', 'title', 'content', 'image')
+        return self::createUrlToPosts(self::select('id', 'post_category_id', 'title', 'content', 'image', 'updated_at')
             ->where(['status' => 'Published'])
             ->distinct('category_id')
             ->inRandomOrder()
@@ -110,7 +110,7 @@ class Posts extends Model implements Feedable
      */
     static public function topPostsDifferentCategories(): mixed
     {
-        return self::createUrlToPosts(self::select('id', 'post_category_id', 'title', 'content', 'image')
+        return self::createUrlToPosts(self::select('id', 'post_category_id', 'title', 'seo_title', 'content', 'image', 'updated_at')
             ->where(['status' => 'Published'])
             ->distinct('category_id')
             ->orderBy('id', 'DESC')
@@ -135,6 +135,11 @@ class Posts extends Model implements Feedable
         }
 
         return $posts;
+    }
+
+    static public function createUrlFromPost(Posts $post)
+    {
+        return '/'.Category::getCategoryUrlById($post->post_category_id) . '/' . Str::slug(Str::limit(strip_tags($post->title))) . '_' .$post->id;
     }
 
     static public function getUrlPostById($id)

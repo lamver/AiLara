@@ -37,7 +37,7 @@
                         <div class="col-md-4">
                             {{--           <h4>{{ $post->title }}</h4>--}}
                             <div class="card mb-3">
-                                <img src="{{ $post->image }}" class="card-img-top" alt="...">
+                                <img src="{{ \App\Helpers\ImageMaster::resizeImgFromCdn($post->image, 300, 300) }}" class="card-img-top" alt="{{ $post->seo_title }}">
                                 <div class="card-body">
                                     <h2 style="font-size: 18px" class="card-title">{{ $post->title }}</h2>
                                     <p class="card-text">{{ \Illuminate\Support\Str::limit(strip_tags($post->content)) }}</p>

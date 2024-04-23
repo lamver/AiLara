@@ -2,6 +2,7 @@
 
 namespace App\Models\Modules\Blog;
 
+use App\Helpers\StrMaster;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -241,7 +242,7 @@ class Category extends Model
             $category = self::query()->select(['id', 'parent_id','slug', 'title'])->where(['id' => $category])->first();
 
             $data[] = [
-                'name' => $category->title, 'uri' => '/'.$uriConcat,
+                'name' => StrMaster::htmlTagClear($category->title), 'uri' => '/'.$uriConcat,
             ];
         }
 

@@ -27,9 +27,9 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8 post_block">
-                <h1>{{ $post->title }}</h1>
+                <h1>{!! \App\Helpers\StrMaster::htmlTagClear($post->title) !!}</h1>
                 <img alt="{{ $post->seo_title }}" src="{!! $post->image !!}"/>
-                {!! \Illuminate\Support\Str::markdown(str_replace("<br>", "\n", $post->content)) !!}
+                {!! \App\Helpers\StrMaster::applyHtml($post->content) !!}
             </div>
         </div>
     </div>
