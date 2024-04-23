@@ -97,7 +97,7 @@ class Posts extends Model implements Feedable
 
     static public function topFourPosts()
     {
-        return self::createUrlToPosts(self::select('id', 'post_category_id', 'title', 'content')
+        return self::createUrlToPosts(self::select('id', 'post_category_id', 'title', 'content', 'image')
             ->distinct('category_id')
             ->inRandomOrder()
             ->limit(4)
@@ -112,7 +112,8 @@ class Posts extends Model implements Feedable
         return self::createUrlToPosts(self::select('id', 'post_category_id', 'title', 'content', 'image')
             ->where(['status' => 'Published'])
             ->distinct('category_id')
-            ->inRandomOrder()
+            ->orderBy('id', 'DESC')
+            /*->inRandomOrder()*/
             ->limit(20)
             ->get());
     }
