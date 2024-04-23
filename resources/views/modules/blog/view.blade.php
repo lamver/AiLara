@@ -29,7 +29,7 @@
             <div class="col-md-8 post_block">
                 <h1>{{ $post->title }}</h1>
                 <img alt="{{ $post->seo_title }}" src="{!! $post->image !!}"/>
-                {!! $post->content !!}
+                {!! \Illuminate\Support\Str::markdown(str_replace("<br>", "\n", $post->content)) !!}
             </div>
         </div>
     </div>
