@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Modules\Blog\Category;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -54,5 +55,14 @@ Route::middleware(['auth', 'verified'])->prefix(\Illuminate\Support\Facades\Conf
 
 /** web routes */
 Route::prefix(\Illuminate\Support\Facades\Config::get('modules.blog.route_prefix'))->group(function () {
-    Route::get('/', [\App\Http\Controllers\Modules\Blog\PostsController::class, 'index'])->name('blog.post.index');
+    $routeName = \Illuminate\Support\Facades\Config::get('modules.blog.route_prefix') == '/' ? 'index' : 'blog.post.index';
+    Route::get('/', [\App\Http\Controllers\Modules\Blog\PostsController::class, 'index'])->name($routeName);
+
+    $categorySlugsRoute = Category::getFullUrlsToAllCategory();
+
+    foreach ($categorySlugsRoute as $slug) {
+        Route::get('/'.$slug, [\App\Http\Controllers\Modules\Blog\PostsController::class, 'category'])->name('blog.post.cat' . '.' . str_replace("/", ".", $slug));
+        Route::get('/'.$slug . 'feed', [\App\Http\Controllers\Modules\Blog\PostsController::class, 'rss'])->name('blog.post.cat' . '.' . str_replace("/", ".", $slug) . '.rss');
+        Route::get('/'.$slug . '{slug}_{id}', [\App\Http\Controllers\Modules\Blog\PostsController::class, 'view'])->name('blog.post.cat' . '.' . str_replace("/", ".", $slug) . '.view.post');
+    }
 });

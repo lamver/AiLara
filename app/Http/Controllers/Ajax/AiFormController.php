@@ -81,7 +81,7 @@ class AiFormController extends BaseController
             '{{age}}' => $request->age,
         ]);
 
-        $resultApi = $aiSearchApi->taskCreate($promptMask);
+        $resultApi = $aiSearchApi->taskCreate(['prompt' => $promptMask]);
 
         if (empty($resultApi) || !$resultApi['result']) {
             return $this->resultError("Result returned false");

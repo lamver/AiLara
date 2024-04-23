@@ -35,7 +35,17 @@
                             </td>
                             @continue
                         @endif
-                        <td>{{ $postData->{$column->Field} }}</td>
+                            @if($column->Field == 'author_id')
+                                <td> {{ $postData->user->name }}</td>
+                                @continue
+                            @endif
+                            @if($column->Field == 'category_id')
+                                <td> {{ $postData->category->title }}</td>
+                                @continue
+                            @endif
+                            <td>
+                                {{ \Illuminate\Support\Str::limit(strip_tags($postData->{$column->Field}), 50) }}
+                            </td>
                     @endforeach
                 </tr>
             @endforeach

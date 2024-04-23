@@ -5,7 +5,7 @@
 @section('page_options')
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group me-2">
-            <a href="{{ route('admin.blog.post.index') }}" type="button" class="btn btn-sm btn-outline-success">All posts</a>
+            <a href="{{ route('admin.blog.category.index') }}" type="button" class="btn btn-sm btn-outline-success">All category</a>
 {{--            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>--}}
         </div>
 {{--        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
@@ -15,15 +15,15 @@
     </div>
 @endsection
 @section('content')
-{{--{{ $post->title }}--}}
+{{--{{ $model->title }}--}}
 @php
     $route = route('admin.blog.category.store');
     $method = 'POST';
     $btnName = 'Create';
 @endphp
-@if(isset($post))
+@if(isset($model))
     @php
-    $route = route('admin.blog.category.update', ['post' => $post->id]);
+    $route = route('admin.blog.category.update', ['category' => $model->id]);
     $method = 'PUT';
     $btnName = 'Update';
     @endphp
@@ -40,47 +40,54 @@
             @continue
         @endif
 
+        <br>
+        <label style="font-size: 14px; font-weight: bolder" for="label_{{ $param->Field }}">{{ \App\Models\Modules\Blog\Category::columnName($param->Field) }}</label>
+
         @if($param->Field == 'parent_id')
-            <label for="label_{{ $param->Field }}">{{ $param->Field }}</label>
             <select id="label_{{ $param->Field }}" name="{{ $param->Field }}" class="form form-control">
-                <option value=""> - no parent cat -</option>
+                <option value="0"> - no parent cat -</option>
                 @foreach($categoryTree['categories'] as $category)
-                    <option value="{{$category->id}}">{{$category->id}} {{$category->title}}</option>
-                    @if(count($category->childs)) {{--{{ print_r($category->childs[0]->title) }}--}}
-                        @include('admin.modules.blog.category.select-categories', ['childs' => $category->childs])
+                    @if(isset($model) && $category->id == $model->id)
+                        @continue
                     @endif
+                    <option @if(isset($model) && $category->id == $model->parent_id) selected @endif value="{{$category->id}}">{{$category->id}} {{$category->title}} {{--{{ $model->id }}--}}</option>
+                    @if(count($category->childs))
+                        @include('admin.modules.blog.category.select-categories', ['childs' => $category->childs, 'model' => isset($model) ? $model : null ])
+                    @endif
+                @endforeach
+            </select>
+            @continue
+        @endif
+        @if($param->Field == 'author_id')
+            <select id="label_{{ $param->Field }}" name="{{ $param->Field }}" class="form form-control">
+                @foreach(\App\Models\User::getAuthors() as $author)
+                    <option @if(isset($category) && $category->{$param->Field} == $author->id) selected @endif value="{{ $author->id }}">{{ $author->name }}</option>
                 @endforeach
             </select>
             @continue
         @endif
 
         @if(in_array($param->Type, ['bigint unsigned', 'int unsigned']))
-            <label for="label_{{ $param->Field }}">{{ $param->Field }}</label>
-            <input type="text" class="form-control" id="label_{{ $param->Field }}" name="{{ $param->Field }}" value="{{ $post->{$param->Field} ?? '' }}" aria-describedby="emailHelp" placeholder="{{ $param->Comment}}">
+            <input type="text" class="form-control" id="label_{{ $param->Field }}" name="{{ $param->Field }}" value="{{ $model->{$param->Field} ?? '' }}" aria-describedby="emailHelp" placeholder="{{ $param->Comment}}">
             <small id="emailHelp" class="form-text text-muted">{{ $param->Comment}}</small>
             @continue
         @endif
         @if(in_array($param->Type, ['varchar(255)']))
-                <label for="label_{{ $param->Field }}">{{ $param->Field }}</label>
-                <input type="text" class="form-control" id="label_{{ $param->Field }}" name="{{ $param->Field }}" value="{{ $post->{$param->Field} ?? ''  }}" aria-describedby="emailHelp" placeholder="{{ $param->Comment}}">
+                <input type="text" class="form-control" id="label_{{ $param->Field }}" name="{{ $param->Field }}" value="{{ $model->{$param->Field} ?? ''  }}" aria-describedby="emailHelp" placeholder="{{ $param->Comment}}">
                 <small id="emailHelp" class="form-text text-muted">{{ $param->Comment}}</small>
                 @continue
         @endif
         @if(in_array($param->Type, ['text', 'longtext']))
-            <label for="exampleInputEmail1">{{ $param->Field }}</label>
-            <textarea class="form form-control" id="label_{{ $param->Field }}" name="{{ $param->Field }}" placeholder="{{ $param->Comment}}">{{ $post->{$param->Field}  ?? '' }}</textarea>
+            <textarea class="form form-control" id="label_{{ $param->Field }}" name="{{ $param->Field }}" placeholder="{{ $param->Comment}}">{{ $model->{$param->Field}  ?? '' }}</textarea>
             <small id="emailHelp" class="form-text text-muted">{{ $param->Comment}}</small>
             @continue
         @endif
         @if(in_array($param->Type, ['timestamp']))
-            <label for="label_{{ $param->Field }}">{{ $param->Field }}</label>
-            <input type="date" class="form-control" id="label_{{ $param->Field }}" name="{{ $param->Field }}" value="{{ $post->{$param->Field} ?? ''  }}" aria-describedby="emailHelp" placeholder="{{ $param->Comment}}">
+            <input type="date" class="form-control" id="label_{{ $param->Field }}" name="{{ $param->Field }}" value="{{ $model->{$param->Field} ?? ''  }}" aria-describedby="emailHelp" placeholder="{{ $param->Comment}}">
             <small id="emailHelp" class="form-text text-muted">{{ $param->Comment}}</small>
             @continue
         @endif
-            <br>{{ $param->Type }}<br>
-            <label for="exampleInputEmail1">{{ $param->Field }}</label>
-            <input type="text" class="form-control" id="label_{{ $param->Field }}" name="{{ $param->Field }}" value="{{ $post->{$param->Field} ?? ''  }}" aria-describedby="emailHelp" placeholder="{{ $param->Comment}}">
+            <input type="text" class="form-control" id="label_{{ $param->Field }}" name="{{ $param->Field }}" value="{{ $model->{$param->Field} ?? ''  }}" aria-describedby="emailHelp" placeholder="{{ $param->Comment}}">
             <small id="emailHelp" class="form-text text-muted">{{ $param->Comment}}</small>
     @endforeach
 <br>

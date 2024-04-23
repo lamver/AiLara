@@ -114,7 +114,7 @@ class Update
         Artisan::call('cache:clear');
         $output .= Artisan::output();
 
-        Artisan::call('config:clear');
+        Artisan::call('config:cache');
         $output .= Artisan::output();
 
         //Artisan::call('config:cache');

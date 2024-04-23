@@ -132,6 +132,12 @@ return [
             'path' => storage_path('logs/update.log'),
             'level' => 'debug',
         ],
+
+        'import' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/import.log'),
+            'level' => 'debug',
+        ],
     ],
 
 ];

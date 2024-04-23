@@ -30,7 +30,16 @@
         @if($param->Field == 'what_are_we_doing')
             <b>{{ $param->Field }}</b>: {{ \App\Models\Modules\Blog\Import::getDoingVariantsName($import->{$param->Field}) }} <br>
             @continue
-            @endif
+        @endif
+        @if($param->Field == 'log_last_execute')
+            <div style="max-height: 200px; overflow-y: scroll">
+                <b>{{ $param->Field }}</b>: {{ $import->{$param->Field} }} <br>
+            </div>
+            @continue
+        @endif
         <b>{{ $param->Field }}</b>: {{ $import->{$param->Field} }} <br>
     @endforeach
+    <form method="get">
+        <button class="btn btn-secondary" type="submit" name="execute" value="true">Execute</button>
+    </form>
 @endsection

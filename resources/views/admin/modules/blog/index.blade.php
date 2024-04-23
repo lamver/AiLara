@@ -30,16 +30,27 @@
                                 <form action="{{ route('admin.blog.post.destroy', $postData) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-link" type="submit">Delete</button>
+                                    <button class="btn btn-link" type="submit" onclick="return confirm('Are you sure?')">Delete</button>
                                 </form>
                             </td>
                             @continue
                         @endif
-                    <td>{{ $postData->{$column->Field} }}</td>
+                        @if($column->Field == 'author_id')
+                           <td> {{ $postData->user->name }}</td>
+                                @continue
+                        @endif
+                        @if($column->Field == 'post_category_id')
+                            <td> {{ $postData->category->title }}</td>
+                                @continue
+                        @endif
+                        <td>
+                            {{ \Illuminate\Support\Str::limit(strip_tags($postData->{$column->Field}), 50) }}
+                        </td>
                     @endforeach
                 </tr>
             @endforeach
             </tbody>
         </table>
+        {{ $posts->links('pagination.default') }}
     </div>
 @endsection

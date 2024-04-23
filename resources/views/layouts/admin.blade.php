@@ -7,9 +7,7 @@
         <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
         <meta name="generator" content="Hugo 0.84.0">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-
-        <title>Dashboard Template · Bootstrap v5.0</title>
-
+        <title>AiLara dashboard</title>
         <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/dashboard/">
         @stack('top-scripts')
         @yield('stylesheet')
@@ -162,7 +160,10 @@
             <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
             <div class="navbar-nav">
                 <div class="nav-item text-nowrap">
-                    <a class="nav-link px-3" href="#">{{ __('admin.sign_out') }}</a>
+                    <form method="post" action="{{route('logout')}}">
+                        @csrf
+                        <button type="submit" class="nav-link px-3">Sign out</button>
+                    </form>
                 </div>
             </div>
         </header>
@@ -172,39 +173,27 @@
                     <div class="position-sticky pt-3">
                         <ul class="nav flex-column">
                             <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="{{route('admin.index')}}" {{\Illuminate\Support\Facades\Route::is('admin.index') ? 'disable' : ''}}>
+                                <a class="nav-link" aria-current="page" href="/admin" {{\Illuminate\Support\Facades\Route::is('admin.index') ? 'disable' : ''}}>
                                     <span data-feather="home"></span>
-                                    {{ __('admin.dashboard') }}
+                                    Dashboard
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('accessUi.') }}">
                                     <span data-feather="file"></span>
-                                    {{ __('admin.RBAC') }}
+                                    RBAC
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('admin.configuration') }} ">
                                     <span data-feather="shopping-cart"></span>
-                                    {{ __('admin.configuration') }}
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">
-                                    <span data-feather="users"></span>
-                                    {{ __('admin.ai_search') }}
+                                    Configuration
                                 </a>
                                 <ul>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('admin.ais.commonData') }}">
+                                        <a class="nav-link" href="{{ route('admin.configuration.robots_txt') }}">
                                             <span data-feather="bar-chart-2"></span>
-                                            {{ __('admin.common_data') }}
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('admin.ais.aiForms') }}">
-                                            <span data-feather="bar-chart-2"></span>
-                                            {{ __('admin.ai_forms') }}
+                                            Robots TXT
                                         </a>
                                     </li>
                                 </ul>
@@ -212,37 +201,57 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="#">
                                     <span data-feather="users"></span>
-                                    {{ __('admin.modules') }}
+                                    Ai Search
                                 </a>
                                 <ul>
                                     <li class="nav-item">
                                         <a class="nav-link" href="{{ route('admin.ais.commonData') }}">
                                             <span data-feather="bar-chart-2"></span>
-                                            {{ __('admin.configuration') }}
+                                            Common data
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{ route('admin.ais.aiForms') }}">
+                                            <span data-feather="bar-chart-2"></span>
+                                            Ai Forms
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    <span data-feather="users"></span>
+                                    Modules
+                                </a>
+                                <ul>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{ route('admin.ais.commonData') }}">
+                                            <span data-feather="bar-chart-2"></span>
+                                            Configuration
                                         </a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="#">
                                             <span data-feather="users"></span>
-                                            {{ __('admin.blog') }}
+                                            Blog
                                         </a>
                                         <ul>
                                             <li>
                                                 <a class="nav-link" href="{{ route('admin.blog.post.index') }}">
                                                     <span data-feather="bar-chart-2"></span>
-                                                    {{ __('admin.posts') }}
+                                                    Posts
                                                 </a>
                                             </li>
                                             <li>
                                                 <a class="nav-link" href="{{ route('admin.blog.category.index') }}">
                                                     <span data-feather="bar-chart-2"></span>
-                                                    {{ __('admin.category') }}
+                                                    Category
                                                 </a>
                                             </li>
                                             <li>
                                                 <a class="nav-link" href="{{ route('admin.blog.import.index') }}">
                                                     <span data-feather="bar-chart-2"></span>
-                                                    {{ __('admin.import') }}
+                                                    Import
                                                 </a>
                                             </li>
                                         </ul>
@@ -253,35 +262,20 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('telegram-bots.index') }}">
                                     <span data-feather="bar-chart-2"></span>
-                                    {{ __('admin.telegram_bots') }}
+                                    Telegram bots
                                 </a>
                                 <a class="nav-link" href="{{ route('admin.ais.pages') }}">
                                     <span data-feather="bar-chart-2"></span>
-                                    {{ __('admin.pages') }}
+                                    Pages
                                 </a>
                                 <a class="nav-link" href="{{ route('admin.update') }}">
                                     <span data-feather="bar-chart-2"></span>
-                                    {{ __('admin.update_app') }}
+                                    Update app
                                 </a>
                                 <a class="nav-link" href="{{ route('admin.logs') }}">
                                     <span data-feather="bar-chart-2"></span>
-                                    {{ __('admin.Logs') }}
+                                    Logs
                                 </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/admin/translations">
-                                    <span data-feather="bar-chart-2"></span>
-                                    {{ __('admin.Managing transfers') }}
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <div class="d-flex flex-row bd-highlight">
-                                    <select class="form-select" id="setLang" style="width: 100px; margin-left: auto; margin-top: 23px; margin-right: 25px;">
-                                        @php foreach ($languages as $lang): @endphp
-                                        <option @if(trans()->getLocale() === $lang) selected @endif value="{{$lang}}">{{$lang}}</option>
-                                        @php endforeach; @endphp
-                                    </select>
-                                </div>
                             </li>
                         </ul>
                     </div>
@@ -435,42 +429,9 @@
 
         @stack('bottom-scripts')
         <script>
-
             let requestUri = location.pathname;
             let link = document.querySelector(`#sidebarMenu .nav-item a[href*="${requestUri}"]`);
-            if(!!link) {
-                link.classList.add('active');
-            }
-
-            let setLang = document.getElementById('setLang');
-            setLang.addEventListener('change', function (){
-                let selectedLang = this.value;
-                fetch(`/admin/setLang/${selectedLang}`)
-                    .then(() => {
-                        updateLanguageInUrl(selectedLang);
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
-
-            });
-
-            function updateLanguageInUrl(newLang) {
-                let href = location.href;
-                let languages = {!! json_encode($languages) !!};
-                let langRegex = new RegExp('/(' + languages.join('|') + ')/');
-
-                if (langRegex.test(href)) {
-                    href = href.replace(langRegex, '/' + newLang + '/');
-                } else if (newLang !== 'en') {
-                    href = `${location.origin}/${newLang}${location.pathname}`;
-                }
-
-                // Remove any occurrence of 'en/' from the URL
-                href = href.replace(/en\//, '');
-
-                location.href = href;
-            }
+            link.classList.add('active');
         </script>
 
     </body>
