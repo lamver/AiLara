@@ -30,7 +30,7 @@ return [
      *
      * These middleware will get attached onto each Laratrust panel route.
      */
-    'middleware' => ['web', 'auth', 'verified'],
+    'middleware' => ['web', 'auth', 'verified', 'rbac:admin'],
 
     /**
      * Enable permissions assignment
