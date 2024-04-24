@@ -32,5 +32,10 @@
                 {!! \App\Helpers\StrMaster::applyHtml($post->content) !!}
             </div>
         </div>
+        @auth('web')
+        @if(\Illuminate\Support\Facades\Auth::user()->can('posts.edit'))
+            <a href="?status=draft">Draft</a>
+        @endif
+        @endauth
     </div>
 @endsection

@@ -41,6 +41,7 @@
                                 <div class="card-body">
                                     <h2 style="font-size: 18px" class="card-title">{{ \App\Helpers\StrMaster::htmlTagClear($post->title) }}</h2>
                                     <p class="card-text">{{ \App\Helpers\StrMaster::htmlTagClear($post->content) }}</p>
+                                    <a href="{{ $post->urlToPost }}" title="{{ $post->seo_title }}" class="stretched-link btn btn-link">Читать</a>
                                     <p class="card-text">
                                         <small class="text-muted">
                                             {{ \Illuminate\Support\Carbon::create($post->updated_at)->shortRelativeDiffForHumans(date("Y-m-d h:i:s", time())) }}
