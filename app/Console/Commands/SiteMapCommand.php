@@ -71,6 +71,14 @@ class SiteMapCommand extends Command
      */
     public function handle(): void
     {
+        $sitemapsDir = base_path() . '/public/sitemaps';
+
+        if (!is_dir($sitemapsDir)) {
+            mkdir($sitemapsDir, 755, true);
+        }
+
+        chmod($sitemapsDir, 755);
+
         $start = microtime(true);
         $this->info("Старт.");
 
