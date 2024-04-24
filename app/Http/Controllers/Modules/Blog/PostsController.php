@@ -120,7 +120,7 @@ class PostsController extends Controller
      */
     public function view(Request $request, $slug, $id): \Illuminate\Foundation\Application|View|Factory|Application|RedirectResponse
     {
-        if (is_null($post = Posts::query()->find($id))) {
+        if (is_null($post = Posts::query()->where(['status' => 'Published'])->find($id))) {
             return abort(404);
         }
 
