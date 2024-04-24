@@ -59,7 +59,7 @@ class Update
                 Log::channel('update')->log('debug', '$directoryPath: ' . $directoryPath);
                 if (!is_dir($directoryPath)) {
                     try {
-                        mkdir($directoryPath, 0744, true);
+                        mkdir($directoryPath, 0755, true);
                     } catch (\Exception $e) {
                         Log::channel('update')->log('debug', 'mkdir_message: ' . $e->getMessage());
                     }
