@@ -13,6 +13,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 class PostsController extends Controller
@@ -122,6 +123,15 @@ class PostsController extends Controller
     {
         if (is_null($post = Posts::query()->where(['status' => 'Published'])->find($id))) {
             return abort(404);
+        }
+
+        if (
+            $request->get('status') == 'draft'
+            && Auth::user()->can('posts.edit')
+        ) {
+            $post->status = 'Draft';
+            $post->save();
+            return redirect($request->url());
         }
 
         if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
