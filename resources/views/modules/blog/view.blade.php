@@ -34,7 +34,10 @@
         </div>
         @auth('web')
         @if(\Illuminate\Support\Facades\Auth::user()->can('posts.edit'))
-            <a href="?status=draft">Draft</a>
+                <div class="btn-group me-2" role="group" aria-label="Second group">
+                    <a href="?status=draft" type="button" class="btn btn-secondary">Fast to Draft</a>
+                    <a href="{{ route('admin.blog.post.edit', $post) }}" type="button" class="btn btn-secondary">Edit</a>
+                </div>
         @endif
         @endauth
     </div>
