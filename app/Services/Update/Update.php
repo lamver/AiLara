@@ -174,6 +174,10 @@ class Update
                     continue;
                 }
 
+                if (stripos($pathWithoutDirExtract, '/public/robots.txt')) {
+                    continue;
+                }
+
                 if (stripos($pathWithoutDirExtract, '/storage/')) {
                     continue;
                 }
