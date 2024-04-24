@@ -2,13 +2,11 @@
 
 namespace App\Http\Middleware;
 
-use App\Services\Rbac\RbacAccess;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
-use Wnikk\LaravelAccessRules\Models\Rule;
 use Wnikk\LaravelAccessRules\Models\Owner;
-use Auth;
 
 /**
  * Class Rbac

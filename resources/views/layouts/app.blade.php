@@ -167,5 +167,5 @@
 </script>
 @stack('bottom-scripts')
 </body>
-{!! \Illuminate\Support\Facades\Config::get('ailara.counterExternalCode') !!}
+{!! (new \App\Settings\SettingGeneral())->counter_external_code !!}
 </html>

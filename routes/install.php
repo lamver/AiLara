@@ -41,6 +41,7 @@ Route::get('/install_', function () {
 
         Artisan::call('migrate');
         Artisan::call('route:clear');
+        Artisan::call('route:cache');
 
         $user = new \App\Models\User();
         $userPassword = \Illuminate\Support\Str::random(10);
@@ -49,6 +50,8 @@ Route::get('/install_', function () {
         $user->email = $userLogin;
         $user->name = 'Admin Root';
         $user->save();
+
+        Artisan::call('db:seed --class=CreateAdminRoleAndAddToUsersSeeder');
 
         echo 'Your login: <b>' . $userLogin . '</b><br>';
         echo 'Your password: <b>' . $userPassword . '</b><br>';

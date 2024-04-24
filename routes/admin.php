@@ -20,7 +20,7 @@ use App\Http\Controllers\AiSearch\TaskController;
 |
 */
 
-Route::middleware(['auth', 'verified'])->prefix(\Illuminate\Support\Facades\Config::get('ailara.admin_prefix'))->group(function () {
+Route::middleware(['auth', 'verified', 'rbac:admin'])->prefix(\Illuminate\Support\Facades\Config::get('ailara.admin_prefix'))->group(function () {
     Route::get('/', [MainController::class, 'index'])->name('admin.index');
     Route::get('/configuration', [MainController::class, 'configuration'])->name('admin.configuration');
     Route::post('/configuration', [MainController::class, 'configuration'])->name('admin.configuration.save');
