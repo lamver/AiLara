@@ -111,7 +111,7 @@ class Update
             $zip->close();
             //echo 'Zip archive extracted successfully.';
 
-            if (file_exists(base_path() . '/vendor')) {
+            /*if (file_exists(base_path() . '/vendor')) {
                 self::renameRecursive(base_path() . '/vendor', base_path() . '/vendor_down');
             }
 
@@ -119,7 +119,7 @@ class Update
 
             if (file_exists(base_path() . '/vendor_down')) {
                 self::deleteDirectory(base_path() . '/vendor_down');
-            }
+            }*/
         } else {
             //echo 'Failed to extract the zip archive.';
         }
