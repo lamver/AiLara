@@ -86,9 +86,9 @@ class Update
     /**
      * @return void
      */
-    static public function composerUpdate(): void
+    static public function composerUpdate(): array
     {
-        self::vendorInstall();
+        return self::vendorInstall();
         //chdir(base_path());
         //exec('composer install', $output, $return);
         // Получаем вывод работы команды
@@ -99,8 +99,9 @@ class Update
     /**
      * @return void
      */
-    static public function vendorInstall(): void
+    static public function vendorInstall(): array
     {
+        $resultProcess = [];
         $zipFile = base_path() . '/storage/app/update/extract_files/AiLara-main/vendor.zip';
         $extractLocation = base_path() . '/vendor_up';
 
@@ -109,7 +110,7 @@ class Update
         if ($zip->open($zipFile) === TRUE) {
             $zip->extractTo($extractLocation);
             $zip->close();
-            //echo 'Zip archive extracted successfully.';
+            $resultProcess[] = 'Zip archive extracted successfully.';
 
             /*if (file_exists(base_path() . '/vendor')) {
                 self::renameRecursive(base_path() . '/vendor', base_path() . '/vendor_down');
@@ -121,8 +122,10 @@ class Update
                 self::deleteDirectory(base_path() . '/vendor_down');
             }*/
         } else {
-            //echo 'Failed to extract the zip archive.';
+            $resultProcess[] = 'Failed to extract the zip archive.';
         }
+
+        return $resultProcess;
     }
 
     /**
