@@ -27,10 +27,18 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8 post_block">
-                <h1>{{ $post->title }}</h1>
+                <h1>{!! \App\Helpers\StrMaster::htmlTagClear($post->title) !!}</h1>
                 <img alt="{{ $post->seo_title }}" src="{!! $post->image !!}"/>
-                {!! $post->content !!}
+                {!! \App\Helpers\StrMaster::applyHtml($post->content) !!}
             </div>
         </div>
+        @auth('web')
+        @if(\Illuminate\Support\Facades\Auth::user()->can('posts.edit'))
+                <div class="btn-group me-2" role="group" aria-label="Second group">
+                    <a href="?status=draft" type="button" class="btn btn-secondary">Fast to Draft</a>
+                    <a href="{{ route('admin.blog.post.edit', $post) }}" type="button" class="btn btn-secondary">Edit</a>
+                </div>
+        @endif
+        @endauth
     </div>
 @endsection

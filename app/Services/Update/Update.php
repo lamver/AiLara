@@ -59,7 +59,7 @@ class Update
                 Log::channel('update')->log('debug', '$directoryPath: ' . $directoryPath);
                 if (!is_dir($directoryPath)) {
                     try {
-                        mkdir($directoryPath, 0744, true);
+                        mkdir($directoryPath, 0755, true);
                     } catch (\Exception $e) {
                         Log::channel('update')->log('debug', 'mkdir_message: ' . $e->getMessage());
                     }
@@ -83,13 +83,97 @@ class Update
 
     }
 
-    static public function composerUpdate()
+    /**
+     * @return void
+     */
+    static public function composerUpdate(): void
     {
-        chdir(base_path());
-        exec('composer install', $output, $return);
+        self::vendorInstall();
+        //chdir(base_path());
+        //exec('composer install', $output, $return);
         // Получаем вывод работы команды
         // Выводим результат
-        return $output;
+        //return $output;
+    }
+
+    /**
+     * @return void
+     */
+    static public function vendorInstall(): void
+    {
+        $zipFile = base_path() . '/storage/app/update/extract_files/AiLara-main/vendor.zip';
+        $extractLocation = base_path() . '/vendor_up';
+
+        $zip = new \ZipArchive;
+
+        if ($zip->open($zipFile) === TRUE) {
+            $zip->extractTo($extractLocation);
+            $zip->close();
+            //echo 'Zip archive extracted successfully.';
+
+            /*if (file_exists(base_path() . '/vendor')) {
+                self::renameRecursive(base_path() . '/vendor', base_path() . '/vendor_down');
+            }
+
+            self::renameRecursive(base_path() . '/vendor_up', base_path() . '/vendor');
+
+            if (file_exists(base_path() . '/vendor_down')) {
+                self::deleteDirectory(base_path() . '/vendor_down');
+            }*/
+        } else {
+            //echo 'Failed to extract the zip archive.';
+        }
+    }
+
+    /**
+     * @param $dir
+     * @return bool
+     */
+    static public function deleteDirectory($dir): bool
+    {
+        if (!file_exists($dir)) {
+            return true;
+        }
+
+        if (!is_dir($dir)) {
+            return unlink($dir);
+        }
+
+        foreach (scandir($dir) as $item) {
+            if ($item == '.' || $item == '..') {
+                continue;
+            }
+
+            if (!self::deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
+                return false;
+            }
+        }
+
+        return rmdir($dir);
+    }
+
+    /**
+     * @param $old_dir
+     * @param $new_dir
+     * @return void
+     */
+    static function renameRecursive($old_dir, $new_dir): void
+    {
+        $dir = opendir($old_dir);
+        @mkdir($new_dir);
+
+        while ($file = readdir($dir)) {
+            if (($file != '.') && ($file != '..')) {
+                if (is_dir($old_dir . '/' . $file)) {
+                    self::renameRecursive($old_dir . '/' . $file, $new_dir . '/' . $file);
+                } else {
+                    rename($old_dir . '/' . $file, $new_dir . '/' . $file);
+                }
+            }
+        }
+
+        closedir($dir);
+        rmdir($old_dir);
     }
 
     /**
@@ -171,6 +255,10 @@ class Update
                 }
 
                 if (stripos($pathWithoutDirExtract, '/public/')) {
+                    continue;
+                }
+
+                if (stripos($pathWithoutDirExtract, '/public/robots.txt')) {
                     continue;
                 }
 

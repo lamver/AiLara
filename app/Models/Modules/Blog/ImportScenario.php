@@ -2,6 +2,7 @@
 
 namespace App\Models\Modules\Blog;
 
+use App\Helpers\StrMaster;
 use App\Services\AiSearchApi;
 use Illuminate\Support\Facades\Log;
 
@@ -13,7 +14,7 @@ class ImportScenario
      * @param bool $url
      * @return array
      */
-    static public function rewrite($text, bool $url = false): array
+    static public function rewrite($text, bool $url = false, string|array $skip = null): array
     {
         $answer = [
             'result' => true,
@@ -42,6 +43,12 @@ class ImportScenario
         } else {
             Log::channel('import')->log('warning', $result);
             $answer['result'] = false;
+
+            return $answer;
+        }
+
+        if (StrMaster::checkStrInString($answer['content'], $skip)) {
+            Log::channel('import')->log('warning', 'skip');
 
             return $answer;
         }
@@ -122,16 +129,13 @@ class ImportScenario
 
         if ($result['result']) {
             $filesUrl = self::getResult($task, $result['task_id'], true);
-            $answer['image'] = $filesUrl[array_rand($filesUrl)]; //array_rand($filesUrl, 0); //$filesUrl;
+            $answer['image'] = $filesUrl[array_rand($filesUrl)];
 
-            //dd($answer['image']);
         } else {
-            //print_r($result);
             $answer['result'] = false;
             $answer['image'] = 'error';
         }
 
-        //dd($answer);
         return $answer;
     }
 
@@ -163,7 +167,7 @@ class ImportScenario
      * @param bool $url
      * @return array
      */
-    static public function translate($text, bool $url = false): array
+    static public function translate($text, bool $url = false, string|array $skip = null): array
     {
         $answer = [
             'result' => true,
@@ -192,6 +196,12 @@ class ImportScenario
         } else {
             Log::channel('import')->log('warning', $result);
             $answer['result'] = false;
+
+            return $answer;
+        }
+
+        if (StrMaster::checkStrInString($answer['content'], $skip)) {
+            Log::channel('import')->log('warning', 'skip');
 
             return $answer;
         }
