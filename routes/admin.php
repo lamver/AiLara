@@ -1,12 +1,10 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\Admin\MainController;
 use App\Http\Controllers\Admin\Integration\AiSearchController;
 use App\Http\Controllers\AiSearch\ControlPanel\SeoPages;
-use App\Http\Controllers\AiSearch\TaskController;
 
 
 /*
@@ -47,4 +45,19 @@ Route::middleware(['auth', 'verified', 'rbac:admin'])->prefix(\Illuminate\Suppor
         ->where('formId', '[0-9]+');
     Route::get('/update', [\App\Http\Controllers\Admin\UpdateController::class, 'index'])->name('admin.update');
     Route::get('/logs', [\App\Http\Controllers\Admin\LogsController::class, 'index'])->name('admin.logs');
+
+    Route::resource('user', UserController::class, [
+        'names' => [
+            'index' => 'admin.user.index',
+            'create' => 'admin.user.create',
+            'store' => 'admin.user.store',
+            'edit' => 'admin.user.edit',
+            'update' => 'admin.user.update',
+            'show' => 'admin.user.show',
+            'destroy' => 'admin.user.destroy',
+        ],
+    ]);
+
+    Route::post('/log-as-user', [UserController::class, 'logInAsUser'])->name('admin.logInAsUser');
+
 });

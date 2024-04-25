@@ -66,8 +66,9 @@
                 /* rtl:remove */
                 left: 0;
                 z-index: 100; /* Behind the navbar */
-                padding: 48px 0 0; /* Height of navbar */
+                padding: 48px 0 40px 0; /* Height of navbar */
                 box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+                overflow-y: auto;
             }
 
             @media (max-width: 767.98px) {
@@ -158,7 +159,10 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
-            <div class="navbar-nav">
+            <div class="navbar-nav flex-row">
+                <div class="nav-item text-nowrap">
+                    <a href="{{route('admin.user.show', Auth::user()->id)}}" class="nav-link px-3">{{Auth::user()->name}}</a>
+                </div>
                 <div class="nav-item text-nowrap">
                     <form method="post" action="{{route('logout')}}">
                         @csrf
@@ -275,6 +279,12 @@
                                 <a class="nav-link" href="{{ route('admin.logs') }}">
                                     <span data-feather="bar-chart-2"></span>
                                     Logs
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('admin.user.index') }}">
+                                    <span data-feather="bar-chart-2"></span>
+                                    {{__('users')}}
                                 </a>
                             </li>
                         </ul>

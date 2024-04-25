@@ -19,8 +19,8 @@
         "spatie/laravel-settings": "^3.3",
         "spatie/laravel-sitemap": "^7.2",
         "willvincent/feeds": "^2.6",
-        "wnikk/laravel-access-rules": "^2.0",
-        "wnikk/laravel-access-ui": "^1.3"
+        "wnikk/laravel-access-rules": "^2.0.11",
+        "wnikk/laravel-access-ui": "^1.3.4"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
