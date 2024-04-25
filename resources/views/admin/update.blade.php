@@ -38,9 +38,9 @@
     <div style="max-height: 300px; overflow-y: scroll">
     @if(!$previousStepError)
         @php $output =  \App\Services\Update\Update::composerUpdate(); @endphp
-        @foreach($output as $outputRow)
+{{--        @foreach($output as $outputRow)
             {{ $outputRow }} <br>
-        @endforeach
+        @endforeach--}}
     @else
         {{ $previousStepError }}
     @endif
