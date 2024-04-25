@@ -48,7 +48,7 @@ class Installer {
 
         $extractPath = str_replace('public/' , '', $extractPath);
 
-        echo $extractPath . '<br>';
+        $extractPath . '<br>';
 
         if (!is_dir($extractPath)) {
             mkdir($extractPath, 0755, true);
@@ -70,12 +70,12 @@ class Installer {
      */
     static public function unzipFile($file_path, $dest): bool
     {
-        echo $file_path . '<br>';
-        echo $dest . '<br>';
+        $file_path . '<br>';
+        $dest . '<br>';
         $zip = new ZipArchive;
 
         if(!is_dir($dest) ) {
-            echo 'Нет папки, куда распаковывать...' . '<br>';
+            'Нет папки, куда распаковывать...' . '<br>';
             return false;
         }
 
@@ -85,7 +85,7 @@ class Installer {
             $zip->close();
             return true;
         } else {
-            echo 'Произошла ошибка при распаковке архива' . '<br>';
+            'Произошла ошибка при распаковке архива' . '<br>';
             return false;
         }
     }
@@ -134,24 +134,24 @@ class Installer {
     static public function composerInstall(): bool
     {
 
-/*        $composerDir = getcwd();
+        /*        $composerDir = getcwd();
 
-        $composerDir = str_replace('public' , '', $composerDir);
+                $composerDir = str_replace('public' , '', $composerDir);
 
-        chdir($composerDir);
+                chdir($composerDir);
 
-        $output = shell_exec('composer install');
-        echo "<pre>composer result: $output</pre>";
+                $output = shell_exec('composer install');
+                echo "<pre>composer result: $output</pre>";
 
-        return true;*/
+                return true;*/
 
         // Название папки для распаковки
         $extractPath = getcwd();
 
         $extractPath = str_replace('public' , '', $extractPath);
 
-        echo 'getcwd: ' . getcwd() . '<br>';
-        echo $extractPath . '<br>';
+        'getcwd: ' . getcwd() . '<br>';
+        $extractPath . '<br>';
 
         $zipfile = $extractPath . '/vendor.zip';
 
@@ -305,7 +305,7 @@ class Installer {
 if (isset($_GET['step'])) {
     session_start();
 
-    echo '<!DOCTYPE html>
+    $outputContent =  '<!DOCTYPE html>
 <html>
 <head>
     <style>
@@ -327,25 +327,29 @@ if (isset($_GET['step'])) {
 
     if ($_GET['step'] == 0) {
         header("Refresh:2; url=/install.php?step=1");
-        echo 'step #0' . '<br>';
+        echo $outputContent . 'step #0' . '<br>';
         exit;
     }
 
     if ($_GET['step'] == 1) {
-        echo 'step #1' . '<br>';
-        echo 'Download archive' . '<br>';
+
         if (Installer::downloadArchiveRepository()) {
             header("Refresh:2; url=/install.php?step=2");
+            echo $outputContent . 'step #1' . '<br>';
+            echo $outputContent . 'Download archive' . '<br>';
+            echo $outputContent;
             exit;
         }
-        echo 'Download archive error!' . '<br>';
+        echo $outputContent . 'Download archive error!' . '<br>';
     }
 
     if ($_GET['step'] == 2) {
-        echo 'step #2' . '<br>';
-        echo 'Extract archive' . '<br>';
+
         if (Installer::extractArchiveRepository()) {
             header("Refresh:2; url=/install.php?step=3");
+
+            echo $outputContent . 'step #2' . '<br>';
+            echo $outputContent . 'Extract archive' . '<br>';
             exit;
         }
 
@@ -353,8 +357,7 @@ if (isset($_GET['step'])) {
     }
 
     if ($_GET['step'] == 3) {
-        echo 'step #3' . '<br>';
-        echo 'Move files' . '<br>';
+
         $sourceDir = getcwd().'/storage/app/update/extract_files/AiLara-main';
         $sourceDir = str_replace('public/' , '', $sourceDir);
         $destDir = getcwd();
@@ -362,27 +365,29 @@ if (isset($_GET['step'])) {
 
         if (Installer::moveFiles($sourceDir, $destDir)) {
             header("Refresh:2; url=/install.php?step=4");
+
+            echo $outputContent . 'step #3' . '<br>';
+            echo $outputContent . 'Move files' . '<br>';
             exit;
         }
 
-        echo 'Move files error!' . '<br>';
+        echo $outputContent . 'Move files error!' . '<br>';
     }
 
     if ($_GET['step'] == 4) {
-        echo 'step #4' . '<br>';
-        echo 'Install vendor files' . '<br>';
-
         if (Installer::composerInstall()) {
             header("Refresh:2; url=/install.php?step=5");
+
+            echo $outputContent . 'step #4' . '<br>';
+            echo $outputContent . 'Install vendor files' . '<br>';
+
             exit;
         }
 
-        echo 'Move files error!' . '<br>';
+        echo $outputContent . 'Move files error!' . '<br>';
     }
 
     if ($_GET['step'] == 5) {
-        echo 'step #4' . '<br>';
-        echo 'Set DB connections' . '<br>';
 
         if (
             isset($_POST)
@@ -394,13 +399,18 @@ if (isset($_GET['step'])) {
         ) {
             if (Installer::checkDbConnection($_POST['DB_HOST'], $_POST['DB_PORT'], $_POST['DB_DATABASE'], $_POST['DB_USERNAME'], $_POST['DB_PASSWORD'])) {
                 Installer::createEnv($_POST);
-                echo 'DB connections success' . '<br>';
 
-                echo 'Sess install: ' . $_SESSION['app_key'] . '<br>';
                 header("Refresh:5; url=/install_?appKey=" . $_SESSION['app_key']);
+
+                echo $outputContent . 'step #4' . '<br>';
+                echo $outputContent .  'Set DB connections' . '<br>';
+                echo $outputContent . 'DB connections success' . '<br>';
+
+                echo $outputContent . 'Sess install: ' . $_SESSION['app_key'] . '<br>';
+
                 exit;
             } else {
-                echo 'Error DB connections' . '<br>';
+                echo $outputContent . 'Error DB connections' . '<br>';
             }
         }
 
@@ -3582,5 +3592,3 @@ Canvas Ncence
 </script>
 </body>
 </html>
-
-
