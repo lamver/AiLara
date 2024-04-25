@@ -84,7 +84,7 @@ class Update
     }
 
     /**
-     * @return void
+     * @return array
      */
     static public function composerUpdate(): array
     {
