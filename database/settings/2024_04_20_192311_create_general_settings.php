@@ -6,7 +6,16 @@ return new class extends SettingsMigration
 {
     public function up(): void
     {
-        $this->migrator->add('general.site_name', 'AiLara');
-        $this->migrator->add('general.site_active', true);
+        try {
+            $this->migrator->add('general.site_name', 'AiLara');
+        } catch (Exception $e) {
+            \Illuminate\Support\Facades\Log::error($e->getMessage());
+        }
+
+        try {
+            $this->migrator->add('general.site_active', true);
+        } catch (Exception $e) {
+            \Illuminate\Support\Facades\Log::error($e->getMessage());
+        }
     }
 };

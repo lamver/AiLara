@@ -27,4 +27,26 @@ class StrMaster
 
         return $content;
     }
+
+    /**
+     * @param string $string
+     * @param string|array $entries
+     * @return bool
+     */
+    static public function checkStrInString(string $string, string|array $entries): bool
+    {
+        if (is_array($entries)) {
+            foreach ($entries as $word) {
+                if (stripos($string, $word) !== false) {
+                    return true;
+                }
+            }
+        } else {
+            if (stripos($string, $entries) !== false) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
