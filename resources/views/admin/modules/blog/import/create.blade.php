@@ -75,8 +75,8 @@
         @if(in_array($param->Field, ['repeating_task', 'cron']))
             <label for="label_{{ $param->Field }}" class="form-label">{{ $param->Field }}</label>
             <select id="label_{{ $param->Field }}" name="{{ $param->Field }}" class="form form-control">
-                <option value="0">No</option>
-                <option value="1">Yes</option>
+                <option @if(isset($import) && $import->{$param->Field} == '0') selected @endif value="0">No</option>
+                <option @if(isset($import) && $import->{$param->Field} == '1') selected @endif value="1">Yes</option>
             </select>
             @continue
         @endif

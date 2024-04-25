@@ -2,6 +2,7 @@
 
 namespace App\Models\Modules\Blog;
 
+use App\Helpers\StrMaster;
 use App\Models\User;
 use App\Services\Proxy\Proxy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -194,6 +195,14 @@ class Import extends Model
 
         foreach ($feed->get_items() as $item) {
 
+            if (!empty($import->skip_url_if_entry)) {
+                $arrayEntriesToSkip = explode("\n", $import->skip_url_if_entry);
+
+                if (StrMaster::checkStrInString($item->get_permalink(), $arrayEntriesToSkip)) {
+                    continue;
+                }
+            }
+
             $uniqueIdAfterImport = self::createUniqueIdAfterImportRss($item, $import->category_id, $import->author_id);
 
             if (Posts::query()->where(['unique_id_after_import' => $uniqueIdAfterImport])->exists()) {
@@ -201,11 +210,11 @@ class Import extends Model
             }
 
             if ($import->what_are_we_doing == self::DOING_REWRITE) {
-                $result = ImportScenario::rewrite($item->get_permalink(), true);
+                $result = ImportScenario::rewrite($item->get_permalink(), true, explode("\n", $import->skip_if_entries_phrases));
             }
 
             if ($import->what_are_we_doing == self::DOING_TRANSLATE) {
-                $result = ImportScenario::translate($item->get_permalink(), true);
+                $result = ImportScenario::translate($item->get_permalink(), true, explode("\n", $import->skip_if_entries_phrases));
             }
 
             $dataToPost = [
@@ -231,9 +240,9 @@ class Import extends Model
         }
 
         if (file_exists($tempPathToRss)) {
-/*            if (!unlink($tempPathToRss)) {
+            if (!unlink($tempPathToRss)) {
                 $logLastExecute .= 'error delete file: ' . $tempPathToRss . PHP_EOL;
-            }*/
+            }
         }
 
         $import->log_last_execute = 'Import ' . $countCreatePosts . ' from ' . $totalCandidateToImport . PHP_EOL . $logLastExecute;
