@@ -57,12 +57,7 @@ class Rbac
      */
     protected function checkUserPermission(): bool
     {
-        return true;
         $owner = Owner::where("original_id", $this->role)->first();
-
-        if (!$owner) {
-            abort(403);
-        }
         foreach ($owner->permission as $permission) {
             if (Auth::user()->hasPermission($permission->rule->guard_name)) {
                 return true;
