@@ -1,12 +1,15 @@
 <?php
 
+use App\Http\Controllers\Admin\UserController;
+
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Config;
+
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\Admin\MainController;
 use App\Http\Controllers\Admin\Integration\AiSearchController;
 use App\Http\Controllers\AiSearch\ControlPanel\SeoPages;
+
 use App\Services\Translation\Translation;
 
 
@@ -35,6 +38,7 @@ Route::middleware(['auth', 'verified'])->prefix(Translation::checkRoutePrefix())
         Route::get('/page-edit/{id}', [SeoPages::class, 'seoPageEdit'])->name('admin.ais.page.edit');
         Route::post('/page-save/{id}', [SeoPages::class, 'seoPageSave'])->name('admin.ais.page.save');
 
+
         Route::get('/ais/ai-forms', [AiSearchController::class, 'aiForms'])
             ->name('admin.ais.aiForms');
         Route::get('/ais/ai-forms/new-form', [AiSearchController::class, 'newForm'])
@@ -49,9 +53,25 @@ Route::middleware(['auth', 'verified'])->prefix(Translation::checkRoutePrefix())
             ->where('formId', '[0-9]+');
         Route::get('/update', [\App\Http\Controllers\Admin\UpdateController::class, 'index'])->name('admin.update');
         Route::get('/logs', [\App\Http\Controllers\Admin\LogsController::class, 'index'])->name('admin.logs');
+
         Route::get('/setLang/{locale}', function (string $locale) {
             app()->setLocale($locale);
             session()->put('locale', $locale);
         })->name('setLang');
+
+        Route::resource('user', UserController::class, [
+            'names' => [
+                'index' => 'admin.user.index',
+                'create' => 'admin.user.create',
+                'store' => 'admin.user.store',
+                'edit' => 'admin.user.edit',
+                'update' => 'admin.user.update',
+                'show' => 'admin.user.show',
+                'destroy' => 'admin.user.destroy',
+            ],
+        ]);
+
+        Route::post('/log-as-user', [UserController::class, 'logInAsUser'])->name('admin.logInAsUser');
+        
     });
 });
