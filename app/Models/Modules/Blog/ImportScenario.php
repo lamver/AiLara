@@ -202,7 +202,7 @@ class ImportScenario
 
         if (StrMaster::checkStrInString($answer['content'], $skip)) {
             Log::channel('import')->log('warning', 'skip');
-
+            $answer['result'] = false;
             return $answer;
         }
 

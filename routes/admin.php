@@ -34,7 +34,7 @@ Route::middleware(['auth', 'verified', 'rbac:admin'])->prefix(Translation::check
 
         Route::get('/ais/common-data', [AiSearchController::class, 'commonData'])->name('admin.ais.commonData');
 
-        Route::get('/pages', [SeoPages::class, 'seoPagesList'])->name('admin.ais.pages');
+        Route::get('/routes', [SeoPages::class, 'routeList'])->name('admin.ais.pages');
         Route::get('/page-edit/{id}', [SeoPages::class, 'seoPageEdit'])->name('admin.ais.page.edit');
         Route::post('/page-save/{id}', [SeoPages::class, 'seoPageSave'])->name('admin.ais.page.save');
 

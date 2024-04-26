@@ -7,18 +7,28 @@ ini_set('display_startup_errors', 1);
 ini_set('memory_limit','512M');
 error_reporting(E_ALL);
 
-class Installer {
-
+class Installer
+{
     const URL_REPOSITORY = 'https://github.com/lamver/AiLara/archive/refs/heads/main.zip';
     const ARCHIVE_FILE_ZIP_NAME = 'main.zip';
 
-    const APP_PATH_TO_UPDATE_ARCHIVE = 'update/main.zip';
-    const APP_PATH_TO_UPDATE_ARCHIVE_EXTRACT_FILES = 'update/extract_files';
+    protected array $stepLog = [];
+
+    /**
+     * @return true
+     */
+    public function firstStep(): bool
+    {
+        $this->stepLog[] = 'Initial';
+        $this->stepLog[] = 'Check sys';
+
+        return true;
+    }
 
     /**
      * @return bool
      */
-    static public function downloadArchiveRepository(): bool
+    public function downloadArchiveRepository(): bool
     {
         $url = self::URL_REPOSITORY;
 
@@ -29,11 +39,20 @@ class Installer {
         $download = curl_exec($ch);
         curl_close($ch);
 
+        if (curl_errno($ch)) {
+            $this->addStepLog('Ошибка curl: ' . curl_error($ch));
+
+            return false;
+        }
+
+        $this->addStepLog('Archive uploaded');
+
         try {
             file_put_contents(self::ARCHIVE_FILE_ZIP_NAME, file_get_contents(self::URL_REPOSITORY));
-
+            $this->addStepLog('Archive saved');
             return true;
         } catch (Exception $e) {
+            $this->addStepLog($e->getMessage());
             return false;
         }
     }
@@ -41,22 +60,21 @@ class Installer {
     /**
      * @return bool
      */
-    static public function extractArchiveRepository(): bool
+    public function extractArchiveRepository(): bool
     {
         // Название папки для распаковки
         $extractPath = getcwd().'/storage/app/update/extract_files';
 
         $extractPath = str_replace('public/' , '', $extractPath);
 
-        $extractPath . '<br>';
-
         if (!is_dir($extractPath)) {
             mkdir($extractPath, 0755, true);
+            $this->addStepLog('Directory created');
         }
 
         $zipfile = getcwd() . '/'.self::ARCHIVE_FILE_ZIP_NAME;
 
-        $resultExtract = self::unzipFile($zipfile, $extractPath);
+        $resultExtract = $this->unzipFile($zipfile, $extractPath);
 
         unlink($zipfile);
 
@@ -64,51 +82,34 @@ class Installer {
     }
 
     /**
-     * @param $file_path
-     * @param $dest
+     * @param string|null $sourceDir
+     * @param string|null $destDir
      * @return bool
      */
-    static public function unzipFile($file_path, $dest): bool
+    public function moveFiles(string $sourceDir = null, string $destDir = null): bool
     {
-        $file_path . '<br>';
-        $dest . '<br>';
-        $zip = new ZipArchive;
-
-        if(!is_dir($dest) ) {
-            'Нет папки, куда распаковывать...' . '<br>';
-            return false;
+        if (empty($sourceDir)) {
+            $sourceDir = getcwd().'/storage/app/update/extract_files/AiLara-main';
+            $sourceDir = str_replace('public/' , '', $sourceDir);
         }
 
-        // открываем архив
-        if(true === $zip->open($file_path) ) {
-            $zip->extractTo( $dest );
-            $zip->close();
-            return true;
-        } else {
-            'Произошла ошибка при распаковке архива' . '<br>';
-            return false;
+        if (empty($destDir)) {
+            $destDir = getcwd();
+            $destDir = str_replace('public' , '', $destDir);
         }
-    }
 
-    /**
-     * @param $sourceDir
-     * @param $destDir
-     * @return bool
-     */
-    static public function moveFiles($sourceDir, $destDir) {
         if (!is_dir($sourceDir) || !is_dir($destDir)) {
+            $this->addStepLog('No source directory or destination directory');
             return false;
         }
 
         $files = glob($sourceDir . '/{,.}[!.,!..]*', GLOB_BRACE);
 
-        //print_r($files); die();
-
         foreach ($files as $file) {
             if (is_file($file)) {
                 $fileName = basename($file);
                 $destFile = $destDir . '/' . $fileName;
-                //echo 'copy: ' . $fileName . ' to: ' . $destFile .'<br>';
+                $this->addStepLog('copy: ' . $fileName . ' to: ' . $destFile);
                 if (!rename($file, $destFile)) {
                     return false;
                 }
@@ -116,10 +117,12 @@ class Installer {
                 $dirName = basename($file);
                 $newDestDir = $destDir . '/' . $dirName;
                 if (!is_dir($newDestDir)) {
-                    //echo 'create dir: ' . $newDestDir . ' from: ' . $dirName .'<br>';
+                    $this->addStepLog('create dir: ' . $newDestDir . ' from: ' . $dirName);
                     mkdir($newDestDir);
                 }
-                if (!self::moveFiles($file, $newDestDir)) {
+
+                if (!$this->moveFiles($file, $newDestDir)) {
+                    $this->addStepLog('Error moving files');
                     return false;
                 }
             }
@@ -131,46 +134,108 @@ class Installer {
     /**
      * @return true
      */
-    static public function composerInstall(): bool
+    public function vendorInstall(): bool
     {
+        $rootDir = getcwd();
+        $rootDir = str_replace('public' , '', $rootDir);
 
-        /*        $composerDir = getcwd();
+        $this->addStepLog($rootDir);
 
-                $composerDir = str_replace('public' , '', $composerDir);
+        $vendorZipPath = $rootDir.'vendor.zip';
 
-                chdir($composerDir);
+        if (file_exists($vendorZipPath)) {
+            $this->addStepLog('Archive vendor.zip exists');
+        } else {
+            $this->addStepLog('Archive not found');
 
-                $output = shell_exec('composer install');
-                echo "<pre>composer result: $output</pre>";
+            return false;
+        }
 
-                return true;*/
+        $extractLocation = $rootDir.'vendor';
 
-        // Название папки для распаковки
-        $extractPath = getcwd();
+        $zip = new \ZipArchive;
 
-        $extractPath = str_replace('public' , '', $extractPath);
+        if ($zip->open($vendorZipPath) === TRUE) {
+            $zip->extractTo($extractLocation);
+            $zip->close();
+            $this->addStepLog('Archive vendor successfully unpacked');
 
-        'getcwd: ' . getcwd() . '<br>';
-        $extractPath . '<br>';
+            return true;
+        }
 
-        $zipfile = $extractPath . '/vendor.zip';
+        $this->addStepLog('Archive vendor unpacking error');
 
-        return self::unzipFile($zipfile, $extractPath);
+        return true;
+    }
+
+    /**
+     * @param $file_path
+     * @param $dest
+     * @return bool
+     */
+    private function unzipFile($file_path, $dest): bool
+    {
+        $zip = new \ZipArchive;
+
+        if(!is_dir($dest) ) {
+            $this->addStepLog('There is no folder where to unpack...');
+            return false;
+        }
+
+        // открываем архив
+        if(true === $zip->open($file_path) ) {
+            $zip->extractTo( $dest );
+            $zip->close();
+            $this->addStepLog('Archive unpacked');
+            return true;
+        } else {
+            $this->addStepLog('An error occurred while unpacking the archive...');
+            return false;
+        }
     }
 
     /**
      * @return string
      */
-    static public function getHomeDir(): string
+    public function viewStepLog(): string
     {
-        return dirname(getcwd(), 2);
+        $stepLog = '';
+
+        foreach ($this->stepLog as $logString) {
+            $stepLog .= $logString . '<br>';
+        }
+
+        return $stepLog;
     }
 
-    /**
-     * @param array $data
-     * @return bool
-     */
-    static public function createEnv(array $data = []): bool
+    public function addStepLog($message)
+    {
+        $this->stepLog[] = $message;
+
+        return $this;
+    }
+
+    public function checkDbConnection($servername, $port, $dbname, $username, $password): bool
+    {
+        try {
+            $conn = new mysqli($servername, $username, $password, $dbname, $port);
+        } catch (Exception $e) {
+            $this->addStepLog($e->getMessage());
+
+            return false;
+        }
+
+        if ($conn->connect_error) {
+            $this->addStepLog('Error connecting to database');
+            return false;
+        } else {
+            $conn->close();
+            $this->addStepLog('Connection to database successful');
+            return true;
+        }
+    }
+
+    public function createEnv(array $data = []): bool
     {
         $env = [
             'APP_NAME' => 'AiLara',
@@ -250,35 +315,6 @@ class Installer {
         return true;
     }
 
-    /**
-     * @param $servername
-     * @param $port
-     * @param $dbname
-     * @param $username
-     * @param $password
-     * @return bool
-     */
-    static public function checkDbConnection($servername, $port, $dbname, $username, $password): bool
-    {
-        try {
-            $conn = new mysqli($servername, $username, $password, $dbname, $port);
-        } catch (Exception $e) {
-            echo $e->getMessage() . '<br>';
-            return false;
-        }
-
-        if ($conn->connect_error) {
-            return false;
-        } else {
-            $conn->close();
-            return true;
-        }
-    }
-
-    /**
-     * @param $length
-     * @return string
-     */
     public static function generateRandomString($length): string
     {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -289,9 +325,6 @@ class Installer {
         return $randomString;
     }
 
-    /**
-     * @return string
-     */
     static public function getProtocolHostPort(): string
     {
         $host = $_SERVER['HTTP_HOST'];
@@ -300,14 +333,38 @@ class Installer {
 
         return $protocol . '://' . $host . ($port != ':80' && $port != '443' ? ':'.$port.'/' : '/');
     }
+
+    /**
+     * @return string
+     */
+    static public function formConnectDbParams(): string
+    {
+        $form = '<form method="post">';
+        $form .= 'DB_HOST' . '<br>';
+        $form .='<input name="DB_HOST" value="127.0.0.1">' . '<br>';
+        $form .='DB_PORT' . '<br>';
+        $form .='<input name="DB_PORT" value="3306">' . '<br>';
+        $form .='DB_DATABASE' . '<br>';
+        $form .='<input name="DB_DATABASE" value="">' . '<br>';
+        $form .='DB_USERNAME' . '<br>';
+        $form .='<input name="DB_USERNAME" value="">' . '<br>';
+        $form .='DB_PASSWORD' . '<br>';
+        $form .='<input name="DB_PASSWORD" value="">' . '<br>';
+        $form .='<button type="submit">Apply</button>' . '<br>';
+        $form .='</form>';
+
+        return $form;
+    }
+
 }
 
 if (isset($_GET['step'])) {
     session_start();
+    $installer = new Installer();
 
     $outputContent =  '<!DOCTYPE html>
 <html>
-<head>
+    <head>
     <style>
     body {
             color: white;
@@ -326,65 +383,69 @@ if (isset($_GET['step'])) {
 
 
     if ($_GET['step'] == 0) {
-        header("Refresh:2; url=/install.php?step=1");
-        echo $outputContent . 'step #0' . '<br>';
+        if ($installer->firstStep()) {
+            header("Refresh:2; url=/install.php?step=1");
+            $installer->addStepLog('ok');
+        } else {
+            $installer->addStepLog('Error!');
+        }
+
+        echo $outputContent . 'Step #0' . '<br>';
+        echo $installer->viewStepLog();
+
         exit;
     }
 
     if ($_GET['step'] == 1) {
-
-        if (Installer::downloadArchiveRepository()) {
+        if ($installer->downloadArchiveRepository()) {
             header("Refresh:2; url=/install.php?step=2");
-            echo $outputContent . 'step #1' . '<br>';
-            echo $outputContent . 'Download archive' . '<br>';
-            echo $outputContent;
-            exit;
+            $installer->addStepLog('ok');
+        } else {
+            $installer->addStepLog('Error!');
         }
-        echo $outputContent . 'Download archive error!' . '<br>';
+
+        echo $outputContent . 'Step #1' . '<br>';
+        echo $installer->viewStepLog();
+
+        exit;
     }
 
     if ($_GET['step'] == 2) {
-
-        if (Installer::extractArchiveRepository()) {
+        if ($installer->extractArchiveRepository()) {
             header("Refresh:2; url=/install.php?step=3");
-
-            echo $outputContent . 'step #2' . '<br>';
-            echo $outputContent . 'Extract archive' . '<br>';
-            exit;
+            $installer->addStepLog('ok');
+        } else {
+            $installer->addStepLog('Error!');
         }
 
-        echo 'Extract archive error!' . '<br>';
+        echo $outputContent . 'Step #2' . '<br>';
+        echo $installer->viewStepLog();
+
+        exit;
     }
 
     if ($_GET['step'] == 3) {
-
-        $sourceDir = getcwd().'/storage/app/update/extract_files/AiLara-main';
-        $sourceDir = str_replace('public/' , '', $sourceDir);
-        $destDir = getcwd();
-        $destDir = str_replace('public' , '', $destDir);
-
-        if (Installer::moveFiles($sourceDir, $destDir)) {
+        if ($installer->moveFiles()) {
             header("Refresh:2; url=/install.php?step=4");
-
-            echo $outputContent . 'step #3' . '<br>';
-            echo $outputContent . 'Move files' . '<br>';
-            exit;
+            $installer->addStepLog('ok');
+        } else {
+            $installer->addStepLog('Error!');
         }
 
-        echo $outputContent . 'Move files error!' . '<br>';
+        echo $outputContent . 'Step #3' . '<br>';
+        echo $installer->viewStepLog();
     }
 
     if ($_GET['step'] == 4) {
-        if (Installer::composerInstall()) {
+        if ($installer->vendorInstall()) {
             header("Refresh:2; url=/install.php?step=5");
-
-            echo $outputContent . 'step #4' . '<br>';
-            echo $outputContent . 'Install vendor files' . '<br>';
-
-            exit;
+            $installer->addStepLog('ok');
+        } else {
+            $installer->addStepLog('Error!');
         }
 
-        echo $outputContent . 'Move files error!' . '<br>';
+        echo $outputContent . 'Step #4' . '<br>';
+        echo $installer->viewStepLog();
     }
 
     if ($_GET['step'] == 5) {
@@ -397,54 +458,20 @@ if (isset($_GET['step'])) {
             && isset($_POST['DB_USERNAME'])
             && isset($_POST['DB_PASSWORD'])
         ) {
-            if (Installer::checkDbConnection($_POST['DB_HOST'], $_POST['DB_PORT'], $_POST['DB_DATABASE'], $_POST['DB_USERNAME'], $_POST['DB_PASSWORD'])) {
-                Installer::createEnv($_POST);
-
+            if ($installer->checkDbConnection($_POST['DB_HOST'], $_POST['DB_PORT'], $_POST['DB_DATABASE'], $_POST['DB_USERNAME'], $_POST['DB_PASSWORD'])) {
+                $installer->createEnv($_POST);
                 header("Refresh:5; url=/install_?appKey=" . $_SESSION['app_key']);
-
-                echo $outputContent . 'step #4' . '<br>';
-                echo $outputContent .  'Set DB connections' . '<br>';
-                echo $outputContent . 'DB connections success' . '<br>';
-
-                echo $outputContent . 'Sess install: ' . $_SESSION['app_key'] . '<br>';
-
-                exit;
+                $installer->addStepLog('ok');
+                $installer->addStepLog('Install session: ' . $_SESSION['app_key']);
             } else {
-                echo $outputContent . 'Error DB connections' . '<br>';
-            }
-        }
-
-        echo '<form method="post">';
-        echo 'DB_HOST' . '<br>';
-        echo '<input name="DB_HOST" value="127.0.0.1">' . '<br>';
-        echo 'DB_PORT' . '<br>';
-        echo '<input name="DB_PORT" value="3306">' . '<br>';
-        echo 'DB_DATABASE' . '<br>';
-        echo '<input name="DB_DATABASE" value="">' . '<br>';
-        echo 'DB_USERNAME' . '<br>';
-        echo '<input name="DB_USERNAME" value="">' . '<br>';
-        echo 'DB_PASSWORD' . '<br>';
-        echo '<input name="DB_PASSWORD" value="">' . '<br>';
-        echo '<button type="submit">Apply</button>' . '<br>';
-        echo '</form>';
-
-    }
-
-    if ($_GET['step'] == 20) {
-        echo 'start' . '<br>';
-        if (Installer::downloadArchiveRepository()) {
-            echo 'download archive successfully'. '<br>';
-            if (!Installer::extractArchiveRepository()) {
-                die('Ошибка распаковки архива');
+                $installer->addStepLog('Error!');
+                echo Installer::formConnectDbParams();
             }
 
-            $sourceDir = getcwd().'/storage/app/update/extract_files/AiLara-main';
-            $sourceDir = str_replace('public/' , '', $sourceDir);
-            $destDir = getcwd();
-            $destDir = str_replace('public' , '', $destDir);
-
-            Installer::moveFiles($sourceDir, $destDir);
-            Installer::composerInstall();
+            echo $outputContent . 'Step #5' . '<br>';
+            echo $installer->viewStepLog();
+        } else {
+            echo Installer::formConnectDbParams();
         }
     }
 

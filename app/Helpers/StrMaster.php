@@ -37,11 +37,17 @@ class StrMaster
     {
         if (is_array($entries)) {
             foreach ($entries as $word) {
+                if (empty($word)) {
+                    continue;
+                }
                 if (stripos($string, $word) !== false) {
                     return true;
                 }
             }
         } else {
+            if (empty($word)) {
+                return false;
+            }
             if (stripos($string, $entries) !== false) {
                 return true;
             }

@@ -10,6 +10,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
@@ -26,7 +27,7 @@ class SeoPages extends Controller
      *
      * @return Application|Factory|View
      */
-    public function seoPagesList(Request $request)
+    public function routeList(Request $request)
     {
         $routes = collect(Route::getRoutes())->filter(function($route) {
             return in_array('GET', $route->methods());
@@ -43,7 +44,7 @@ class SeoPages extends Controller
 
         $allPages = SeoPagesModel::all();
 
-        return view('admin.integration.seoPagesList', [
+        return view('admin.integration.routeList', [
             'allPages'  => $allPages,
             'routes'    => $routes,
         ]);
