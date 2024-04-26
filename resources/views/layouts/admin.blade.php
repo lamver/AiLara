@@ -296,6 +296,7 @@
                                     {{__('Users')}}
                                 </a>
                              </li>
+                            @if(isset($languages))
                             <li class="nav-item">
                                 <div class="d-flex flex-row bd-highlight">
                                     <select class="form-select" id="setLang" style="width: 100px; margin-left: auto; margin-top: 23px; margin-right: 25px;">
@@ -305,7 +306,7 @@
                                     </select>
                                 </div>
                             </li>
-
+                            @endif
                         </ul>
                     </div>
                 </nav>
