@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Wnikk\LaravelAccessRules\Models\Owner;
 use Wnikk\LaravelAccessRules\Traits\HasPermissions;
+use Wnikk\LaravelAccessRules\Models\Inheritance;
 
 class User extends Authenticatable
 {
@@ -21,6 +22,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'status',
         'password',
     ];
 
@@ -44,6 +46,9 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    const STATUS_ON = 1;
+    const STATUS_OFF = 0;
+
     /**
      * @return array
      */
@@ -51,4 +56,15 @@ class User extends Authenticatable
     {
         return self::query()->get();
     }
+
+    /**
+     * Get the parent owner in the inheritance chain of the current owner.
+     *
+     * @return Owner|null The parent owner if found, null otherwise.
+     */
+    public function getInheritanceParent(): ?Owner
+    {
+        return Inheritance::where('owner_id', $this->getOwner()->id)->first()?->ownerParent()->first();
+    }
+
 }

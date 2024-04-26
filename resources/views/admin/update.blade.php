@@ -1,3 +1,4 @@
+{{--
 @extends('layouts.admin')
 @section('content')
     @php $previousStepError = false; @endphp
@@ -62,3 +63,4 @@
         @endif
     </div>
 @endsection
+--}}
