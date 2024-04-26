@@ -24,7 +24,7 @@ use App\Services\Translation\Translation;
 |
 */
 
-Route::middleware(['auth', 'verified'])->prefix(Translation::checkRoutePrefix())->group(function () {
+Route::middleware(['auth', 'verified', 'rbac:admin'])->prefix(Translation::checkRoutePrefix())->group(function () {
     Route::prefix(Config::get('ailara.admin_prefix'))->group(function () {
         Route::get('/', [MainController::class, 'index'])->name('admin.index');
         Route::get('/configuration', [MainController::class, 'configuration'])->name('admin.configuration');
@@ -72,6 +72,5 @@ Route::middleware(['auth', 'verified'])->prefix(Translation::checkRoutePrefix())
         ]);
 
         Route::post('/log-as-user', [UserController::class, 'logInAsUser'])->name('admin.logInAsUser');
-        
     });
 });
