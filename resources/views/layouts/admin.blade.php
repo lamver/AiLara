@@ -164,7 +164,10 @@
                     <a href="{{route('admin.user.show', Auth::user()->id)}}" class="nav-link px-3">{{Auth::user()->name}}</a>
                 </div>
                 <div class="nav-item text-nowrap">
-                    <a class="nav-link px-3" href="#">{{ __('admin.sign_out') }}</a>
+                    <form method="post" action="{{route('logout')}}">
+                        @csrf
+                        <button type="submit" class="nav-link px-3">{{ __('admin.sign_out') }}</button>
+                    </form>
                 </div>
             </div>
         </header>
@@ -267,7 +270,7 @@
                                 </a>
                                 <a class="nav-link" href="{{ route('admin.ais.pages') }}">
                                     <span data-feather="bar-chart-2"></span>
-                                    {{ __('admin.pages') }}
+                                    {{ __('admin.Routes') }}
                                 </a>
                                 <a class="nav-link" href="{{ route('admin.update') }}">
                                     <span data-feather="bar-chart-2"></span>
@@ -288,7 +291,7 @@
                              <li class="nav-item">
                                <a class="nav-link" href="{{ route('admin.user.index') }}">
                                     <span data-feather="bar-chart-2"></span>
-                                    {{__('users')}}
+                                    {{__('Users')}}
                                 </a>
                              </li>
                             <li class="nav-item">
@@ -299,7 +302,7 @@
                                         @php endforeach; @endphp
                                     </select>
                                 </div>
-                            </li>   
+                            </li>
 
                         </ul>
                     </div>
