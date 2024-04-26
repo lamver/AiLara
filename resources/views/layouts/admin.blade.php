@@ -161,7 +161,7 @@
             <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
             <div class="navbar-nav flex-row">
                 <div class="nav-item text-nowrap">
-                    <a href="{{route('admin.user.show', \Illuminate\Support\Facades\Auth::user()->id)}}" class="nav-link px-3">{{ \Illuminate\Support\Facades\Auth::user()->name}}</a>
+                    <a href="{{route('admin.user.show', \Illuminate\Support\Facades\Auth::id())}}" class="nav-link px-3">{{ \Illuminate\Support\Facades\Auth::user()->getAuthIdentifierName()}}</a>
                 </div>
                 <div class="nav-item text-nowrap">
                     <form method="post" action="{{route('logout')}}">
