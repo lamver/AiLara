@@ -28,7 +28,7 @@
         <div class="row">
             <div class="col-md-8 post_block">
                 <h1>{!! \App\Helpers\StrMaster::htmlTagClear($post->title) !!}</h1>
-                <img alt="{{ $post->seo_title }}" data-src="{!! $post->image !!}" src="{{ \App\Helpers\ImageMaster::getRandomSprite() }}"/>
+                <img class="lazy-load-image" alt="{{ $post->seo_title }}" data-src="{!! $post->image !!}" src="{{ \App\Helpers\ImageMaster::getRandomSprite() }}"/>
                 {!! \App\Helpers\StrMaster::applyHtml($post->content) !!}
             </div>
         </div>
