@@ -69,6 +69,10 @@ class UpdateController extends BaseController
             }
         }
 
+        if ($result) {
+            $updateLog[] = 'Migrate ' . Update::migrate();
+        }
+
         Artisan::call('config:clear');
         Artisan::call('config:cache');
         Artisan::call('route:clear');
