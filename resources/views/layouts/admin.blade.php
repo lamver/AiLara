@@ -164,10 +164,7 @@
                     <a href="{{route('admin.user.show', Auth::user()->id)}}" class="nav-link px-3">{{Auth::user()->name}}</a>
                 </div>
                 <div class="nav-item text-nowrap">
-                    <form method="post" action="{{route('logout')}}">
-                        @csrf
-                        <button type="submit" class="nav-link px-3">Sign out</button>
-                    </form>
+                    <a class="nav-link px-3" href="#">{{ __('admin.sign_out') }}</a>
                 </div>
             </div>
         </header>
@@ -177,21 +174,21 @@
                     <div class="position-sticky pt-3">
                         <ul class="nav flex-column">
                             <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="/admin" {{\Illuminate\Support\Facades\Route::is('admin.index') ? 'disable' : ''}}>
+                                <a class="nav-link" aria-current="page" href="{{route('admin.index')}}" {{\Illuminate\Support\Facades\Route::is('admin.index') ? 'disable' : ''}}>
                                     <span data-feather="home"></span>
-                                    Dashboard
+                                    {{ __('admin.dashboard') }}
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('accessUi.') }}">
                                     <span data-feather="file"></span>
-                                    RBAC
+                                    {{ __('admin.RBAC') }}
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('admin.configuration') }} ">
                                     <span data-feather="shopping-cart"></span>
-                                    Configuration
+                                    {{ __('admin.configuration') }}
                                 </a>
                                 <ul>
                                     <li class="nav-item">
@@ -205,19 +202,19 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="#">
                                     <span data-feather="users"></span>
-                                    Ai Search
+                                    {{ __('admin.ai_search') }}
                                 </a>
                                 <ul>
                                     <li class="nav-item">
                                         <a class="nav-link" href="{{ route('admin.ais.commonData') }}">
                                             <span data-feather="bar-chart-2"></span>
-                                            Common data
+                                            {{ __('admin.common_data') }}
                                         </a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="{{ route('admin.ais.aiForms') }}">
                                             <span data-feather="bar-chart-2"></span>
-                                            Ai Forms
+                                            {{ __('admin.ai_forms') }}
                                         </a>
                                     </li>
                                 </ul>
@@ -225,37 +222,37 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="#">
                                     <span data-feather="users"></span>
-                                    Modules
+                                    {{ __('admin.modules') }}
                                 </a>
                                 <ul>
                                     <li class="nav-item">
                                         <a class="nav-link" href="{{ route('admin.ais.commonData') }}">
                                             <span data-feather="bar-chart-2"></span>
-                                            Configuration
+                                            {{ __('admin.configuration') }}
                                         </a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="#">
                                             <span data-feather="users"></span>
-                                            Blog
+                                            {{ __('admin.blog') }}
                                         </a>
                                         <ul>
                                             <li>
                                                 <a class="nav-link" href="{{ route('admin.blog.post.index') }}">
                                                     <span data-feather="bar-chart-2"></span>
-                                                    Posts
+                                                    {{ __('admin.posts') }}
                                                 </a>
                                             </li>
                                             <li>
                                                 <a class="nav-link" href="{{ route('admin.blog.category.index') }}">
                                                     <span data-feather="bar-chart-2"></span>
-                                                    Category
+                                                    {{ __('admin.category') }}
                                                 </a>
                                             </li>
                                             <li>
                                                 <a class="nav-link" href="{{ route('admin.blog.import.index') }}">
                                                     <span data-feather="bar-chart-2"></span>
-                                                    Import
+                                                    {{ __('admin.import') }}
                                                 </a>
                                             </li>
                                         </ul>
@@ -266,27 +263,44 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('telegram-bots.index') }}">
                                     <span data-feather="bar-chart-2"></span>
-                                    Telegram bots
+                                    {{ __('admin.telegram_bots') }}
                                 </a>
                                 <a class="nav-link" href="{{ route('admin.ais.pages') }}">
                                     <span data-feather="bar-chart-2"></span>
-                                    Pages
+                                    {{ __('admin.pages') }}
                                 </a>
                                 <a class="nav-link" href="{{ route('admin.update') }}">
                                     <span data-feather="bar-chart-2"></span>
-                                    Update app
+                                    {{ __('admin.update_app') }}
                                 </a>
                                 <a class="nav-link" href="{{ route('admin.logs') }}">
                                     <span data-feather="bar-chart-2"></span>
-                                    Logs
+                                    {{ __('admin.Logs') }}
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('admin.user.index') }}">
+
+                                <a class="nav-link" href="/admin/translations">
+                                    <span data-feather="bar-chart-2"></span>
+                                    {{ __('admin.Managing transfers') }}
+                                </a>
+                            </li>
+                             <li class="nav-item">
+                               <a class="nav-link" href="{{ route('admin.user.index') }}">
                                     <span data-feather="bar-chart-2"></span>
                                     {{__('users')}}
                                 </a>
-                            </li>
+                             </li>
+                            <li class="nav-item">
+                                <div class="d-flex flex-row bd-highlight">
+                                    <select class="form-select" id="setLang" style="width: 100px; margin-left: auto; margin-top: 23px; margin-right: 25px;">
+                                        @php foreach ($languages as $lang): @endphp
+                                        <option @if(trans()->getLocale() === $lang) selected @endif value="{{$lang}}">{{$lang}}</option>
+                                        @php endforeach; @endphp
+                                    </select>
+                                </div>
+                            </li>   
+
                         </ul>
                     </div>
                 </nav>
@@ -439,9 +453,42 @@
 
         @stack('bottom-scripts')
         <script>
+
             let requestUri = location.pathname;
             let link = document.querySelector(`#sidebarMenu .nav-item a[href*="${requestUri}"]`);
-            link.classList.add('active');
+            if(!!link) {
+                link.classList.add('active');
+            }
+
+            let setLang = document.getElementById('setLang');
+            setLang.addEventListener('change', function (){
+                let selectedLang = this.value;
+                fetch(`/admin/setLang/${selectedLang}`)
+                    .then(() => {
+                        updateLanguageInUrl(selectedLang);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+
+            });
+
+            function updateLanguageInUrl(newLang) {
+                let href = location.href;
+                let languages = {!! json_encode($languages) !!};
+                let langRegex = new RegExp('/(' + languages.join('|') + ')/');
+
+                if (langRegex.test(href)) {
+                    href = href.replace(langRegex, '/' + newLang + '/');
+                } else if (newLang !== 'en') {
+                    href = `${location.origin}/${newLang}${location.pathname}`;
+                }
+
+                // Remove any occurrence of 'en/' from the URL
+                href = href.replace(/en\//, '');
+
+                location.href = href;
+            }
         </script>
 
     </body>
