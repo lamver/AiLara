@@ -26,7 +26,7 @@
         <link rel="icon" href="/docs/5.0/assets/img/favicons/favicon.ico">
         <meta name="theme-color" content="#7952b3">
 
-        @yield('stylesheet')
+        @stack('stylesheet')
         <style>
             .bd-placeholder-img {
                 font-size: 1.125rem;
