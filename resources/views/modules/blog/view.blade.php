@@ -28,7 +28,7 @@
         <div class="row">
             <div class="col-md-8 post_block">
                 <h1>{!! \App\Helpers\StrMaster::htmlTagClear($post->title) !!}</h1>
-                <img alt="{{ $post->seo_title }}" src="{!! $post->image !!}"/>
+                <img alt="{{ $post->seo_title }}" data-src="{!! $post->image !!}" src="{{ \App\Helpers\ImageMaster::getRandomSprite() }}"/>
                 {!! \App\Helpers\StrMaster::applyHtml($post->content) !!}
             </div>
         </div>
@@ -42,3 +42,18 @@
         @endauth
     </div>
 @endsection
+@push('bottom-scripts')
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let lazyLoadImages = document.querySelectorAll('.lazy-load-image');
+
+            lazyLoadImages.forEach(function(element) {
+                if (element.tagName === 'IMG' && element.getAttribute('data-src')) {
+                    element.setAttribute('src', element.getAttribute('data-src'));
+                } else if (element.tagName === 'DIV' && element.getAttribute('data-bg-url')) {
+                    element.style.backgroundImage = `url(${element.getAttribute('data-bg-url')})`;
+                }
+            });
+        });
+    </script>
+@endpush
