@@ -15,7 +15,7 @@
         .info-block-top:before {
             content: "";
             position: absolute;
-            height: 50%;
+            height: 80%;
             width: 100%;
             bottom: 0;
             left: 0;
