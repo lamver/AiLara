@@ -10,6 +10,19 @@
             position: relative;
             margin-bottom: 10px;
             box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 2;
+        }
+        .info-block-top:before {
+            content: "";
+            position: absolute;
+            height: 50%;
+            width: 100%;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-image: -webkit-gradient(linear, left top, left bottom, from(transparent), to(black));
+            background-image: linear-gradient(180deg, transparent, black);
+            z-index: 0;
         }
 
         h2 a {
@@ -25,11 +38,7 @@
         }
 
         .text-overlay {
-/*            background-color: rgba(0, 0, 0, 0.6);
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);*/
+            z-index: 2;
         }
     </style>
 @endpush
