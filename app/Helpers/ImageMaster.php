@@ -19,4 +19,15 @@ class ImageMaster
         $url = str_replace('width=1024', 'width=' . $w, $url);
         return str_replace('height=1024', 'height=' . $h, $url);
     }
+
+    static public function getRandomSprite()
+    {
+        $sprite = [
+            'green',
+            'light',
+            'red',
+        ];
+
+        return '/images/sprite/' . $sprite[array_rand($sprite)] .'.png';
+    }
 }

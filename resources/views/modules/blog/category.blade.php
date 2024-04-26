@@ -22,7 +22,7 @@
     </style>
 @endpush
 @section('stylesheet')
-    <link href="https://blogzine.webestica.com/assets/css/style.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+
 @endsection
 @section('header-navbar')
     @include('modules.blog.header-navbar')
@@ -37,7 +37,7 @@
                         <div class="col-md-4">
                             {{--           <h4>{{ $post->title }}</h4>--}}
                             <div class="card mb-3">
-                                <img src="{{ \App\Helpers\ImageMaster::resizeImgFromCdn($post->image, 300, 300) }}" class="card-img-top" alt="{{ $post->seo_title }}">
+                                <img src="{{ \App\Helpers\ImageMaster::getRandomSprite() }}" data-src="{{ \App\Helpers\ImageMaster::resizeImgFromCdn($post->image, 300, 300) }}" class="card-img-top lazy-load-image" alt="{{ $post->seo_title }}">
                                 <div class="card-body">
                                     <h2 style="font-size: 18px" class="card-title">{{ \App\Helpers\StrMaster::htmlTagClear($post->title) }}</h2>
                                     <p class="card-text">{{ \App\Helpers\StrMaster::htmlTagClear($post->content) }}</p>
@@ -61,3 +61,18 @@
         {{ $posts->links('pagination.default') }}
     </div>
 @endsection
+@push('bottom-scripts')
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let lazyLoadImages = document.querySelectorAll('.lazy-load-image');
+
+            lazyLoadImages.forEach(function(element) {
+                if (element.tagName === 'IMG' && element.getAttribute('data-src')) {
+                    element.setAttribute('src', element.getAttribute('data-src'));
+                } else if (element.tagName === 'DIV' && element.getAttribute('data-bg-url')) {
+                    element.style.backgroundImage = `url(${element.getAttribute('data-bg-url')})`;
+                }
+            });
+        });
+    </script>
+@endpush
