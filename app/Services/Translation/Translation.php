@@ -2,7 +2,7 @@
 
 namespace App\Services\Translation;
 
-use App;
+use Illuminate\Support\Facades\App;
 use Barryvdh\TranslationManager\Manager;
 
 /**
@@ -21,7 +21,12 @@ class Translation
     public static function getLanguages(): array
     {
         $transistor = App::make(Manager::class);
-        return $transistor->getLocales();
+        try {
+            return $transistor->getLocales();
+        } catch (\Exception $e) {
+            return [];
+        }
+
     }
 
     /**

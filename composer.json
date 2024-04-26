@@ -7,7 +7,7 @@
     "require": {
         "php": "^8.1",
         "artesaos/seotools": "^1.2",
-        "barryvdh/laravel-translation-manager": "^0.6.6",
+        "barryvdh/laravel-translation-manager": "*",
         "davejamesmiller/laravel-breadcrumbs": "^5.3",
         "defstudio/telegraph": "^1.42",
         "guzzlehttp/guzzle": "^7.2",
