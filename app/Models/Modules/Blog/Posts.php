@@ -20,6 +20,13 @@ class Posts extends Model implements Feedable
         'Draft'
     ];
 
+    /**
+     * The maximum number of characters for the content of an RSS feed item.
+     *
+     * @var int
+     */
+    const RSS_CONTENT_LN = 200;
+
     const STATUS_DEFAULT = 'Draft';
 
     protected $table = 'blog_posts';
@@ -156,14 +163,16 @@ class Posts extends Model implements Feedable
      */
     public function toFeedItem(): FeedItem
     {
+        $user = $this->user()->first();
+        $description = strip_tags(str::limit($this->description, self::RSS_CONTENT_LN));
         return FeedItem::create()
             ->id($this->id)
             ->title($this->title)
-            ->summary($this->summary)
+            ->summary($description)
             ->updated($this->updated_at)
-            ->link($this->link)
-            ->authorName($this->author)
-            ->authorEmail($this->authorEmail);
+            ->link($this->source_url)
+            ->authorName($user->name)
+            ->authorEmail( '');
     }
 
     /**
