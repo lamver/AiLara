@@ -6,9 +6,6 @@
         <meta name="robots" content="noindex">
     @endpush
 @endif
-@section('header-navbar')
-    @include('modules.blog.header-navbar')
-@endsection
 @push('styles')
     <style>
         .info_block img {
@@ -22,12 +19,12 @@
     </style>
 @endpush
 @section('stylesheet')
-
 @endsection
-@section('header-navbar')
+@section('top-sub-app-navbar')
     @include('modules.blog.header-navbar')
 @endsection
 @section('content')
+
     <div class="container">
         <h1>{{ $category->title }}</h1>
         <div class="row">

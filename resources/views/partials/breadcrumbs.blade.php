@@ -1,5 +1,5 @@
 @if (count($breadcrumbs))
-    <nav aria-label="breadcrumb">
+    <nav aria-label="breadcrumb" style="margin-top: 10px;">
         <ol class="breadcrumb">
             @foreach ($breadcrumbs as $breadcrumb)
                 @if ($breadcrumb->url && !$loop->last)
@@ -13,3 +13,4 @@
         </ol>
     </nav>
 @endif
+

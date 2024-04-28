@@ -2,7 +2,7 @@
 @section('stylesheet')
 
 @endsection
-@push('styles')
+@section('styles')
     <style>
         .info-block-top {
             background-position: center center;
@@ -40,12 +40,16 @@
         .text-overlay {
             z-index: 2;
         }
+
+        .nav-item.dropdown:hover .dropdown-menu {
+            display: block;
+        }
     </style>
-@endpush
+@endsection
 @section('header-navbar')
-    @include('modules.blog.header-navbar')
 @endsection
 @section('content')
+    @include('modules.blog.header-navbar')
     <div class="container">
         <h1>{{ $settings->app_name }}</h1>
         <div class="row">
