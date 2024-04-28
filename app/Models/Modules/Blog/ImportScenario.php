@@ -282,9 +282,14 @@ class ImportScenario
 
         if ($result['result']) {
             $filesUrl = self::getResult($task, $result['task_id'], true);
-            $answer['image'] = $filesUrl[array_rand($filesUrl)]; //array_rand($filesUrl, 0); //$filesUrl;
 
-            //dd($answer['image']);
+            if (empty($filesUrl)) {
+                $answer['result'] = false;
+                $answer['image'] = 'error';
+            } else {
+                $answer['image'] = $filesUrl[array_rand($filesUrl)]; //array_rand($filesUrl, 0); //$filesUrl;
+            }
+
         } else {
             //print_r($result);
             $answer['result'] = false;
