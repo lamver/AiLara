@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg" style="border-bottom: 1px solid lightslategray">
+<nav class="navbar navbar-expand-lg shadow-sm">
     <div class="container container-fluid">
         <a class="navbar-brand" href="<?php echo Route::currentRouteName() == 'index' ? '#home' : route('index')?>">
             <img title="{{ \Illuminate\Support\Facades\Config::get('ailara.logoTitle') }}" alt="Нейросеть для разбора сноведений" width="{{ \Illuminate\Support\Facades\Config::get('ailara.logoWidthPx') }}" height="{{ \Illuminate\Support\Facades\Config::get('ailara.logoHeightPx') }}" src="{{ \Illuminate\Support\Facades\Config::get('ailara.logoPath') }}"/>

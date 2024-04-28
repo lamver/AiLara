@@ -4,6 +4,7 @@ use App\Http\Controllers\Ajax\AiTaskController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Ajax\AiFormController;
+use App\Http\Controllers\Api\V1\Module\Blog\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,3 +26,7 @@ Route::get('/form/template', [AiFormController::class, 'template'])->name('ajax.
 Route::get('/form/js', [AiFormController::class, 'js'])->name('ajax.ai-form.js');
 Route::post('/task/execute', [AiFormController::class, 'execute'])->name('ajax.ai-form.execute');
 Route::get('/task/get_task', [AiTaskController::class, 'getTask'])->name('ajax.ai-form.getTask');
+
+Route::prefix('/v1')->group(function () {
+    Route::get('/module/blog/load', [PostController::class, 'load'])->name('api.module.blog.post.load');
+});
