@@ -173,26 +173,61 @@ class Import extends Model
      * @param Import $import
      * @return true
      */
-    static public function executeRss(Import $import)
+    static public function executeRss(Import $import): bool
     {
         $tmpFileNameRss = self::getTmpFileNameRss();
-
-        self::downloadRssFeed($import->task_source, $tmpFileNameRss);
-
-        $tmpFilePath = Storage::path(self::TEMP_LOC_PATH_RSS);
-
-        if (!is_dir($tmpFilePath)) {
-            mkdir($tmpFilePath, 0744, true);
-        }
-
-        $tempPathToRss = $tmpFilePath . $tmpFileNameRss;
-
-        $feed = FeedsFacade::make($tempPathToRss, true);
-
-        $totalCandidateToImport = count($feed->get_items());
         $countCreatePosts = 0;
         $logLastExecute = '';
 
+        $rssUrls = explode("\n", str_replace("\r", "", $import->task_source));
+
+
+        if (!is_array($rssUrls)) {
+            $import->log_last_execute = 'Import Error, no rss urls';
+            $import->save();
+
+            return false;
+        }
+
+        foreach ($rssUrls as $rssUrl) {
+            self::downloadRssFeed($rssUrl, $tmpFileNameRss);
+
+            $tmpFilePath = Storage::path(self::TEMP_LOC_PATH_RSS);
+
+            if (!is_dir($tmpFilePath)) {
+                mkdir($tmpFilePath, 0744, true);
+            }
+
+            $tempPathToRss = $tmpFilePath . $tmpFileNameRss;
+
+            $feed = FeedsFacade::make($tempPathToRss, true);
+
+            $totalCandidateToImport = count($feed->get_items());
+
+            $logLastExecute .= self::processingRssFeed($feed, $import, $logLastExecute, $countCreatePosts);
+
+            if (file_exists($tempPathToRss)) {
+                if (!unlink($tempPathToRss)) {
+                    $logLastExecute .= 'error delete file: ' . $tempPathToRss . PHP_EOL;
+                }
+            }
+        }
+
+        $import->log_last_execute = 'Import ' . $countCreatePosts . ' from ' . $totalCandidateToImport . PHP_EOL . $logLastExecute;
+        $import->save();
+
+        return true;
+    }
+
+    /**
+     * @param $feed
+     * @param Import $import
+     * @param $logLastExecute
+     * @param $countCreatePosts
+     * @return string|void
+     */
+    static public function processingRssFeed($feed, Import $import, $logLastExecute, &$countCreatePosts)
+    {
         foreach ($feed->get_items() as $item) {
 
             if (!empty($import->skip_url_if_entry)) {
@@ -237,18 +272,9 @@ class Import extends Model
             } else {
                 $logLastExecute .= 'Error: ' . $item->get_title() . '/' . $uniqueIdAfterImport . PHP_EOL;
             }
+
+            return $logLastExecute;
         }
-
-        if (file_exists($tempPathToRss)) {
-            if (!unlink($tempPathToRss)) {
-                $logLastExecute .= 'error delete file: ' . $tempPathToRss . PHP_EOL;
-            }
-        }
-
-        $import->log_last_execute = 'Import ' . $countCreatePosts . ' from ' . $totalCandidateToImport . PHP_EOL . $logLastExecute;
-        $import->save();
-
-        return true;
     }
 
     /**
