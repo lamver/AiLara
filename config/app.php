@@ -170,6 +170,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Wnikk\LaravelAccessRules\AccessRulesServiceProvider::class,
         willvincent\Feeds\FeedsServiceProvider::class,
+        Ladumor\LaravelPwa\PWAServiceProvider::class,
     ])->toArray(),
 
     /*

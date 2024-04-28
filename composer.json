@@ -11,6 +11,7 @@
         "davejamesmiller/laravel-breadcrumbs": "^5.3",
         "defstudio/telegraph": "^1.42",
         "guzzlehttp/guzzle": "^7.2",
+        "ladumor/laravel-pwa": "^0.0.4",
         "laravel/breeze": "^1.29",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",

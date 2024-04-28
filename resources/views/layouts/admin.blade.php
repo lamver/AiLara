@@ -481,7 +481,7 @@
 
             function updateLanguageInUrl(newLang) {
                 let href = location.href;
-                let languages = {!! json_encode($languages) !!};
+                let languages = {!! json_encode($languages ?? []) !!};
                 let langRegex = new RegExp('/(' + languages.join('|') + ')/');
 
                 if (langRegex.test(href)) {
