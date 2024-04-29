@@ -73,8 +73,20 @@ class MainController extends BaseController
         $settings->api_key_aisearch = $request->post('api_key_aisearch') ?? "";
         $settings->api_host = $request->post('api_host') ?? "";
         $settings->admin_prefix = $request->post('admin_prefix') ?? "";
+        $settings->backup_status = (bool)$request->post('backup_status');
 
-        return $settings->save();
+        $backupFrequency = SettingGeneral::BACKUP_FREQUENCY;
+
+        if (key_exists($request->post('backup_frequency'), $backupFrequency)){
+            $backupFrequency[$request->post('backup_frequency')] = true;
+            $settings->backup_frequency = $backupFrequency;
+        }
+
+        $return = $settings->save();
+
+        Artisan::call('cache:clear');
+
+        return $return;
 
     }
 

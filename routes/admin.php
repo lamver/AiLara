@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\BackupController;
 use App\Http\Controllers\Admin\UserController;
 
 use App\Http\Controllers\ProfileController;
@@ -72,5 +73,11 @@ Route::middleware(['auth', 'verified', 'rbac:admin'])->prefix(Translation::check
         ]);
 
         Route::post('/log-as-user', [UserController::class, 'logInAsUser'])->name('admin.logInAsUser');
+
+        //backup route
+        Route::get('/backup', [BackupController::class, 'index'])->name('admin.backup.index');
+        Route::post('/backup', [BackupController::class, 'destroy'])->name('admin.backup.destroy');
+        Route::post('/make_backup', [BackupController::class, 'makeBackup'])->name('admin.backup.makeBackup');
+
     });
 });

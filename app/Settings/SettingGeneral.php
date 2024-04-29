@@ -11,6 +11,8 @@ class SettingGeneral extends Settings
     const TYPE_INT = 'integer';
     const TYPE_BOOLEAN = 'boolean';
 
+    const TYPE_ARRAY = 'array';
+
     /** @var string */
     public string $site_name;
 
@@ -45,6 +47,21 @@ class SettingGeneral extends Settings
 
     /**  @var string */
     public string $admin_prefix;
+
+    public array $backup_frequency;
+
+    /**  @var string */
+    const BACKUP_FREQUENCY = [
+        'hourly' => false,
+        'daily' => false,
+        'weekly' => false,
+        'monthly' => false,
+        'yearly' => false,
+    ];
+
+    /** @var bool */
+    public bool $backup_status;
+
 
     // public bool $api_key;
 
