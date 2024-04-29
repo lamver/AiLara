@@ -117,8 +117,7 @@ class PostsController extends Controller
         return view('modules.blog.category', [
             'posts' => $posts,
             'category' => $category,
-            'breadcrumbs' => $breadcrumbs,
-            'rssUrl' => $request->segment(1)
+            'breadcrumbs' => $breadcrumbs
             /*, 'columns' => $columns*/
         ]);
     }
