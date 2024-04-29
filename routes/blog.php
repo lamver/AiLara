@@ -62,7 +62,7 @@ Route::prefix(\Illuminate\Support\Facades\Config::get('modules.blog.route_prefix
 
     foreach ($categorySlugsRoute as $slug) {
         Route::get('/'.$slug, [\App\Http\Controllers\Modules\Blog\PostsController::class, 'category'])->name('blog.post.cat' . '.' . str_replace("/", ".", $slug));
-        Route::get('/'.$slug . 'feed', [\App\Http\Controllers\Modules\Blog\PostsController::class, 'rss'])->name('blog.post.cat' . '.' . str_replace("/", ".", $slug) . '.rss');
-        Route::get('/'.$slug . '{slug}_{id}', [\App\Http\Controllers\Modules\Blog\PostsController::class, 'view'])->name('blog.post.cat' . '.' . str_replace("/", ".", $slug) . '.view.post');
+        Route::get('/'.$slug . 'feed', [\App\Http\Controllers\Modules\Blog\PostsController::class, 'rss'])->name('blog.post.cat' . '.' . str_replace("/", ".", trim($slug,'/')) . '.rss');
+        Route::get('/'.$slug . '{slug}_{id}', [\App\Http\Controllers\Modules\Blog\PostsController::class, 'view'])->name('blog.post.cat' . '.' . str_replace("/", ".", trim($slug,'/')) . '.view.post');
     }
 });

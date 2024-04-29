@@ -13,11 +13,20 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Spatie\Feed\Feed;
 
 class PostsController extends Controller
 {
+    /**
+     * The maximum number of items to fetch from an RSS feed.
+     *
+     * @var int
+     */
+    const RSS_ITEMS_LENGTH = 200;
+
     /**
      * Display a listing of the resource.
      * @param Request $request
@@ -108,7 +117,7 @@ class PostsController extends Controller
         return view('modules.blog.category', [
             'posts' => $posts,
             'category' => $category,
-            'breadcrumbs' => $breadcrumbs,
+            'breadcrumbs' => $breadcrumbs
             /*, 'columns' => $columns*/
         ]);
     }
@@ -174,14 +183,36 @@ class PostsController extends Controller
         ]);
     }
 
-    public function rss(Request $request)
+    /**
+     * Generate an RSS feed for a specific category.
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function rss(Request $request): Response
     {
         if (is_null($categoryId = Category::findCategoryIdByUrl(Route::current()->uri()))) {
             return abort('404');
         }
 
-        $feed = Posts::getFeedItems(); //query()->where(['post_category_id' => $categoryId])->get()->toFeedItem();
-        dd($feed, $categoryId, 'rss');
+        $items = Category::where('id', $categoryId)
+            ->with(['Posts' => function ($query) {
+                $query->where('status', Posts::STATUS[0]);
+            }])
+            ->limit(self::RSS_ITEMS_LENGTH)->first();
+
+        $rss = new Feed(
+            $items->title,
+            $items->Posts,
+            '',
+            'feed::rss',
+            $items->description,
+            '',
+            'rss',
+        );
+
+        return $rss->toResponse($request);
+
     }
 
 }
