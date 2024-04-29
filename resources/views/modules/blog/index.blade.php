@@ -154,6 +154,7 @@
         });
     });
 
+    @if (isset($post))
     let lastPostId = {{ $post->id }};
 
     const handleScroll = () => {
@@ -207,5 +208,7 @@
             }, 2000);
         }
     });
+
+    @endif
 </script>
 @endpush
