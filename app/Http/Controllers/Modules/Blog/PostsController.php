@@ -25,7 +25,7 @@ class PostsController extends Controller
      *
      * @var int
      */
-    const RSS_ITEMS_LN = 200;
+    const RSS_ITEMS_LENGTH = 200;
 
     /**
      * Display a listing of the resource.
@@ -200,7 +200,7 @@ class PostsController extends Controller
             ->with(['Posts' => function ($query) {
                 $query->where('status', Posts::STATUS[0]);
             }])
-            ->limit(self::RSS_ITEMS_LN)->first();
+            ->limit(self::RSS_ITEMS_LENGTH)->first();
 
         $rss = new Feed(
             $items->title,
