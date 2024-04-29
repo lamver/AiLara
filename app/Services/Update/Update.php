@@ -265,7 +265,7 @@ class Update
                     continue;
                 }
 
-                if (stripos($pathWithoutDirExtract, '/public/robots.txt')) {
+                if (stripos($pathWithoutDirExtract, '/public/robots.txt')) { dd('ff');
                     continue;
                 }
 

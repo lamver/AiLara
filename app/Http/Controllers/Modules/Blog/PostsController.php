@@ -38,6 +38,19 @@ class PostsController extends Controller
 
         $settings = new SettingGeneral();
 
+        $param = [
+            'title'         => $settings->app_name,
+            'description'   => $settings->app_name,
+            'canonicalUrl'  => '/',
+            'type'          => 'articles',
+        ];
+
+        if (!empty($settings->image)) {
+            $param['image'] = ImageMaster::resizeImgFromCdn($settings->image, 300, 300);
+        }
+
+        SeoTools::setSeoParam($param);
+
         return view('modules.blog.index', [
             'topFourPosts' => $topFourPosts,
             'topPostsDifferentCategories' => $topPostsDifferentCategories,
