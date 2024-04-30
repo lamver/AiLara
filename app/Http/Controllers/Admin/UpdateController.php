@@ -79,6 +79,8 @@ class UpdateController extends BaseController
         Artisan::call('route:cache');
         Artisan::call('view:clear');
 
+        Update::clearExtractPath();
+
         return view('admin.update', ['updateLog' => $updateLog, 'result' => $result]);
     }
 
