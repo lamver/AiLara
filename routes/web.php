@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Admin\Integration\AdminTelegramBotController;
 use App\Http\Controllers\Ajax\UserStateController;
 use App\Http\Controllers\Modules\ModuleController;
 use App\Http\Controllers\ProfileController;
@@ -38,8 +37,6 @@ Route::prefix(Translation::checkRoutePrefix())->group(function () {
     Route::get('/', [ModuleController::class, 'index'])->name('index');
 
 });
-
-Route::resource("/telegram-bots", AdminTelegramBotController::class)->except('show');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 

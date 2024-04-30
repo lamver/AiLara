@@ -1,12 +1,15 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Config;
+use App\Http\Controllers\Admin\BackupController;
+use App\Http\Controllers\Admin\UserController;
+
+use App\Http\Controllers\Admin\Integration\AdminTelegramBotController;
+
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\Admin\MainController;
 use App\Http\Controllers\Admin\Integration\AiSearchController;
 use App\Http\Controllers\AiSearch\ControlPanel\SeoPages;
+
 use App\Services\Translation\Translation;
 
 
@@ -21,8 +24,9 @@ use App\Services\Translation\Translation;
 |
 */
 
-Route::middleware(['auth', 'verified'])->prefix(Translation::checkRoutePrefix())->group(function () {
-    Route::prefix(Config::get('ailara.admin_prefix'))->group(function () {
+Route::middleware(['auth', 'verified', 'rbac:admin'])->prefix(Translation::checkRoutePrefix())->group(function () {
+
+    Route::prefix(app(\App\Settings\SettingGeneral::class)->admin_prefix)->group(function () {
         Route::get('/', [MainController::class, 'index'])->name('admin.index');
         Route::get('/configuration', [MainController::class, 'configuration'])->name('admin.configuration');
         Route::post('/configuration', [MainController::class, 'configuration'])->name('admin.configuration.save');
@@ -53,5 +57,8 @@ Route::middleware(['auth', 'verified'])->prefix(Translation::checkRoutePrefix())
             app()->setLocale($locale);
             session()->put('locale', $locale);
         })->name('setLang');
+
+        Route::resource("/telegram-bots", AdminTelegramBotController::class)->except('show');
+
     });
 });
