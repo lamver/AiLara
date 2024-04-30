@@ -8,6 +8,11 @@ use App\Models\Modules\Blog\Import;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * Class ImportController
+ *
+ * @package App\Http\Controllers\Admin\Blog
+ */
 class ImportController extends Controller
 {
     /**

@@ -61,44 +61,80 @@
                         </h2>
                         <div class="text-overlay" style="position: absolute; bottom: 10%; left: 5%; color: white; font-size: 1.2em;">
                             {{ \App\Helpers\StrMaster::htmlTagClear($topFourPosts[0]->content, 70) }}
+                            <p></p>
+                            <div class="text-muted" style="font-size: 0.8em;">
+                                <img width="30" height="30" class="rounded-circle" src="{{ \App\Models\User::getAvatarUrl($topFourPosts[0]->user) }}"/> &nbsp;
+                                {{ $topFourPosts[0]->user->name }}
+                                {{ \Illuminate\Support\Carbon::create($topFourPosts[0]->updated_at)->shortRelativeDiffForHumans(date("Y-m-d h:i:s", time())) }}
+                                <a href="{{ \App\Models\Modules\Blog\Category::getCategoryUrlById($topFourPosts[0]->post_category_id) }}">
+                                    {{ $topFourPosts[0]->category->title }}
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
             @endif
             <div class="col-md-6">
                 <div class="row">
-                    @if(isset($topFourPosts[1]) && !empty($topFourPosts[0]->title))
+                    @if(isset($topFourPosts[1]) && !empty($topFourPosts[1]->title))
                         <div class="col-md-12 top-four-post">
                             <div class="shadow-sm rounded info-block-top lazy-load-image" data-bg-url="{{ \App\Helpers\ImageMaster::resizeImgFromCdn($topFourPosts[1]->image, 800, 900) }}" style="height: 250px; background-image: url('{{ \App\Helpers\ImageMaster::getRandomSprite() }}'); background-size: 100%;">
-                                <h2 class="text-overlay" style="position: absolute; font-size: 1.6em">
+                                <h2 class="text-overlay" style="position: absolute; font-size: 1.6em; bottom: 50%">
                                     <a class="stretched-link" href="{{ $topFourPosts[1]->urlToPost }}">{{ \App\Helpers\StrMaster::htmlTagClear($topFourPosts[1]->title, 50) }}</a>
                                 </h2>
                                 <div class="text-overlay" style="position: absolute; bottom: 10%; left: 5%; color: white; font-size: 1.2em;">
                                     {{ \App\Helpers\StrMaster::htmlTagClear($topFourPosts[1]->content, 70) }}
+                                    <p></p>
+                                    <div class="text-muted" style="font-size: 0.8em;">
+                                        <img width="30" height="30" class="rounded-circle" src="{{ \App\Models\User::getAvatarUrl($topFourPosts[0]->user) }}"/> &nbsp;
+                                        {{ $topFourPosts[0]->user->name }}
+                                        {{ \Illuminate\Support\Carbon::create($topFourPosts[0]->updated_at)->shortRelativeDiffForHumans(date("Y-m-d h:i:s", time())) }}
+                                        <a href="{{ \App\Models\Modules\Blog\Category::getCategoryUrlById($topFourPosts[0]->post_category_id) }}">
+                                            {{ $topFourPosts[0]->category->title }}
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     @endif
-                    @if(isset($topFourPosts[2]) && !empty($topFourPosts[0]->title))
+                    @if(isset($topFourPosts[2]) && !empty($topFourPosts[2]->title))
                         <div class="col-md-6 top-four-post">
-                            <div class="shadow-sm rounded info-block-top" data-bg-url="{{ \App\Helpers\ImageMaster::resizeImgFromCdn($topFourPosts[2]->image, 800, 900) }}" style="height: 250px; background-image: url('{{ \App\Helpers\ImageMaster::getRandomSprite() }}'); background-size: 100%;">
-                                <h2 class="text-overlay" style="font-size: 1.2em">
+                            <div class="shadow-sm rounded info-block-top lazy-load-image" data-bg-url="{{ \App\Helpers\ImageMaster::resizeImgFromCdn($topFourPosts[2]->image, 800, 900) }}" style="height: 250px; background-image: url('{{ \App\Helpers\ImageMaster::getRandomSprite() }}'); background-size: 100%;">
+                                <h2 class="text-overlay" style="font-size: 1.2em; bottom: 50%">
                                     <a class="stretched-link" href="{{ $topFourPosts[2]->urlToPost }}">{{ \App\Helpers\StrMaster::htmlTagClear($topFourPosts[2]->title, 50) }}</a>
                                 </h2>
                                 <div class="text-overlay" style="position: absolute; bottom: 10%; left: 5%; color: white; font-size: 0.8em;">
                                     {{ \App\Helpers\StrMaster::htmlTagClear($topFourPosts[2]->content, 70) }}
+                                    <p></p>
+                                    <div class="text-muted" style="font-size: 1.0em;">
+                                        <img width="30" height="30" class="rounded-circle" src="{{ \App\Models\User::getAvatarUrl($topFourPosts[0]->user) }}"/> &nbsp;
+                                        {{ $topFourPosts[0]->user->name }}
+                                        {{ \Illuminate\Support\Carbon::create($topFourPosts[0]->updated_at)->shortRelativeDiffForHumans(date("Y-m-d h:i:s", time())) }}
+                                        <a title="{{ $topFourPosts[0]->category->seo_title }}" href="{{ \App\Models\Modules\Blog\Category::getCategoryUrlById($topFourPosts[0]->post_category_id) }}">
+                                            {{ $topFourPosts[0]->category->title }}
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     @endif
-                    @if(isset($topFourPosts[3]) && !empty($topFourPosts[0]->title))
+                    @if(isset($topFourPosts[3]) && !empty($topFourPosts[3]->title))
                         <div class="col-md-6 top-four-post">
-                            <div class="shadow-sm rounded info-block-top" data-bg-url="{{ \App\Helpers\ImageMaster::resizeImgFromCdn($topFourPosts[3]->image, 800, 900) }}" style="height: 250px; background-image: url('{{ \App\Helpers\ImageMaster::getRandomSprite() }}'); background-size: 100%;">
-                                <h2 class="text-overlay" style="position: absolute; font-size: 1.2em">
+                            <div class="shadow-sm rounded info-block-top lazy-load-image" data-bg-url="{{ \App\Helpers\ImageMaster::resizeImgFromCdn($topFourPosts[3]->image, 300, 300) }}" style="height: 250px; background-image: url('{{ \App\Helpers\ImageMaster::getRandomSprite() }}'); background-size: 100%;">
+                                <h2 class="text-overlay" style="position: absolute; font-size: 1.2em; bottom: 50%">
                                     <a class="stretched-link" href="{{ $topFourPosts[3]->urlToPost }}">{{ \App\Helpers\StrMaster::htmlTagClear($topFourPosts[3]->title, 50) }}</a>
                                 </h2>
                                 <div class="text-overlay" style="position: absolute; bottom: 10%; left: 5%; color: white; font-size: 0.8em;">
                                     {{ \App\Helpers\StrMaster::htmlTagClear($topFourPosts[3]->content, 70) }}
+                                    <p></p>
+                                    <div class="text-muted" style="font-size: 1.0em;">
+                                        <img width="30" height="30" class="rounded-circle" src="{{ \App\Models\User::getAvatarUrl($topFourPosts[0]->user) }}"/> &nbsp;
+                                        {{ $topFourPosts[0]->user->name }}
+                                        {{ \Illuminate\Support\Carbon::create($topFourPosts[0]->updated_at)->shortRelativeDiffForHumans(date("Y-m-d h:i:s", time())) }}
+                                        <a title="{{ $topFourPosts[0]->category->seo_title }}" href="{{ \App\Models\Modules\Blog\Category::getCategoryUrlById($topFourPosts[0]->post_category_id) }}">
+                                            {{ $topFourPosts[0]->category->title }}
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -121,14 +157,18 @@
                                     <h3 class="card-title">{{ \App\Helpers\StrMaster::htmlTagClear($post->title) }}</h3>
                                     <p class="card-text">{{ \App\Helpers\StrMaster::htmlTagClear($post->content, 150) }}</p>
                                     <a href="{{ $post->urlToPost }}" title="{{ $post->seo_title }}" class="stretched-link btn btn-link">Читать</a>
-                                    <p class="card-text">
-                                        <small class="text-muted">
-                                            {{ \Illuminate\Support\Carbon::create($post->updated_at)->shortRelativeDiffForHumans(date("Y-m-d h:i:s", time())) }}
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-dots-fill" viewBox="0 0 16 16">
-                                                <path d="M16 8c0 3.866-3.582 7-8 7a9 9 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234-.2.032-.352-.176-.273-.362.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7M5 8a1 1 0 1 0-2 0 1 1 0 0 0 2 0m4 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0m3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
-                                            </svg>
-                                        </small>
-                                    </p>
+                                    <p></p>
+                                    <div class="text-muted" style="font-size: 1.0em;">
+                                        <img width="30" height="30" class="rounded-circle" src="{{ \App\Models\User::getAvatarUrl($post->user) }}"/> &nbsp;
+                                        {{ $post->user->name }}
+                                        {{ \Illuminate\Support\Carbon::create($post->updated_at)->shortRelativeDiffForHumans(date("Y-m-d h:i:s", time())) }}
+                                        <a title="{{ $post->category->seo_title }}" href="{{ \App\Models\Modules\Blog\Category::getCategoryUrlById($post->post_category_id) }}">
+                                            {{ $post->category->title }}
+                                        </a> &nbsp;
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-dots-fill" viewBox="0 0 16 16">
+                                            <path d="M16 8c0 3.866-3.582 7-8 7a9 9 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234-.2.032-.352-.176-.273-.362.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7M5 8a1 1 0 1 0-2 0 1 1 0 0 0 2 0m4 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0m3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
+                                        </svg>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -3,6 +3,7 @@
 namespace App\Models\Modules\Blog;
 
 use App\Helpers\StrMaster;
+use App\Models\Modules\Blog\TraitsImport\ImportFromUrls;
 use App\Models\User;
 use App\Services\Proxy\Proxy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,7 +15,7 @@ use willvincent\Feeds\Facades\FeedsFacade;
 
 class Import extends Model
 {
-    use HasFactory;
+    use HasFactory, ImportFromUrls;
 
     const SOURCE_TYPE_RSS = 1;
     const SOURCE_TYPE_URL = 2;
@@ -46,9 +47,9 @@ class Import extends Model
     ];
 
     const IMPORT_SOURCE_TYPE_NAME = [
-        self::SOURCE_TYPE_RSS => 'RSS',
-        self::SOURCE_TYPE_URL => 'URL',
-        self::SOURCE_TYPE_WRITE_LONGREAD => 'WRITE LONGREAD',
+        self::SOURCE_TYPE_RSS => "RSS's",
+        self::SOURCE_TYPE_URL => "URL's",
+        self::SOURCE_TYPE_WRITE_LONGREAD => "WRITE LONGREAD's",
     ];
 
     const DOING_WRITE = 1;
@@ -164,8 +165,12 @@ class Import extends Model
 
     static public function execute(Import $import)
     {
-        if($import->source_type == Import::SOURCE_TYPE_RSS) {
+        if ($import->source_type == Import::SOURCE_TYPE_RSS) {
             self::executeRss($import);
+        }
+
+        if ($import->source_type == Import::SOURCE_TYPE_URL) {
+            self::executeUrls($import);
         }
     }
 
@@ -286,6 +291,11 @@ class Import extends Model
     static public function createUniqueIdAfterImportRss($item, $categoryId, $authorId)
     {
         return md5($item->get_permalink() . $categoryId . $authorId);
+    }
+
+    static public function createUniqueIdAfterImportUrl($url, $categoryId, $authorId)
+    {
+        return md5($url . $categoryId . $authorId);
     }
 
     /**

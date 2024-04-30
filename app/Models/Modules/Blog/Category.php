@@ -267,4 +267,15 @@ class Category extends Model
 
         return $column;
     }
+
+    static public function getCategoryNameById(int $id)
+    {
+        $categoryName = self::query()->select('title')->where(['id' => $id])->get();
+
+        if (empty($categoryName)) {
+            return 'Unknown';
+        }
+
+        return $categoryName->title;
+    }
 }
