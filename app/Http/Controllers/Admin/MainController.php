@@ -61,7 +61,10 @@ class MainController extends BaseController
             return redirect(route('admin.configuration'));
         }
 
-        return view('admin.configuration', ['config' => $settings->toArray()]);
+        $configArray = $settings->toArray();
+        ksort($configArray);
+
+        return view('admin.configuration', ['config' => $configArray]);
     }
 
     /**
