@@ -80,5 +80,10 @@ Route::middleware(['auth', 'verified', 'rbac:admin'])->prefix(Translation::check
         Route::post('/backup', [BackupController::class, 'destroy'])->name('admin.backup.destroy');
         Route::post('/make-backup', [BackupController::class, 'makeBackup'])->name('admin.backup.makeBackup');
 
+
+        /** Ai routes */
+        Route::post('/create-ai-task', [AiQueryController::class, 'createTask'])->name('admin.createAiTask');
+        Route::post('/get-ai-task', [AiQueryController::class, 'getTaskByTaskId'])->name('admin.getAiTask');
+
     });
 });
