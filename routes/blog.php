@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Modules\Blog\Category;
+use App\Settings\SettingGeneral;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 /** Admin routes */
-Route::middleware(['auth', 'verified'])->prefix(\Illuminate\Support\Facades\Config::get('ailara.admin_prefix') . '/module')->group(function () {
+Route::middleware(['auth', 'verified'])->prefix(app(SettingGeneral::class)->admin_prefix . '/module')->group(function () {
     Route::resource('posts', \App\Http\Controllers\Admin\Blog\PostsController::class, [
 /*        'except' => ['show', 'destroy'],*/
         'names' => [

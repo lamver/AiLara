@@ -7,6 +7,11 @@ use App\Http\Controllers\Modules\Blog\PostsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 
+/**
+ * Class ModuleController
+ *
+ * @package App\Http\Controllers\Modules
+ */
 class ModuleController extends Controller
 {
     public function index(Request $request)
