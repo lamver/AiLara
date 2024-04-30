@@ -14,6 +14,7 @@ return [
     'owner_types' => [
         RbacAccess::RULE_ADMIN['name'],
         RbacAccess::RULE_USER['name'],
+        'User'
     ],
 
     /*

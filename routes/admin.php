@@ -1,15 +1,14 @@
 <?php
 
-use App\Http\Controllers\Admin\BackupController;
 use App\Http\Controllers\Admin\UserController;
 
+use Illuminate\Support\Facades\Config;
 use App\Http\Controllers\Admin\Integration\AdminTelegramBotController;
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\MainController;
 use App\Http\Controllers\Admin\Integration\AiSearchController;
 use App\Http\Controllers\AiSearch\ControlPanel\SeoPages;
-
 use App\Services\Translation\Translation;
 
 
@@ -24,9 +23,8 @@ use App\Services\Translation\Translation;
 |
 */
 
-Route::middleware(['auth', 'verified', 'rbac:admin'])->prefix(Translation::checkRoutePrefix())->group(function () {
-
-    Route::prefix(app(\App\Settings\SettingGeneral::class)->admin_prefix)->group(function () {
+Route::middleware(['auth', 'verified'])->prefix(Translation::checkRoutePrefix())->group(function () {
+    Route::prefix(Config::get('ailara.admin_prefix'))->group(function () {
         Route::get('/', [MainController::class, 'index'])->name('admin.index');
         Route::get('/configuration', [MainController::class, 'configuration'])->name('admin.configuration');
         Route::post('/configuration', [MainController::class, 'configuration'])->name('admin.configuration.save');
@@ -38,6 +36,7 @@ Route::middleware(['auth', 'verified', 'rbac:admin'])->prefix(Translation::check
         Route::get('/pages', [SeoPages::class, 'seoPagesList'])->name('admin.ais.pages');
         Route::get('/page-edit/{id}', [SeoPages::class, 'seoPageEdit'])->name('admin.ais.page.edit');
         Route::post('/page-save/{id}', [SeoPages::class, 'seoPageSave'])->name('admin.ais.page.save');
+
 
         Route::get('/ais/ai-forms', [AiSearchController::class, 'aiForms'])
             ->name('admin.ais.aiForms');
@@ -59,6 +58,21 @@ Route::middleware(['auth', 'verified', 'rbac:admin'])->prefix(Translation::check
         })->name('setLang');
 
         Route::resource("/telegram-bots", AdminTelegramBotController::class)->except('show');
+
+
+        Route::resource('user', UserController::class, [
+            'names' => [
+                'index' => 'admin.user.index',
+                'create' => 'admin.user.create',
+                'store' => 'admin.user.store',
+                'edit' => 'admin.user.edit',
+                'update' => 'admin.user.update',
+                'show' => 'admin.user.show',
+                'destroy' => 'admin.user.destroy',
+            ],
+        ]);
+
+        Route::post('/log-as-user', [UserController::class, 'logInAsUser'])->name('admin.logInAsUser');
 
     });
 });
