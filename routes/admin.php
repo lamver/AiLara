@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AiQueryController;
 use App\Http\Controllers\Admin\UserController;
 
 use App\Http\Controllers\ProfileController;
@@ -73,5 +74,10 @@ Route::middleware(['auth', 'verified', 'rbac:admin'])->prefix(Translation::check
         ]);
 
         Route::post('/log-as-user', [UserController::class, 'logInAsUser'])->name('admin.logInAsUser');
+
+        /** Ai routes */
+        Route::post('/create-ai-task', [AiQueryController::class, 'createTask'])->name('admin.createAiTask');
+        Route::post('/get-ai-task', [AiQueryController::class, 'getTaskByTaskId'])->name('admin.getAiTask');
+
     });
 });
