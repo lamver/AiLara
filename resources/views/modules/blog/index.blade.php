@@ -32,7 +32,7 @@
         }
 
         h2 {
-            bottom: 30%;
+            bottom: 40%;
             left: 5%;
             position: absolute;
         }
