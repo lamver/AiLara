@@ -78,7 +78,7 @@ Route::middleware(['auth', 'verified', 'rbac:admin'])->prefix(Translation::check
         //backup route
         Route::get('/backup', [BackupController::class, 'index'])->name('admin.backup.index');
         Route::post('/backup', [BackupController::class, 'destroy'])->name('admin.backup.destroy');
-        Route::post('/make_backup', [BackupController::class, 'makeBackup'])->name('admin.backup.makeBackup');
+        Route::post('/make-backup', [BackupController::class, 'makeBackup'])->name('admin.backup.makeBackup');
 
     });
 });

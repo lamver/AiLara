@@ -63,6 +63,9 @@ class SettingGeneral extends Settings
     /** @var bool */
     public bool $backup_status;
 
+    /** @var bool */
+    public bool $backup_musqldump;
+
 
     // public bool $api_key;
 
@@ -85,7 +88,7 @@ class SettingGeneral extends Settings
     public function prepareAndSave(array $dataSettings, SettingGeneral $settings): SettingGeneral
     {
         $settings->site_name = $dataSettings['site_name'] ?? "";
-        $settings->site_active = (bool)$dataSettings['site_active'];
+        $settings->site_active = key_exists('site_active', $dataSettings) ?  (bool) $dataSettings['site_active'] : false;
         $settings->app_name = $dataSettings['app_name'] ?? "";
         $settings->logo_path = $dataSettings['logo_path'] ?? "";
         $settings->logo_title = $dataSettings['logo_title'] ?? "";
@@ -97,6 +100,15 @@ class SettingGeneral extends Settings
         $settings->api_key_aisearch = $dataSettings['api_key_aisearch'] ?? "";
         $settings->api_host = $dataSettings['api_host'] ?? "";
         $settings->admin_prefix = $dataSettings['admin_prefix'] ?? "";
+        $settings->backup_musqldump = key_exists('backup_musqldump', $dataSettings) ?  (bool) $dataSettings['backup_musqldump'] : false;
+        $settings->backup_status = key_exists('backup_status', $dataSettings) ?  (bool) $dataSettings['backup_status'] : false;
+
+        $backupFrequency = SettingGeneral::BACKUP_FREQUENCY;
+
+        if (key_exists($dataSettings['backup_frequency'], $backupFrequency)){
+            $backupFrequency[$dataSettings['backup_frequency']] = true;
+            $settings->backup_frequency = $backupFrequency;
+        }
 
         return $settings->save();
     }

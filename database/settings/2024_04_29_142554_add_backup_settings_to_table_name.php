@@ -2,6 +2,7 @@
 
 use App\Settings\SettingGeneral;
 use Spatie\LaravelSettings\Migrations\SettingsMigration;
+use Illuminate\Support\Facades\Log;
 
 return new class extends SettingsMigration
 {
@@ -13,12 +14,19 @@ return new class extends SettingsMigration
         try {
             $this->migrator->add('general.backup_frequency', SettingGeneral::BACKUP_FREQUENCY);
         } catch (Exception $e) {
-            \Illuminate\Support\Facades\Log::error($e->getMessage());
+            Log::error($e->getMessage());
         }
+
         try {
             $this->migrator->add('general.backup_status', true);
         } catch (Exception $e) {
-            \Illuminate\Support\Facades\Log::error($e->getMessage());
+            Log::error($e->getMessage());
+        }
+
+        try {
+            $this->migrator->add('general.backup_musqldump', true);
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
         }
     }
 

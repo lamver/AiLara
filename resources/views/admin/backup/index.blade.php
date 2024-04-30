@@ -21,6 +21,15 @@
             </svg>
         </button>
     </form>
+    @if($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach($errors->all() as $error)
+                    <span>{{$error}}</span>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <table class="table table-hover">
         <thead>
         <tr>

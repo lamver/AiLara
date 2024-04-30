@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Settings\SettingGeneral;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -10,10 +11,20 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Support\Facades\Log;
+use Config;
 
 class BackupController extends BaseController
 {
 
+    public function __construct(SettingGeneral $settingGeneral) {
+        if ($settingGeneral->backup_musqldump) {
+            Config::set('backup.backup.source.databases', [
+                'mysql',
+            ]);
+        }
+    }
     /**
      * @return Application|Factory|View
      */
@@ -37,7 +48,12 @@ class BackupController extends BaseController
      */
     public function makeBackup(): RedirectResponse
     {
-        Artisan::call('backup:run');
+        try {
+            Artisan::call('backup:run');
+        }catch (BindingResolutionException $exception){
+            Log::error($exception->getMessage());
+            return redirect()->route('admin.backup.index')->withErrors(['msg' => 'Somthing went wrong']);
+        }
 
         return redirect()->route('admin.backup.index');
 
