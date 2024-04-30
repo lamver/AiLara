@@ -202,11 +202,11 @@ class PostsController extends Controller
             ->limit(self::RSS_ITEMS_LENGTH)->first();
 
         $rss = new Feed(
-            $items->title,
+            $items->title ?? "",
             $items->Posts,
             '',
             'feed::rss',
-            $items->description,
+            $items->description ?? "",
             '',
             'rss',
         );

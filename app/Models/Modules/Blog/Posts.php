@@ -167,10 +167,10 @@ class Posts extends Model implements Feedable
         return FeedItem::create()
             ->id($this->id)
             ->title($this->title ?? "")
-            ->summary($description)
+            ->summary($description ?? "")
             ->updated($this->updated_at)
             ->link(self::createUrlFromPost($this))
-            ->authorName($user->name)
+            ->authorName($user->name ?? "")
             ->authorEmail('');
     }
 
