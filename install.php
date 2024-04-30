@@ -241,7 +241,7 @@ class Installer
             'APP_NAME' => 'AiLara',
             'APP_ENV' => 'local',
             'APP_KEY' => '',
-            'APP_DEBUG' => 'true',
+            'APP_DEBUG' => 'false',
             'APP_URL' => '',
             'FRONTEND_URL' => '',
             'LOG_LEVEL' => 'debug',

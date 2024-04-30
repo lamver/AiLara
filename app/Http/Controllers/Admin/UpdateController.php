@@ -41,6 +41,14 @@ class UpdateController extends BaseController
             $result = false;
         }
 
+        if ($result) {
+            $composerProcess = Update::composerUpdate();
+
+            foreach ($composerProcess as $process) {
+                $updateLog[] = 'File ' . $process . ' was updated';
+            }
+        }
+
         $fileCandidateToUpdate = Update::getFileToCandidateUpdate();
 
         if ($result && count($fileCandidateToUpdate) > 0) {
@@ -59,14 +67,6 @@ class UpdateController extends BaseController
             $updateLog[] = 'No file candidate to update';
 
             $result = false;
-        }
-
-        if ($result) {
-            $composerProcess = Update::composerUpdate();
-
-            foreach ($composerProcess as $process) {
-                $updateLog[] = 'File ' . $process . ' was updated';
-            }
         }
 
         if ($result) {
