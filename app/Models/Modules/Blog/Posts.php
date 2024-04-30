@@ -2,9 +2,11 @@
 
 namespace App\Models\Modules\Blog;
 
+use App\Helpers\StrMaster;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
@@ -19,6 +21,13 @@ class Posts extends Model implements Feedable
         'Published',
         'Draft'
     ];
+
+    /**
+     * The maximum number of characters for the content of an RSS feed item.
+     *
+     * @var int
+     */
+    const RSS_CONTENT_LN = 200;
 
     const STATUS_DEFAULT = 'Draft';
 
@@ -119,6 +128,57 @@ class Posts extends Model implements Feedable
             ->get());
     }
 
+    /**
+     * @param int $lastId
+     * @param int $limit
+     * @return array
+     */
+    static public function loadPosts(null|int $lastId = 0, int $limit = 20)
+    {
+        $result = self::select('id', 'post_category_id', 'title', 'seo_title', 'content', 'image', 'updated_at', 'author_id')
+            ->where(['status' => 'Published'])
+            ->orderBy('id', 'DESC');
+
+        if (empty($lastId) || $lastId != 0) {
+            $result->where('id', '<', $lastId);
+        }
+
+        if ($limit > 50) {
+            $limit = 50;
+        }
+
+        $posts = $result->limit($limit)->get();
+
+        return self::prepareToPreview($posts);
+    }
+
+    /**
+     * @param $posts
+     * @return array
+     */
+    static public function prepareToPreview($posts): array
+    {
+        $prepared = [];
+
+        foreach ($posts as $post) {
+            $prepared[] = [
+                'id' => $post->id,
+                'post_category_id' => $post->post_category_id,
+                'title' => StrMaster::htmlTagClear($post->title, 50),
+                'seo_title' => $post->seo_title,
+                'content' => StrMaster::htmlTagClear($post->content, 100),
+                'image' => $post->image,
+                'updated_at' => $post->updated_at,
+                'updated_at_human' => Carbon::create($post->updated_at)->shortRelativeDiffForHumans(date("Y-m-d h:i:s", time())),
+                'author_id' => $post->author_id,
+                'author_username' => $post->user->name,
+                'urlToPost' => self::createUrlFromPost($post),
+            ];
+        }
+
+        return $prepared;
+    }
+
     static public function getPostsByCategoryId($categoryId)
     {
         return self::createUrlToPosts(Posts::query()->where(['post_category_id' => $categoryId])->where(['status' => 'Published'])->orderBy('id', 'DESC')->paginate(30));
@@ -131,7 +191,7 @@ class Posts extends Model implements Feedable
     static public function createUrlToPosts($posts)
     {
         foreach ($posts as $post) {
-            $post->urlToPost = '/'.Category::getCategoryUrlById($post->post_category_id) . '/' . Str::slug(Str::limit(strip_tags($post->title))) . '_' .$post->id;
+            $post->urlToPost = self::createUrlFromPost($post);
         }
 
         return $posts;
@@ -156,14 +216,16 @@ class Posts extends Model implements Feedable
      */
     public function toFeedItem(): FeedItem
     {
+        $user = $this->user()->first();
+        $description = strip_tags(str::limit($this->description, self::RSS_CONTENT_LN));
         return FeedItem::create()
             ->id($this->id)
             ->title($this->title)
-            ->summary($this->summary)
+            ->summary($description)
             ->updated($this->updated_at)
-            ->link($this->link)
-            ->authorName($this->author)
-            ->authorEmail($this->authorEmail);
+            ->link($this->source_url)
+            ->authorName($user->name)
+            ->authorEmail( '');
     }
 
     /**

@@ -7,7 +7,7 @@
         <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
         <meta name="generator" content="Hugo 0.84.0">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <title>AiLara dashboard</title>
+        <title>{{ app(\App\Settings\SettingGeneral::class)->app_name }}</title>
         <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/dashboard/">
         @stack('top-scripts')
         @yield('stylesheet')
@@ -159,14 +159,19 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+            @auth()
             <div class="navbar-nav flex-row">
                 <div class="nav-item text-nowrap">
-                    <a href="{{route('admin.user.show', Auth::user()->id)}}" class="nav-link px-3">{{Auth::user()->name}}</a>
+                    <a href="{{ route('admin.user.show', \Illuminate\Support\Facades\Auth::id()) }}" class="nav-link px-3">{{ \Illuminate\Support\Facades\Auth::user()->getAuthIdentifierName() }}</a>
                 </div>
                 <div class="nav-item text-nowrap">
-                    <a class="nav-link px-3" href="#">{{ __('admin.sign_out') }}</a>
+                    <form method="post" action="{{route('logout')}}">
+                        @csrf
+                        <button type="submit" class="nav-link px-3">{{ __('admin.sign_out') }}</button>
+                    </form>
                 </div>
             </div>
+            @endauth
         </header>
         <div class="container-fluid">
             <div class="row">
@@ -267,7 +272,7 @@
                                 </a>
                                 <a class="nav-link" href="{{ route('admin.ais.pages') }}">
                                     <span data-feather="bar-chart-2"></span>
-                                    {{ __('admin.pages') }}
+                                    {{ __('admin.Routes') }}
                                 </a>
                                 <a class="nav-link" href="{{ route('admin.update') }}">
                                     <span data-feather="bar-chart-2"></span>
@@ -288,9 +293,10 @@
                              <li class="nav-item">
                                <a class="nav-link" href="{{ route('admin.user.index') }}">
                                     <span data-feather="bar-chart-2"></span>
-                                    {{__('users')}}
+                                    {{__('Users')}}
                                 </a>
                              </li>
+                            @if(isset($languages))
                             <li class="nav-item">
                                 <div class="d-flex flex-row bd-highlight">
                                     <select class="form-select" id="setLang" style="width: 100px; margin-left: auto; margin-top: 23px; margin-right: 25px;">
@@ -299,8 +305,8 @@
                                         @php endforeach; @endphp
                                     </select>
                                 </div>
-                            </li>   
-
+                            </li>
+                            @endif
                         </ul>
                     </div>
                 </nav>
@@ -475,7 +481,7 @@
 
             function updateLanguageInUrl(newLang) {
                 let href = location.href;
-                let languages = {!! json_encode($languages) !!};
+                let languages = {!! json_encode($languages ?? []) !!};
                 let langRegex = new RegExp('/(' + languages.join('|') + ')/');
 
                 if (langRegex.test(href)) {

@@ -8,48 +8,21 @@
     {!! JsonLd::generate() !!}
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="theme-color" content="#6777ef"/>
+    <link rel="apple-touch-icon" href="{{ asset('logo.PNG') }}">
+    <link rel="manifest" href="{{ asset('/manifest.json') }}">
     <link rel="shortcut icon" href="/images/codeflow_favicon.png" type="image/png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     @yield('stylesheet')
     @stack('meta_noindex')
-    @stack('styles')
+    @yield('styles')
     @stack('top-scripts')
     @yield('breadcrumbs-json-ld')
 </head>
 <body>
 @yield('header-navbar')
-{{--        <div class="container">
-            <header class="d-flex flex-wrap justify-content-center py-3 mb-4">
-                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                    <li>
-                        <a href="<?php echo Route::currentRouteName() == 'index' ? '#home' : route('index')?>" class="nav-link px-2 fw-bolder">
-                            <img title="{{ \Illuminate\Support\Facades\Config::get('ailara.logoTitle') }}" alt="Нейросеть для разбора сноведений" width="{{ \Illuminate\Support\Facades\Config::get('ailara.logoWidthPx') }}" height="{{ \Illuminate\Support\Facades\Config::get('ailara.logoHeightPx') }}" src="{{ \Illuminate\Support\Facades\Config::get('ailara.logoPath') }}"/>
-                        </a>
-                    </li>
-                </ul>
-                <ul class="nav nav-pills">
-                    <div class="d-flex" id="auth-btn"></div>
-                    @if(\Illuminate\Support\Facades\Auth::check() && Route::currentRouteName() == 'dashboard')
-                        <a class="navbar-btn btn btn-light btn-sm" style="height: 36px" title="Выйти из аккаунта" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" href="{{ route('logout') }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
-                                <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
-                            </svg>
-                        </a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                            @csrf
-                        </form>
-                    @endif
-                    <li class="nav-item">
-                        <a href="#" id="toggle-main-theme-button" class="nav-link">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-brightness-high-fill" viewBox="0 0 16 16">
-                                <path d="M12 8a4 4 0 1 1-8 0 4 4 0 0 1 8 0zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
-                            </svg>
-                        </a>
-                    </li>
-                </ul>
-            </header>
-        </div>--}}
+@include('top-app-navbar')
+@yield('top-sub-app-navbar')
 <div class="container">
     @yield('breadcrumbs')
 </div>
@@ -164,6 +137,24 @@
         xhr.send();
     };
 
+</script>
+
+<script src="{{ asset('/sw.js') }}"></script>
+<script>
+    if ("serviceWorker" in navigator) {
+        // Register a service worker hosted at the root of the
+        // site using the default scope.
+        navigator.serviceWorker.register("/sw.js").then(
+            (registration) => {
+                console.log("Service worker registration succeeded:", registration);
+            },
+            (error) => {
+                console.error(`Service worker registration failed: ${error}`);
+            },
+        );
+    } else {
+        console.error("Service workers are not supported.");
+    }
 </script>
 @stack('bottom-scripts')
 </body>

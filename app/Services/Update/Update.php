@@ -13,7 +13,10 @@ class Update
     const APP_PATH_TO_UPDATE_ARCHIVE = 'update/main.zip';
     const APP_PATH_TO_UPDATE_ARCHIVE_EXTRACT_FILES = 'update/extract_files';
 
-    static public function downloadArchiveRepository()
+    /**
+     * @return bool
+     */
+    static public function downloadArchiveRepository(): bool
     {
         if (stripos(url()->current(), 'localhost')) {
             return true;
@@ -95,11 +98,6 @@ class Update
         self::deleteDirectory($pathToExtractFiles);
 
         return $resultProcess;
-        //chdir(base_path());
-        //exec('composer install', $output, $return);
-        // Получаем вывод работы команды
-        // Выводим результат
-        //return $output;
     }
 
     /**
@@ -267,7 +265,7 @@ class Update
                     continue;
                 }
 
-                if (stripos($pathWithoutDirExtract, '/public/robots.txt')) {
+                if (stripos($pathWithoutDirExtract, '/public/robots.txt')) { dd('ff');
                     continue;
                 }
 

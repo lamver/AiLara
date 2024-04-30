@@ -6,9 +6,6 @@
         <meta name="robots" content="noindex">
     @endpush
 @endif
-@section('header-navbar')
-    @include('modules.blog.header-navbar')
-@endsection
 @push('styles')
     <style>
         .info_block img {
@@ -22,12 +19,12 @@
     </style>
 @endpush
 @section('stylesheet')
-    <link href="https://blogzine.webestica.com/assets/css/style.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 @endsection
-@section('header-navbar')
+@section('top-sub-app-navbar')
     @include('modules.blog.header-navbar')
 @endsection
 @section('content')
+
     <div class="container">
         <h1>{{ $category->title }}</h1>
         <div class="row">
@@ -37,7 +34,7 @@
                         <div class="col-md-4">
                             {{--           <h4>{{ $post->title }}</h4>--}}
                             <div class="card mb-3">
-                                <img src="{{ \App\Helpers\ImageMaster::resizeImgFromCdn($post->image, 300, 300) }}" class="card-img-top" alt="{{ $post->seo_title }}">
+                                <img src="{{ \App\Helpers\ImageMaster::getRandomSprite() }}" data-src="{{ \App\Helpers\ImageMaster::resizeImgFromCdn($post->image, 300, 300) }}" class="card-img-top lazy-load-image" alt="{{ $post->seo_title }}">
                                 <div class="card-body">
                                     <h2 style="font-size: 18px" class="card-title">{{ \App\Helpers\StrMaster::htmlTagClear($post->title) }}</h2>
                                     <p class="card-text">{{ \App\Helpers\StrMaster::htmlTagClear($post->content) }}</p>
@@ -59,5 +56,26 @@
             </div>
         </div>
         {{ $posts->links('pagination.default') }}
+        <a href="{{route(Route::currentRouteName().'rss')}}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-rss" viewBox="0 0 16 16">
+                <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
+                <path d="M5.5 12a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m-3-8.5a1 1 0 0 1 1-1c5.523 0 10 4.477 10 10a1 1 0 1 1-2 0 8 8 0 0 0-8-8 1 1 0 0 1-1-1m0 4a1 1 0 0 1 1-1 6 6 0 0 1 6 6 1 1 0 1 1-2 0 4 4 0 0 0-4-4 1 1 0 0 1-1-1"/>
+            </svg>
+        </a>
     </div>
 @endsection
+@push('bottom-scripts')
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let lazyLoadImages = document.querySelectorAll('.lazy-load-image');
+
+            lazyLoadImages.forEach(function(element) {
+                if (element.tagName === 'IMG' && element.getAttribute('data-src')) {
+                    element.setAttribute('src', element.getAttribute('data-src'));
+                } else if (element.tagName === 'DIV' && element.getAttribute('data-bg-url')) {
+                    element.style.backgroundImage = `url(${element.getAttribute('data-bg-url')})`;
+                }
+            });
+        });
+    </script>
+@endpush

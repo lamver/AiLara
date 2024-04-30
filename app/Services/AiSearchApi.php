@@ -3,6 +3,7 @@
 
 namespace App\Services;
 
+use App\Settings\SettingGeneral;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 
@@ -19,23 +20,23 @@ class AiSearchApi
     /**
      * AiSearchApi constructor.
      *
-     * @param string $apiKey
-     * @param string $apiHost
+     * @param string|null $apiKey
+     * @param string|null $apiHost
      */
     public function __construct(string $apiKey = null, string $apiHost = null)
     {
-        $this->apiKey  = $apiKey ?? Config::get('ailara.api_key_aisearch');
-        $this->apiHost = $apiHost ?? Config::get('ailara.api_host');
+        $this->apiKey  = $apiKey ?? app(SettingGeneral::class)->api_key_aisearch;
+        $this->apiHost = $apiHost ?? app(SettingGeneral::class)->api_host;
 
-/*        dd($this);*/
         return $this;
     }
 
     /**
-     * @param string $prompt
+     * @param array $param
+     *
      * @return mixed
      */
-    public function taskCreate($param = [])
+    public function taskCreate(array $param = [])
     {
         $curl = curl_init();
 
@@ -100,7 +101,10 @@ class AiSearchApi
         return json_decode($response, true);
     }
 
-    public function getAllTypesTask()
+    /**
+     * @return mixed
+     */
+    public function getAllTypesTask() : mixed
     {
         $curl = curl_init();
 

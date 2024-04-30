@@ -5,6 +5,7 @@ namespace App\Models\Modules\Blog;
 use App\Helpers\StrMaster;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -13,6 +14,16 @@ class Category extends Model
     use HasFactory;
 
     protected $table = 'blog_category';
+
+    /**
+     * Get the posts associated with the user.
+     *
+     * @return HasMany
+     */
+    public function posts(): HasMany
+    {
+        return $this->hasMany(Posts::class, 'post_category_id', 'id');
+    }
 
     /**
      * @return array
