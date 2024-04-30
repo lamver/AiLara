@@ -2,10 +2,22 @@
 
 namespace App\Http;
 
+use App\Settings\SettingGeneral;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Config;
 
 class Kernel extends HttpKernel
 {
+    public function __construct(Application $app, Router $router)
+    {
+        parent::__construct($app, $router);
+
+        Config::set('accessUi.path', app(SettingGeneral::class)->admin_prefix . '/access-ui');
+        Config::set('translation-manager.route.prefix', app(SettingGeneral::class)->admin_prefix . '/translations');
+    }
+
     /**
      * The application's global HTTP middleware stack.
      *
