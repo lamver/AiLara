@@ -241,7 +241,11 @@ class Update
             $dir = $pathToExtractFiles;
         }
 
-        $files = scandir($dir);
+        $files = [];
+
+        if (is_dir($dir)) {
+            $files = scandir($dir);
+        }
 
         foreach($files as $file) {
             if ($file != '.' && $file != '..') {
