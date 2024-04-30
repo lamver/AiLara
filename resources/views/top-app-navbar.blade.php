@@ -1,7 +1,10 @@
+@php
+    $settings = \App\Helpers\Settings::load();
+@endphp
 <nav class="navbar navbar-expand-lg shadow-sm">
     <div class="container container-fluid">
         <a class="navbar-brand" href="<?php echo Route::currentRouteName() == 'index' ? '#home' : route('index')?>">
-            <img title="{{ \Illuminate\Support\Facades\Config::get('ailara.logoTitle') }}" alt="Нейросеть для разбора сноведений" width="{{ \Illuminate\Support\Facades\Config::get('ailara.logoWidthPx') }}" height="{{ \Illuminate\Support\Facades\Config::get('ailara.logoHeightPx') }}" src="{{ \Illuminate\Support\Facades\Config::get('ailara.logoPath') }}"/>
+            <img title="{{ $settings->site_name  }}" alt="Нейросеть для разбора сноведений" width="{{ $settings->logo_width_px }}" height="{{ $settings->logo_height_px }}" src="{{ $settings->logo_path }}"/>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainAppNavbar" aria-controls="mainAppNavbar" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

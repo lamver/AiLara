@@ -26,7 +26,8 @@ use App\Services\Translation\Translation;
 */
 
 Route::middleware(['auth', 'verified', 'rbac:admin'])->prefix(Translation::checkRoutePrefix())->group(function () {
-    Route::prefix(Config::get('ailara.admin_prefix'))->group(function () {
+
+    Route::prefix(app(\App\Settings\SettingGeneral::class)->admin_prefix)->group(function () {
         Route::get('/', [MainController::class, 'index'])->name('admin.index');
         Route::get('/configuration', [MainController::class, 'configuration'])->name('admin.configuration');
         Route::post('/configuration', [MainController::class, 'configuration'])->name('admin.configuration.save');

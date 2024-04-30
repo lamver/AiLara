@@ -28,8 +28,6 @@ class AiSearchController extends BaseController
 
     public function __construct()
     {
-        $this->aiSearch = new AiSearchApi(Config::get('ailara.api_key_aisearch'), Config::get('ailara.api_host'));
-
         return $this;
     }
 
@@ -48,6 +46,11 @@ class AiSearchController extends BaseController
         return view('admin.integration.ais.common-data', ['result' => $result]);
     }
 
+    /**
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Foundation\Application|\Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
     public function pages(Request $request): Application|View|Factory
     {
         try {

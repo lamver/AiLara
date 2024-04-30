@@ -2,6 +2,7 @@
 
 namespace App\Settings;
 
+use Illuminate\Http\Request;
 use Spatie\LaravelSettings\Settings;
 
 class SettingGeneral extends Settings
@@ -73,5 +74,30 @@ class SettingGeneral extends Settings
     public static function group(): string
     {
         return 'general';
+    }
+
+    /**
+     * @param array $dataSettings
+     * @param \App\Settings\SettingGeneral $settings
+     *
+     * @return \App\Settings\SettingGeneral
+     */
+    public function prepareAndSave(array $dataSettings, SettingGeneral $settings): SettingGeneral
+    {
+        $settings->site_name = $dataSettings['site_name'] ?? "";
+        $settings->site_active = (bool)$dataSettings['site_active'];
+        $settings->app_name = $dataSettings['app_name'] ?? "";
+        $settings->logo_path = $dataSettings['logo_path'] ?? "";
+        $settings->logo_title = $dataSettings['logo_title'] ?? "";
+        $settings->logo_height_px = $dataSettings['logo_height_px'];
+        $settings->logo_width_px = $dataSettings['logo_width_px'];
+        $settings->logo_width_px = $dataSettings['logo_width_px'];
+        $settings->counter_external_code = $dataSettings['counter_external_code'] ?? "";
+        $settings->test = $dataSettings['test'];
+        $settings->api_key_aisearch = $dataSettings['api_key_aisearch'] ?? "";
+        $settings->api_host = $dataSettings['api_host'] ?? "";
+        $settings->admin_prefix = $dataSettings['admin_prefix'] ?? "";
+
+        return $settings->save();
     }
 }

@@ -4,7 +4,7 @@
 namespace App\Http\Controllers\Admin;
 
 
-use App\Models\AiLaraConfig;
+use App\Services\AiSearchApi;
 use App\Settings\SettingGeneral;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -14,6 +14,11 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\View\View;
 
+/**
+ * Class MainController
+ *
+ * @package App\Http\Controllers\Admin
+ */
 class MainController extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
@@ -21,7 +26,16 @@ class MainController extends BaseController
 
     public function index(Request $request)
     {
-        return view('admin.index', ['slot' => 'dd']);
+        try {
+            $aisUserData = (new AiSearchApi())->getUserData();
+        } catch (\Exception $e) {
+            $aisUserData = $e->getMessage();
+        }
+
+        return view('admin.index', [
+            'slot' => 'dd',
+            'aisUserData' => $aisUserData,
+        ]);
     }
 
     public function __invoke(SettingGeneral $settings)
@@ -43,21 +57,19 @@ class MainController extends BaseController
         Artisan::call('cache:clear');
 
         if (!empty($request->post())) {
-            $this->configurationSave($request, $settings);
+            $settings->prepareAndSave($request->post(), $settings);
             return redirect(route('admin.configuration'));
         }
 
         return view('admin.configuration', ['config' => $settings->toArray()]);
-
     }
 
     /**
-     * Saves the configuration settings.
+     * @param \Illuminate\Http\Request $request
      *
-     * @param Request $request
-     * @param SettingGeneral $settings
-     * @return SettingGeneral
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application
      */
+
     protected function configurationSave(Request $request, SettingGeneral $settings): SettingGeneral
     {
         $settings->site_name = $request->post('site_name') ?? "";
@@ -105,7 +117,6 @@ class MainController extends BaseController
             file_put_contents($robotsTxtPath, $request->post('robotsTxtContent'));
             redirect(route('admin.configuration.robots_txt'));
         }
-
 
         $robotsTxtContent = file_get_contents($robotsTxtPath);
 
