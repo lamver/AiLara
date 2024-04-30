@@ -6,7 +6,6 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Spatie\Feed\Feedable;
 use Spatie\Feed\FeedItem;
@@ -164,15 +163,15 @@ class Posts extends Model implements Feedable
     public function toFeedItem(): FeedItem
     {
         $user = $this->user()->first();
-        $description = strip_tags(str::limit($this->description, self::RSS_CONTENT_LN));
+        $description = strip_tags(str::limit($this->description ?? "", self::RSS_CONTENT_LN));
         return FeedItem::create()
             ->id($this->id)
-            ->title($this->title)
+            ->title($this->title ?? "")
             ->summary($description)
             ->updated($this->updated_at)
-            ->link($this->source_url)
+            ->link(self::createUrlFromPost($this))
             ->authorName($user->name)
-            ->authorEmail( '');
+            ->authorEmail('');
     }
 
     /**
