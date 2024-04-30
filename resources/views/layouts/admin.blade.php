@@ -7,7 +7,7 @@
         <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
         <meta name="generator" content="Hugo 0.84.0">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <title>AiLara dashboard</title>
+        <title>{{ app(\App\Settings\SettingGeneral::class)->app_name }}</title>
         <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/dashboard/">
         @stack('top-scripts')
         @yield('stylesheet')
