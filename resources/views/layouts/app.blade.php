@@ -209,6 +209,6 @@
     }
 </script>
 @stack('bottom-scripts')
-</body>
 {!! (new \App\Settings\SettingGeneral())->counter_external_code !!}
+</body>
 </html>
