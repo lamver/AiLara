@@ -76,4 +76,18 @@ class Module
         return false;
     }
 
+    /**
+     * @param string $moduleConst
+     *
+     * @return mixed|string
+     */
+    static public function getWebRoutePrefix($moduleConst = self::MODULE_AI_FORM)
+    {
+        if (isset(self::MODULE_CONFIG[$moduleConst])) {
+            return self::MODULE_CONFIG[$moduleConst]['route_prefix'];
+        }
+
+        return '/unknown';
+    }
+
 }

@@ -3,6 +3,9 @@
 use App\Models\Modules\Blog\Category;
 use App\Settings\SettingGeneral;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\Blog\PostsController;
+use App\Http\Controllers\Admin\Blog\CategoryController;
+use App\Http\Controllers\Admin\Blog\ImportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,8 +18,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 /** Admin routes */
-Route::middleware(['auth', 'verified'])->prefix(app(SettingGeneral::class)->admin_prefix . '/module')->group(function () {
-    Route::resource('posts', \App\Http\Controllers\Admin\Blog\PostsController::class, [
+Route::middleware(['auth', 'verified'])->prefix(app(SettingGeneral::class)->admin_prefix . '/module/blog')->group(function () {
+    Route::resource('posts', PostsController::class, [
 /*        'except' => ['show', 'destroy'],*/
         'names' => [
             'index' => 'admin.blog.post.index',
@@ -29,7 +32,7 @@ Route::middleware(['auth', 'verified'])->prefix(app(SettingGeneral::class)->admi
         ],
     ]);
 
-    Route::resource('category', \App\Http\Controllers\Admin\Blog\CategoryController::class, [
+    Route::resource('category', CategoryController::class, [
         'names' => [
             'index' => 'admin.blog.category.index',
             'create' => 'admin.blog.category.create',
@@ -41,7 +44,7 @@ Route::middleware(['auth', 'verified'])->prefix(app(SettingGeneral::class)->admi
         ],
     ]);
 
-    Route::resource('import', \App\Http\Controllers\Admin\Blog\ImportController::class, [
+    Route::resource('import', ImportController::class, [
         'names' => [
             'index' => 'admin.blog.import.index',
             'create' => 'admin.blog.import.create',
@@ -55,10 +58,7 @@ Route::middleware(['auth', 'verified'])->prefix(app(SettingGeneral::class)->admi
 });
 
 /** web routes */
-Route::prefix(\Illuminate\Support\Facades\Config::get('modules.blog.route_prefix'))->group(function () {
-    //$routeName = \Illuminate\Support\Facades\Config::get('modules.blog.route_prefix') == '/' ? 'index' : 'blog.post.index';
-    //Route::get('/', [\App\Http\Controllers\Modules\Blog\PostsController::class, 'index'])->name($routeName);
-
+Route::prefix(\App\Services\Modules\Module::getWebRoutePrefix(\App\Services\Modules\Module::MODULE_BLOG))->group(function () {
     $categorySlugsRoute = Category::getFullUrlsToAllCategory();
 
     foreach ($categorySlugsRoute as $slug) {

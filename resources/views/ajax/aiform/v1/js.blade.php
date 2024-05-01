@@ -219,7 +219,6 @@ fetch(`/api/form/config?id={{ $_GET['id'] }}&state=${Math.floor(Math.random() * 
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log('ff')
                     console.log(data);
                     if (data.result) {
                         localStorage.setItem('taskId',data.data.task_id)
