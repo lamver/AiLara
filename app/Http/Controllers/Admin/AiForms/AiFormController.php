@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\AiForms;
 
 use App\Http\Controllers\Controller;
 use App\Models\Modules\AiForm\AiForm;
+use App\Models\Modules\Blog\Category;
 use Illuminate\Http\Request;
 
 class AiFormController extends Controller
@@ -23,7 +24,10 @@ class AiFormController extends Controller
      */
     public function create()
     {
-        return view('admin.modules.aiform.edit');
+        $categories = Category::where('parent_id', '=', null)->get();
+        $allCategories = Category::pluck('title','id')->all();
+
+        return view('admin.modules.aiform.edit', compact('categories', 'allCategories'));
     }
 
     /**
@@ -51,7 +55,10 @@ class AiFormController extends Controller
      */
     public function edit(AiForm $aiForm)
     {
-        return view('admin.modules.aiform.edit', ['aiForm' => $aiForm]);
+        $categories = Category::where('parent_id', '=', null)->get();
+        $allCategories = Category::pluck('title','id')->all();
+
+        return view('admin.modules.aiform.edit', compact('aiForm', 'categories', 'allCategories'));
     }
 
     /**

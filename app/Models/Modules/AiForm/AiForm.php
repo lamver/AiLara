@@ -192,6 +192,38 @@ class AiForm extends Model
             $aiFrom->price_per_execute = $data['price_per_execute'];
         }
 
+        if (array_key_exists('description_on_page', $data)) {
+            $aiFrom->description_on_page = $data['description_on_page'];
+        }
+
+        if (array_key_exists('title_h1', $data)) {
+            $aiFrom->title_h1 = $data['title_h1'];
+        }
+
+        if (array_key_exists('title_h2', $data)) {
+            $aiFrom->title_h2 = $data['title_h2'];
+        }
+
+        if (array_key_exists('posts_ids', $data)) {
+            $aiFrom->posts_ids = $data['posts_ids'];
+        }
+
+        if (array_key_exists('category_ids', $data)) {
+            $aiFrom->category_ids = json_encode($data['category_ids']);
+        }
+
+        if (array_key_exists('view_posts', $data)) {
+            $aiFrom->view_posts = (bool) $data['view_posts'];
+        }
+
+        if (array_key_exists('allow_comments', $data)) {
+            $aiFrom->allow_comments = $data['allow_comments'];
+        }
+
+        if (array_key_exists('allow_indexing_results', $data)) {
+            $aiFrom->allow_indexing_results = $data['allow_indexing_results'];
+        }
+
         $aiFrom->user_id = Auth::id();
 
         if (empty($aiFrom->name)) {

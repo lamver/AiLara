@@ -67,11 +67,77 @@
                 <div id="emailHelp" class="form-text">{{ __('Name form ') }}</div>
 
                 <div class="mb-3">
+                    <label for="description_on_page" class="form-label">{{ __('admin.Description') }}</label>
+                    <textarea name="description_on_page" class="form-control" id="description_on_page" rows="7">{{ $aiForm->description_on_page ?? '' }}</textarea>
+                </div>
+
+                <label for="title_h1" class="form-label">{{ __('admin.title_h1') }}</label>
+                <input name="title_h1" value="{{ $aiForm->title_h1 ?? '' }}" type="text" class="form-control" id="title_h1" aria-describedby="emailHelp">
+
+                <label for="title_h2" class="form-label">{{ __('admin.title_h2') }}</label>
+                <input name="title_h2" value="{{ $aiForm->title_h2 ?? '' }}" type="text" class="form-control" id="title_h2" aria-describedby="emailHelp">
+
+                <div class="mb-3">
+                    <label for="posts_ids" class="form-label">{{ __('admin.posts_ids') }}</label>
+                    <textarea name="posts_ids" class="form-control" id="posts_ids" rows="3">{{ $aiForm->posts_ids ?? '' }}</textarea>
+                </div>
+
+                <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">{{ __('admin.Slug') }}</label>
                     <input name="slug" value="{{ $aiForm->slug ?? ''}}" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
                 </div>
             </div>
             <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="form-settings-tab">
+
+                <label class="form-check-label" for="flexCheckDefault">
+                    {{ __('admin.View posts') }}
+                </label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="view_posts" value="1" id="flexRadioDefault1" @if(isset($aiForm) && $aiForm->view_posts) checked @endif>
+                    <label class="form-check-label" for="flexRadioDefault1">
+                      {{ __('admin.Yes') }}
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="view_posts" value="0" id="flexRadioDefault2" @if(isset($aiForm) && !$aiForm->view_posts) checked @endif>
+                    <label class="form-check-label" for="flexRadioDefault2">
+                        {{ __('admin.No') }}
+                    </label>
+                </div>
+
+                @include('admin.modules.blog.category.for_selected.main', ['categories' => $categories, 'selected_ids' => !empty(isset($aiForm) && $aiForm->category_ids) ? json_decode($aiForm->category_ids) : [] ])
+
+                <label class="form-check-label" for="flexCheckDefault">
+                    {{ __('admin.Allow comments') }}
+                </label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="allow_comments" value="1" id="flexRadioDefault1" @if(isset($aiForm) && $aiForm->allow_comments) checked @endif>
+                    <label class="form-check-label" for="flexRadioDefault1">
+                        {{ __('admin.Yes') }}
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="allow_comments" value="0" id="flexRadioDefault2" @if(isset($aiForm) && !$aiForm->allow_comments) checked @endif>
+                    <label class="form-check-label" for="flexRadioDefault2">
+                        {{ __('admin.No') }}
+                    </label>
+                </div>
+
+                <label class="form-check-label" for="flexCheckDefault">
+                    {{ __('admin.Allow indexing results') }}
+                </label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="allow_indexing_results" value="1" id="flexRadioDefault1" @if(isset($aiForm) && $aiForm->allow_indexing_results) checked @endif>
+                    <label class="form-check-label" for="flexRadioDefault1">
+                        {{ __('admin.Yes') }}
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="allow_indexing_results" value="0" id="flexRadioDefault2" @if(isset($aiForm) && !$aiForm->allow_indexing_results) checked @endif>
+                    <label class="form-check-label" for="flexRadioDefault2">
+                        {{ __('admin.No') }}
+                    </label>
+                </div>
 
                 <label for="price_per_symbol" class="form-label">{{ __('admin.Price per symbol') }}</label>
                 <input name="price_per_symbol" value="{{ $aiForm->price_per_symbol ?? '' }}" type="number" step="0.01" class="form-control amount" id="price_per_symbol" aria-describedby="emailHelp">
