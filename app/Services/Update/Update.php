@@ -86,13 +86,17 @@ class Update
      */
     static public function composerUpdate(): array
     {
-        $resultProcess = self::vendorInstall();
+        return self::vendorInstall();
+    }
 
+    /**
+     * @return bool
+     */
+    static public function clearExtractPath() : bool
+    {
         $pathToExtractFiles = storage_path('app/'.Update::APP_PATH_TO_UPDATE_ARCHIVE_EXTRACT_FILES.'/AiLara-main');
 
-        self::deleteDirectory($pathToExtractFiles);
-
-        return $resultProcess;
+        return self::deleteDirectory($pathToExtractFiles);
     }
 
     /**

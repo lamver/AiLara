@@ -56,8 +56,8 @@ Route::middleware(['auth', 'verified'])->prefix(app(SettingGeneral::class)->admi
 
 /** web routes */
 Route::prefix(\Illuminate\Support\Facades\Config::get('modules.blog.route_prefix'))->group(function () {
-    $routeName = \Illuminate\Support\Facades\Config::get('modules.blog.route_prefix') == '/' ? 'index' : 'blog.post.index';
-    Route::get('/', [\App\Http\Controllers\Modules\Blog\PostsController::class, 'index'])->name($routeName);
+    //$routeName = \Illuminate\Support\Facades\Config::get('modules.blog.route_prefix') == '/' ? 'index' : 'blog.post.index';
+    //Route::get('/', [\App\Http\Controllers\Modules\Blog\PostsController::class, 'index'])->name($routeName);
 
     $categorySlugsRoute = Category::getFullUrlsToAllCategory();
 

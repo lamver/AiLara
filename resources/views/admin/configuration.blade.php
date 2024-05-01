@@ -3,24 +3,33 @@
     <form method="post" class="row g-3">
         @csrf
         @foreach($config as $configName => $data)
+            @if ($configName == 'home_module')
+                <div class="mb-12">
+                    <label class="form-label" style="font-size: 18px">  {{ __($configName) }}</label>
+                    <select class="form form-control" name="{{$configName}}">
+                        @foreach(\App\Services\Modules\Module::getAllModulesUseOnFront() as $moduleKey => $moduleConf)
+                            <option @if($moduleKey == $data) selected @endif value="{{ $moduleKey }}">{{ $moduleConf['name'] }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                @continue
+                @endif
             @php $theType = gettype($data); @endphp
             @if ($theType === App\Settings\SettingGeneral::TYPE_INT)
+                    <div class="mb-12">
+                        <label class="form-label" style="font-size: 18px">  {{ __($configName) }}</label>
+                        <input class="form-control" name="{{ $configName }}" value="{{ $data }}"/>
+                    </div>
+            @endif
+            @if ($theType === App\Settings\SettingGeneral::TYPE_STRING)
                 <div class="mb-12">
                     <label class="form-label" style="font-size: 18px">  {{ __($configName) }}</label>
                     <input class="form-control" name="{{ $configName }}" value="{{ $data }}"/>
                 </div>
             @endif
-            @if ($theType === App\Settings\SettingGeneral::TYPE_STRING)
-                <div class="mb-12">
-                    <label class="form-label"
-                           style="font-size: 18px">  {{ __($configName) }}</label>
-                    <input class="form-control" name="{{ $configName }}" value="{{ $data }}"/>
-                </div>
-            @endif
             @if ($theType === App\Settings\SettingGeneral::TYPE_TEXT)
                 <div class="mb-12">
-                    <label class="form-label"
-                           style="font-size: 18px">  {{ __($configName) }}</label>
+                    <label class="form-label" style="font-size: 18px">  {{ __($configName) }}</label>
                     <textarea rows="10" class="form-control" name="{{ $configName }}">{{ $data }}</textarea>
                 </div>
             @endif

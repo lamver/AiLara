@@ -14,8 +14,7 @@ class TaskController extends Controller
      */
     public function index(Request $request)
     {
-        dd('here');
-        //
+        return view('modules.ai-form.index');
     }
 
     /**
