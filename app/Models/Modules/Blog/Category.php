@@ -52,6 +52,10 @@ class Category extends Model
             $model->slug = Str::slug($model->title);
         }
 
+        if ($model->parent_id == 0) {
+            $model->parent_id = null;
+        }
+
         try {
             return $model->save();
         } catch (\Exception $exception) {
