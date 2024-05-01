@@ -51,7 +51,7 @@ class SettingGeneral extends Settings
 
     public array $backup_frequency;
 
-    /**  @var string */
+    /**  @var array */
     const BACKUP_FREQUENCY = [
         'hourly' => false,
         'daily' => false,
@@ -65,6 +65,9 @@ class SettingGeneral extends Settings
 
     /** @var bool */
     public bool $backup_musqldump;
+
+    /**  @var string */
+    public string $backup_musqldump_path;
 
 
     // public bool $api_key;
@@ -100,6 +103,7 @@ class SettingGeneral extends Settings
         $settings->api_key_aisearch = $dataSettings['api_key_aisearch'] ?? "";
         $settings->api_host = $dataSettings['api_host'] ?? "";
         $settings->admin_prefix = $dataSettings['admin_prefix'] ?? "";
+        $settings->backup_musqldump_path = $dataSettings['backup_musqldump_path'] ?? "";
         $settings->backup_musqldump = key_exists('backup_musqldump', $dataSettings) ?  (bool) $dataSettings['backup_musqldump'] : false;
         $settings->backup_status = key_exists('backup_status', $dataSettings) ?  (bool) $dataSettings['backup_status'] : false;
 

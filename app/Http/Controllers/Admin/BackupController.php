@@ -3,28 +3,21 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Settings\SettingGeneral;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\Log;
 use Config;
+use Spatie\Backup\Tasks\Backup\BackupJobFactory;
 
 class BackupController extends BaseController
 {
-
-    public function __construct(SettingGeneral $settingGeneral) {
-        if ($settingGeneral->backup_musqldump) {
-            Config::set('backup.backup.source.databases', [
-                'mysql',
-            ]);
-        }
-    }
     /**
      * @return Application|Factory|View
      */
@@ -46,17 +39,51 @@ class BackupController extends BaseController
     /**
      * @return RedirectResponse
      */
-    public function makeBackup(): RedirectResponse
+    public function makeBackup(SettingGeneral $settingGeneral): RedirectResponse
     {
         try {
-            Artisan::call('backup:run');
-        }catch (BindingResolutionException $exception){
-            Log::error($exception->getMessage());
+            $backupJob = BackupJobFactory::createFromArray($this->getBackupSettings($settingGeneral));
+            $backupJob->run();
+        } catch (BindingResolutionException|Exception $e) {
+            Log::error($e->getMessage());
             return redirect()->route('admin.backup.index')->withErrors(['msg' => 'Somthing went wrong']);
         }
 
         return redirect()->route('admin.backup.index');
 
+    }
+
+    /**
+     * @param SettingGeneral $settingGeneral
+     * @return array
+     */
+    public function getBackupSettings(SettingGeneral $settingGeneral): array
+    {
+        $backupSettings = Config::get('backup');
+
+        if ($settingGeneral->backup_musqldump) {
+            $this->addMysqlDumpToConnection($settingGeneral->backup_musqldump_path);
+            $backupSettings['backup']['source']['databases'][] = 'mysql';
+        }
+
+        return $backupSettings;
+    }
+
+    /**
+     * @param $binaryPath
+     * @return void
+     */
+    public function addMysqlDumpToConnection($binaryPath): void
+    {
+        $databaseMysql = Config::get('database.connections.mysql');
+
+        $databaseMysql['dump'] = [
+            'dump_binary_path' => $binaryPath,
+            'use_single_transaction' => true,
+            'timeout' => 60 * 5,
+        ];
+
+        Config::set('database.connections.mysql', $databaseMysql);
     }
 
     /**

@@ -28,6 +28,12 @@ return new class extends SettingsMigration
         } catch (Exception $e) {
             Log::error($e->getMessage());
         }
+
+        try {
+            $this->migrator->add('general.backup_musqldump_path', "");
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+        }
     }
 
 };
