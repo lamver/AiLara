@@ -276,4 +276,18 @@ class AiForm extends Model
 
         return $aiFrom->slug;
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|object|null
+     */
+    static public function loadDefaultForm()
+    {
+        $aiFrom = self::query()->where(['use_default' => true])->first();
+
+        if (empty($aiFrom)) {
+            $aiFrom = self::query()->first();
+        }
+
+        return $aiFrom;
+    }
 }

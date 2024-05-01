@@ -264,6 +264,11 @@ class Category extends Model
         return $data;
     }
 
+    /**
+     * @param string $column
+     *
+     * @return string
+     */
     static public function columnName($column = '')
     {
         $column = str_replace("_", " ", $column);
@@ -272,7 +277,12 @@ class Category extends Model
         return $column;
     }
 
-    static public function getCategoryNameById(int $id)
+    /**
+     * @param int $id
+     *
+     * @return \Illuminate\Support\HigherOrderCollectionProxy|mixed|string
+     */
+    static public function getCategoryNameById(int $id) : mixed
     {
         $categoryName = self::query()->select('title')->where(['id' => $id])->get();
 

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Settings\SettingGeneral;
+use App\Services\Modules\Module;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,3 +31,11 @@ Route::middleware(['auth', 'verified'])->prefix(app(SettingGeneral::class)->admi
 });
 
 /** web routes */
+Route::prefix(Module::getWebRoutePrefix(Module::MODULE_AI_FORM))->group(function () {
+    $allForms = \App\Models\Modules\AiForm\AiForm::query()->get();
+
+    foreach ($allForms as $form) {
+        Route::get('/'.$form->slug, [\App\Http\Controllers\Modules\Task\TaskController::class, 'viewAiFormPage'])->name('aiform.view.form' . '.' . str_replace("/", ".", $form->slug));
+        Route::get('/'.$form->slug . '/{slug}_{id}', [\App\Http\Controllers\Modules\Task\TaskController::class, 'view'])->name('aiform.view.form' . '.' . str_replace("/", ".", trim($form->slug,'/')) . '.result.task');
+    }
+});
