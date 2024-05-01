@@ -42,6 +42,14 @@
                     </div>
                 </div>
             @endif
+            @if ($theType === App\Settings\SettingGeneral::TYPE_ARRAY)
+                <label class="form-check-label" for="{{$configName}}">{{$configName}}</label>
+                <select class="form-select" name="{{$configName}}">
+                    @foreach($data as $key => $item)
+                        <option value="{{$key}}" @if($item) selected @endif>{{$key}}</option>
+                    @endforeach
+                </select>
+            @endif
         @endforeach
         <p></p>
         <div class="mb-3">

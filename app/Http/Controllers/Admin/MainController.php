@@ -72,6 +72,39 @@ class MainController extends BaseController
      *
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application
      */
+
+    protected function configurationSave(Request $request, SettingGeneral $settings): SettingGeneral
+    {
+        $settings->site_name = $request->post('site_name') ?? "";
+        $settings->site_active = (bool)$request->post('site_active');
+        $settings->app_name = $request->post('app_name') ?? "";
+        $settings->logo_path = $request->post('logo_path') ?? "";
+        $settings->logo_title = $request->post('logo_title') ?? "";
+        $settings->logo_height_px = $request->post('logo_height_px');
+        $settings->logo_width_px = $request->post('logo_width_px');
+        $settings->logo_width_px = $request->post('logo_width_px');
+        $settings->counter_external_code = $request->post('counter_external_code') ?? "";
+        $settings->test = $request->post('test');
+        $settings->api_key_aisearch = $request->post('api_key_aisearch') ?? "";
+        $settings->api_host = $request->post('api_host') ?? "";
+        $settings->admin_prefix = $request->post('admin_prefix') ?? "";
+        $settings->backup_status = (bool)$request->post('backup_status');
+
+        $backupFrequency = SettingGeneral::BACKUP_FREQUENCY;
+
+        if (key_exists($request->post('backup_frequency'), $backupFrequency)){
+            $backupFrequency[$request->post('backup_frequency')] = true;
+            $settings->backup_frequency = $backupFrequency;
+        }
+
+        $return = $settings->save();
+
+        Artisan::call('cache:clear');
+
+        return $return;
+
+    }
+
     public function robotsTxt(Request $request)
     {
         $robotsTxtPath = base_path() . '/public/robots.txt';
