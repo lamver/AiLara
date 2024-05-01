@@ -15,6 +15,7 @@ return [
         'middleware' =>  [
             'web',
             'auth',
+            'rbac:admin',
         ],
     ],
 

@@ -2,6 +2,7 @@
 
 use App\Models\Modules\Blog\Category;
 use App\Services\Translation\Translation;
+use App\Settings\SettingGeneral;
 use Illuminate\Support\Facades\Route;
 
 /*

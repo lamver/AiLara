@@ -4,11 +4,11 @@ namespace App\Models\Modules\Blog;
 
 use App\Helpers\StrMaster;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Spatie\Feed\Feedable;
 use Spatie\Feed\FeedItem;
@@ -106,7 +106,7 @@ class Posts extends Model implements Feedable
 
     static public function topFourPosts()
     {
-        return self::createUrlToPosts(self::select('id', 'post_category_id', 'title', 'content', 'image', 'updated_at')
+        return self::createUrlToPosts(self::select('id', 'post_category_id', 'author_id', 'title', 'content', 'image', 'updated_at')
             ->where(['status' => 'Published'])
             ->distinct('category_id')
             ->inRandomOrder()
@@ -115,17 +115,28 @@ class Posts extends Model implements Feedable
     }
 
     /**
+     * @param array $excludeIds
+     *
      * @return mixed
      */
-    static public function topPostsDifferentCategories(): mixed
+    static public function topPostsDifferentCategories(array $excludeIds = []): mixed
     {
-        return self::createUrlToPosts(self::select('id', 'post_category_id', 'title', 'seo_title', 'content', 'image', 'updated_at')
-            ->where(['status' => 'Published'])
-            ->distinct('category_id')
-            ->orderBy('id', 'DESC')
-            /*->inRandomOrder()*/
-            ->limit(20)
-            ->get());
+        $ids = implode(",", $excludeIds);
+
+        $result = self::select('id', 'post_category_id', 'title', 'seo_title', 'author_id', 'content', 'image', 'updated_at')
+                      ->where(['status' => 'Published']);
+
+        if (!empty($ids)) {
+            $result->whereRaw('id not in ('.$ids .')');
+        }
+
+        $result = $result->distinct('category_id')
+                      ->orderBy('id', 'DESC')
+                        /*->inRandomOrder()*/
+                      ->limit(14)
+                      ->get();
+
+        return self::createUrlToPosts($result);
     }
 
     /**
@@ -217,15 +228,15 @@ class Posts extends Model implements Feedable
     public function toFeedItem(): FeedItem
     {
         $user = $this->user()->first();
-        $description = strip_tags(str::limit($this->description, self::RSS_CONTENT_LN));
+        $description = strip_tags(str::limit($this->description ?? "", self::RSS_CONTENT_LN));
         return FeedItem::create()
             ->id($this->id)
-            ->title($this->title)
+            ->title($this->title ?? "")
             ->summary($description)
             ->updated($this->updated_at)
-            ->link($this->source_url)
+            ->link(self::createUrlFromPost($this))
             ->authorName($user->name)
-            ->authorEmail( '');
+            ->authorEmail('');
     }
 
     /**
@@ -244,5 +255,18 @@ class Posts extends Model implements Feedable
     public function category()
     {
         return $this->belongsTo(Category::class, 'post_category_id', 'id');
+    }
+
+    static public function getUniqIdsFromCollections(Collection $collections)
+    {
+        $ids = [];
+
+        foreach ($collections as $item) {
+            if (isset($item->id)) {
+                array_push($ids, $item->id);
+            }
+        }
+
+        return $ids;
     }
 }

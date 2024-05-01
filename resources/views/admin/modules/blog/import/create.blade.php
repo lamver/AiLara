@@ -106,7 +106,7 @@
         @endif
         @if(in_array($param->Type, ['text', 'longtext']))
             <label for="exampleInputEmail1" class="form-label">{{ $param->Field }}</label>
-            <textarea class="form form-control" id="label_{{ $param->Field }}" name="{{ $param->Field }}" placeholder="{{ $param->Comment}}">{{ $import->{$param->Field}  ?? '' }}</textarea>
+            <textarea class="form form-control" rows="25" id="label_{{ $param->Field }}" name="{{ $param->Field }}" placeholder="{{ $param->Comment}}">{{ $import->{$param->Field}  ?? '' }}</textarea>
             <small id="emailHelp" class="form-text text-muted">{{ $param->Comment}}</small>
             @continue
         @endif

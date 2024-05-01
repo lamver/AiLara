@@ -34,7 +34,10 @@ class PostsController extends Controller
     public function index(Request $request)
     {
         $topFourPosts = Posts::topFourPosts();
-        $topPostsDifferentCategories = Posts::topPostsDifferentCategories();
+
+        $unicIds = Posts::getUniqIdsFromCollections($topFourPosts);
+
+        $topPostsDifferentCategories = Posts::topPostsDifferentCategories($unicIds);
 
         $settings = new SettingGeneral();
 
