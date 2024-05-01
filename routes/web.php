@@ -31,10 +31,9 @@ Route::prefix(Translation::checkRoutePrefix())->group(function () {
             return view('dashboard');
         })->middleware(['auth', 'verified'])->name('dashboard');
     });
+    Route::get('/', [ModuleController::class, 'index'])->name('index');
 
     require __DIR__.'/auth.php';
-
-    Route::get('/', [ModuleController::class, 'index'])->name('index');
 });
 
 Route::get('/client_offline', function () {

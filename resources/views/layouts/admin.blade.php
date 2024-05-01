@@ -26,7 +26,6 @@
         <link rel="mask-icon" href="/docs/5.0/assets/img/favicons/safari-pinned-tab.svg" color="#7952b3">
         <link rel="icon" href="/docs/5.0/assets/img/favicons/favicon.ico">
         <meta name="theme-color" content="#7952b3">
-
         @stack('stylesheet')
         <style>
             .bd-placeholder-img {
@@ -153,7 +152,6 @@
         <!-- <link href="dashboard.css" rel="stylesheet"> -->
     </head>
     <body>
-
         <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
             <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">AiLara</a>
             <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
@@ -208,26 +206,6 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="#">
                                     <span data-feather="users"></span>
-                                    {{ __('admin.ai_search') }}
-                                </a>
-                                <ul>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('admin.ais.commonData') }}">
-                                            <span data-feather="bar-chart-2"></span>
-                                            {{ __('admin.common_data') }}
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('admin.ais.aiForms') }}">
-                                            <span data-feather="bar-chart-2"></span>
-                                            {{ __('admin.ai_forms') }}
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">
-                                    <span data-feather="users"></span>
                                     {{ __('admin.modules') }}
                                 </a>
                                 <ul>
@@ -236,6 +214,20 @@
                                             <span data-feather="bar-chart-2"></span>
                                             {{ __('admin.configuration') }}
                                         </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">
+                                            <span data-feather="bar-chart-2"></span>
+                                            {{ __('admin.Ai forms') }}
+                                        </a>
+                                        <ul>
+                                            <li>
+                                                <a class="nav-link" href="{{ route('admin.ais.aiForms') }}">
+                                                    <span data-feather="bar-chart-2"></span>
+                                                    {{ __('admin.Forms') }}
+                                                </a>
+                                            </li>
+                                        </ul>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="#">
@@ -294,7 +286,7 @@
                              <li class="nav-item">
                                <a class="nav-link" href="{{ route('admin.user.index') }}">
                                     <span data-feather="bar-chart-2"></span>
-                                    {{__('users')}}
+                                    {{__('Users')}}
                                 </a>
                              </li>
                             @if(isset($languages))
