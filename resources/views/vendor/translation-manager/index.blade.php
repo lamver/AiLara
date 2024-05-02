@@ -24,7 +24,8 @@
                 }
             });
 
-            $('.editItem a').stop().on('click', function () {
+            $('.editItem a').stop().on('click', function (event) {
+                event.preventDefault();
                 const $this = $(this);
                 $this[0].dataset.oldValue = $this[0].innerHTML;
                 const $parent = $this.closest('.editItem');

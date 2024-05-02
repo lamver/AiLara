@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('content')
-<h2>Ai forms</h2>
-    <a class="btn-link" href="{{ route('admin.ais.aiForms.newForm') }}">New form</a>
+<h2>{{ __('admin.Ai forms') }}</h2>
+    <a class="btn-link" href="{{ route('admin.ais.aiForms.newForm') }}">{{ __('admin.New form') }}</a>
     <table class="table">
         @foreach($aiFormsConfig as $aiFormConfig)
         <tr>

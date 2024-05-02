@@ -9,21 +9,21 @@
     <form method="post" action="{{ route('telegram-bots.store') }}">
         @csrf
         <div class="mb-3">
-            <x-input-label for="botName" :value="__('Bot name')"/>
+            <x-input-label for="botName" :value="__('admin.Bot name')"/>
             <x-text-input id="botName" class="form-control" type="text" name="name" :value="old('name')"
                           required/>
             <x-input-error class="text-danger" :messages="$errors->get('name')" class="mt-2"/>
         </div>
 
         <div class="mb-3">
-            <x-input-label for="botName" :value="__('Bot api key')"/>
+            <x-input-label for="botName" :value="__('admin.Bot api key')"/>
             <x-text-input id="botName" class="form-control" type="text" name="token" :value="old('token')"
                           required/>
             <x-input-error class="text-danger" :messages="$errors->get('token')" class="mt-2"/>
         </div>
 
         <div class="mb-3">
-            <label class="form-check-label" for="formId">{{ __('Select form') }}</label>
+            <label class="form-check-label" for="formId">{{ __('admin.Select form') }}</label>
             <select class="form-select" id="formId" name="form_id" aria-label="">
                 @foreach($forms as $form)
                     <option value="{{$form->id}}">{{$form->name}}</option>
@@ -31,7 +31,7 @@
             </select>
         </div>
 
-        <button type="submit" class="btn btn-primary">{{ __('Save')}}</button>
+        <button type="submit" class="btn btn-primary">{{ __('admin.Save')}}</button>
 
     </form>
 @endsection

@@ -1,11 +1,11 @@
 @extends('layouts.admin')
 @section('page_title')
-    Blog / Imports
+    {{ __('admin.Blog / Imports') }}
 @endsection
 @section('page_options')
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group me-2">
-            <a href="{{ route('admin.blog.import.create') }}" type="button" class="btn btn-sm btn-outline-success">Add</a>
+            <a href="{{ route('admin.blog.import.create') }}" type="button" class="btn btn-sm btn-outline-success">{{ __('admin.Add') }}</a>
         </div>
     </div>
 @endsection
@@ -15,7 +15,7 @@
             <thead>
             <tr>
                 @foreach($columns as $column)
-                    <th scope="col">{{ $column->Field }}</th>
+                    <th scope="col">{{ __('admin.'. str_replace('_', ' ', $column->Field) ) }}</th>
                 @endforeach
             </tr>
             </thead>
@@ -25,12 +25,12 @@
                     @foreach($columns as $column)
                         @if($column->Key == 'PRI')
                             <td>{{ $postData->{$column->Field} }}
-                                <a href="{{ route('admin.blog.import.edit', ['import' => $postData->{$column->Field}]) }}">Edit</a>
-                                <a href="{{ route('admin.blog.import.show', ['import' => $postData->{$column->Field}]) }}">View</a>
+                                <a href="{{ route('admin.blog.import.edit', ['import' => $postData->{$column->Field}]) }}">{{ __('admin.Edit') }}</a>
+                                <a href="{{ route('admin.blog.import.show', ['import' => $postData->{$column->Field}]) }}">{{ __('admin.View') }}</a>
                                 <form action="{{ route('admin.blog.import.destroy', $postData) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-link" type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+                                    <button class="btn btn-link" type="submit" onclick="return confirm('{{ __('admin.Are you sure') }} ? ')">{{ __('admin.Delete') }}</button>
                                 </form>
                             </td>
                             @continue

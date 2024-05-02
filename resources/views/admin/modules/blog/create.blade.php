@@ -42,12 +42,12 @@
 
 </style>
 @section('page_title')
-    Blog / Posts / Create
+    {{ __('admin.Blog / Posts / Create') }}
 @endsection
 @section('page_options')
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group me-2">
-            <a href="{{ route('admin.blog.post.index') }}" type="button" class="btn btn-sm btn-outline-success">All posts</a>
+            <a href="{{ route('admin.blog.post.index') }}" type="button" class="btn btn-sm btn-outline-success">{{ __('admin.All posts') }}</a>
 {{--            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>--}}
         </div>
 {{--        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
@@ -159,37 +159,37 @@
         <div class="modal-content">
 
             <div class="modal-header">
-                <h5 class="modal-title">{{__('admin.field')}}: <span></span></h5>
+                <h5 class="modal-title">{{__('admin.Field')}}: <span></span></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <div class="modal-body">
                 <div class="mb-3">
-                    <label class="form-label">{{__('admin.ai_type')}}</label>
+                    <label class="form-label">{{__('admin.Ai type')}}</label>
                     <select class="form-select" id="typeTask">
-                        <option value="1">{{__('admin.task_text')}}</option>
-                        <option value="2">{{__('admin.task_image')}}</option>
-                        <option value="3">{{__('admin.task_write_text')}}</option>
-                        <option value="6">{{__('admin.task_answer')}}</option>
-                        <option value="7">{{__('admin.task_write_rewrite')}}</option>
-                        <option value="11">{{__('admin.task_make_title')}}</option>
-                        <option value="20">{{__('admin.task_seo_title')}}</option>
-                        <option value="21">{{__('admin.task_seo_description')}}</option>
-                        <option value="22">{{__('admin.task_seo_article')}}</option>
+                        <option value="1">{{__('admin.Task text')}}</option>
+                        <option value="2">{{__('admin.Task image')}}</option>
+                        <option value="3">{{__('admin.Task write text')}}</option>
+                        <option value="6">{{__('admin.Task answer')}}</option>
+                        <option value="7">{{__('admin.Task write rewrite')}}</option>
+                        <option value="11">{{__('admin.Task make title')}}</option>
+                        <option value="20">{{__('admin.Task seo title')}}</option>
+                        <option value="21">{{__('admin.Task seo description')}}</option>
+                        <option value="22">{{__('admin.Task seo article')}}</option>
                     </select>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">{{__('admin.text')}}</label>
-                    <textarea class="form form-control" name="aiForm" placeholder="{{ __('ask_ai') }}"></textarea>
+                    <label class="form-label">{{__('admin.Text')}}</label>
+                    <textarea class="form form-control" name="aiForm" placeholder="{{ __('admin.Ask ai') }}"></textarea>
                 </div>
                 <div class="mb-3" id="innerBox" style="display: none">
-                    <div class="mb-2">{{__('admin.result')}}</div>
+                    <div class="mb-2">{{__('admin.Result')}}</div>
                     <div id="innerResult" class="shadow-lg p-3 mb-5 bg-body rounded" style="text-align: center"></div>
                 </div>
 
                 <button id="createAi" type="button" class="btn btn-primary">
-                    <span>{{__('admin.create')}}</span>
+                    <span>{{__('admin.Create')}}</span>
                     <svg style="fill: rgb(255, 255, 255); display: none" width="24" height="24" viewBox="0 0 24 24"
                          xmlns="http://www.w3.org/2000/svg">
                         <circle cx="4" cy="12" r="3">
@@ -212,9 +212,9 @@
             </div>
             <div class="modal-footer">
                 <button type="button" id="insertBtn" class="btn btn-primary" disabled>
-                    {{__('admin.insert')}}
+                    {{__('admin.Insert')}}
                 </button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{__('admin.close')}}</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{__('admin.Close')}}</button>
             </div>
         </div>
     </div>

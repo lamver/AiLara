@@ -10,7 +10,7 @@
         @method('PUT')
         @csrf
         <div class="mb-3">
-            <x-input-label for="botName" :value="__('Bot name')"/>
+            <x-input-label for="botName" :value="__('admin.Bot name')"/>
             <x-text-input id="botName" class="form-control" type="text" name="name"
                           :value="old('name', $bot->name) "
                           required/>
@@ -18,7 +18,7 @@
         </div>
 
         <div class="mb-3">
-            <x-input-label for="botName" :value="__('Bot api key')"/>
+            <x-input-label for="botName" :value="__('admin.Bot api key')"/>
             <x-text-input id="botName" class="form-control" type="text" name="token"
                           :value="old('name', $bot->token)"
                           required/>
@@ -26,7 +26,7 @@
         </div>
 
         <div class="mb-3">
-            <label class="form-check-label" for="status">{{ __('Select form') }}</label>
+            <label class="form-check-label" for="status">{{ __('admin.Select form') }}</label>
             <select class="form-select" name="form_id" aria-label="">
                 @foreach($forms as $form)
                     <option @if($form->id === $bot->aiFrom->id) selected @endif value="{{$form->id}}">{{$form->name}}</option>
@@ -35,7 +35,7 @@
         </div>
 
         <div class="btn-group" role="group">
-            <button type="submit" class="btn btn-primary">{{ __('Save')}}</button>
+            <button type="submit" class="btn btn-primary">{{ __('admin.Save')}}</button>
         </div>
 
     </form>

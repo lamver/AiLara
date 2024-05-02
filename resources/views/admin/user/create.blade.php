@@ -5,7 +5,7 @@
 
         <div class="row mb-3">
             <div class="form-group">
-                <label for="name" class="form-label">{{ __('Name') }}</label>
+                <label for="name" class="form-label">{{ __('admin.Name') }}</label>
                 <input id="name" type="text" class="form-control @error('name') is-invalid @enderror"
                        name="name"
                        value="{{ old('name') }}" required autocomplete="name" autofocus>
@@ -20,7 +20,7 @@
 
         <div class="row mb-3">
             <div class="form-group">
-                <label for="email" class="form-label">{{ __('Email Address') }}</label>
+                <label for="email" class="form-label">{{ __('admin.Email address') }}</label>
                 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
                        name="email"
                        value="{{ old('email') }}" required autocomplete="email">
@@ -36,7 +36,7 @@
         <div class="row mb-3">
 
             <div class="form-group">
-                <label for="password" class="form-label">{{ __('Password') }}</label>
+                <label for="password" class="form-label">{{ __('admin.Password') }}</label>
                 <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"
                        name="password" required autocomplete="new-password">
 
@@ -50,7 +50,7 @@
 
         <div class="row mb-3">
             <div class="form-group">
-                <label for="password-confirm" class="form-label">{{ __('Confirm Password') }}</label>
+                <label for="password-confirm" class="form-label">{{ __('admin.Confirm password') }}</label>
                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required
                        autocomplete="new-password">
             </div>
@@ -58,7 +58,7 @@
 
         <div class="row mb-3">
             <div class="form-group">
-                <label for="owner-select" class="form-label">{{ __('user_role') }}</label>
+                <label for="owner-select" class="form-label">{{ __('admin.User role') }}</label>
                 <select id="owner-select" class="form-select @error('owner') is-invalid @enderror" name="owner">
                     @foreach($owners as $owner)
                         <option value="{{$owner->original_id}}">{{$owner->original_id}}</option>
@@ -75,10 +75,10 @@
         <div class="row mb-0">
             <div class="col-md-6">
                 <button type="submit" class="btn btn-primary">
-                    {{ __('add') }}
+                    {{ __('admin.Add') }}
                 </button>
                 <a href="{{route('admin.user.index')}}" class="btn btn-danger">
-                    {{ __('cancel') }}
+                    {{ __('admin.Cancel') }}
                 </a>
             </div>
         </div>

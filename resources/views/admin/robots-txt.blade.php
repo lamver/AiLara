@@ -18,7 +18,7 @@
             @endif
         @endforeach--}}
         <p></p>
-        <button type="submit" class="btn btn-secondary">{{ __('Save') }}</button>
+        <button type="submit" class="btn btn-secondary">{{ __('admin.Save') }}</button>
     </form>
 
 @endsection
