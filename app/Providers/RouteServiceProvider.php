@@ -40,6 +40,9 @@ class RouteServiceProvider extends ServiceProvider
                 ->group(base_path('routes/blog.php'));
 
             Route::middleware('web')
+                 ->group(base_path('routes/aiform.php'));
+
+            Route::middleware('web')
                 ->group(base_path('routes/admin.php'));
 
             Route::middleware('web')

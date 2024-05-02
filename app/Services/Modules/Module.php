@@ -23,7 +23,7 @@ class Module
             'name' => self::MODULE_AI_FORM_NAME,
             'controller' => \App\Http\Controllers\Modules\Task\TaskController::class,
             'action' => 'index',
-            'route_prefix' => '/task1',
+            'route_prefix' => '/task',
             'use_on_front' => true,
         ]
     ];
@@ -60,6 +60,34 @@ class Module
         }
 
         return self::MODULE_CONFIG[$moduleConst]['name'];
+    }
+
+    /**
+     * @param string $moduleConst
+     *
+     * @return array|false
+     */
+    static public function isFrontModule(string $moduleConst) : bool|array
+    {
+        if (isset(self::MODULE_CONFIG[$moduleConst]) && self::MODULE_CONFIG[$moduleConst]['use_on_front']) {
+            return self::MODULE_CONFIG[$moduleConst];
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string $moduleConst
+     *
+     * @return mixed|string
+     */
+    static public function getWebRoutePrefix($moduleConst = self::MODULE_AI_FORM)
+    {
+        if (isset(self::MODULE_CONFIG[$moduleConst])) {
+            return self::MODULE_CONFIG[$moduleConst]['route_prefix'];
+        }
+
+        return '/unknown';
     }
 
 }

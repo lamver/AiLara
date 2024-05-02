@@ -1,16 +1,23 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Modules\AiForm;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
+/**
+ * Class AiForm
+ *
+ * @package App\Models\Modules\AiForm
+ */
 class AiForm extends Model
 {
     use HasFactory;
 
-    private string $name;
-    private string $form_config;
+    //private string $name;
+    //private string $form_config;
 
     protected $fillable = [
         'id',
@@ -128,5 +135,159 @@ class AiForm extends Model
         }
 
         return false;
+    }
+
+    /**
+     * @param array $data
+     * @param \App\Models\Modules\AiForm\AiForm|null $aiFrom
+     *
+     * @return bool|string
+     */
+    static public function createOrUpdate(array $data = [], AiForm $aiFrom = null) : bool|string
+    {
+        if (is_null($aiFrom)) {
+            $aiFrom = new self();
+        }
+
+        if (
+            isset($data['use_default'])
+            && $data['use_default'] == 1
+        ) {
+            self::setDefault($aiFrom);
+        }
+
+        if (isset($data['name'])) {
+            $aiFrom->name = $data['name'];
+        }
+
+        if (isset($data['name']) && is_null($data['name'])) {
+            $aiFrom->name = 'New Form';
+        }
+
+        if (isset($data['form_config'])) {
+            $aiFrom->form_config = $data['form_config'];
+        }
+
+        if (array_key_exists('content_on_page', $data)) {
+            $aiFrom->content_on_page = $data['content_on_page'];
+        }
+
+        if (array_key_exists('seo_title', $data)) {
+            $aiFrom->seo_title = $data['seo_title'];
+        }
+
+        if (array_key_exists('seo_description', $data)) {
+            $aiFrom->seo_description = $data['seo_description'];
+        }
+
+        if (array_key_exists('image', $data)) {
+            $aiFrom->image = $data['image'];
+        }
+
+        if (array_key_exists('price_per_symbol', $data)) {
+            $aiFrom->price_per_symbol = $data['price_per_symbol'];
+        }
+
+        if (array_key_exists('price_per_execute', $data)) {
+            $aiFrom->price_per_execute = $data['price_per_execute'];
+        }
+
+        if (array_key_exists('description_on_page', $data)) {
+            $aiFrom->description_on_page = $data['description_on_page'];
+        }
+
+        if (array_key_exists('title_h1', $data)) {
+            $aiFrom->title_h1 = $data['title_h1'];
+        }
+
+        if (array_key_exists('title_h2', $data)) {
+            $aiFrom->title_h2 = $data['title_h2'];
+        }
+
+        if (array_key_exists('posts_ids', $data)) {
+            $aiFrom->posts_ids = $data['posts_ids'];
+        }
+
+        if (array_key_exists('category_ids', $data)) {
+            $aiFrom->category_ids = json_encode($data['category_ids']);
+        }
+
+        if (array_key_exists('view_posts', $data)) {
+            $aiFrom->view_posts = (bool) $data['view_posts'];
+        }
+
+        if (array_key_exists('allow_comments', $data)) {
+            $aiFrom->allow_comments = $data['allow_comments'];
+        }
+
+        if (array_key_exists('allow_indexing_results', $data)) {
+            $aiFrom->allow_indexing_results = $data['allow_indexing_results'];
+        }
+
+        $aiFrom->user_id = Auth::id();
+
+        if (empty($aiFrom->name)) {
+            $aiFrom->name = 'New form';
+        }
+
+        $aiFrom->slug = self::fillSlugFromData($data, $aiFrom);
+
+        try {
+            return $aiFrom->save();
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    /**
+     * @param $aiForm
+     */
+    static public function setDefault(&$aiForm)
+    {
+        self::where('use_default', true)->update(['use_default' => false]);
+
+        $aiForm->use_default = true;
+    }
+
+    /**
+     * @param array $data
+     * @param \App\Models\Modules\AiForm\AiForm $aiFrom
+     *
+     * @return string
+     */
+    static public function fillSlugFromData(array $data, AiForm $aiFrom) : string
+    {
+        if (array_key_exists('slug', $data)) {
+            if (!empty($data['slug'])) {
+                return $data['slug'];
+            }
+
+            if (empty($data['slug']) && !empty($aiFrom->name)) {
+                return Str::slug($aiFrom->name);
+            }
+        }
+
+        if (
+            (empty($aiFrom->slug) || $aiFrom->slug == '')
+            && !empty($aiFrom->name)
+        ) {
+            return Str::slug($aiFrom->name);
+        }
+
+        return $aiFrom->slug;
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|object|null
+     */
+    static public function loadDefaultForm()
+    {
+        $aiFrom = self::query()->where(['use_default' => true])->first();
+
+        if (empty($aiFrom)) {
+            $aiFrom = self::query()->first();
+        }
+
+        return $aiFrom;
     }
 }

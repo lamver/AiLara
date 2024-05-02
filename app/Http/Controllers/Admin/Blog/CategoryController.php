@@ -20,7 +20,7 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        $categories = Category::where('parent_id', '=', null)->get();
+        $categories = Category::where('parent_id', '=', null)->orWhere('parent_id', '=', 0)->get();
         $allCategories = Category::pluck('title','id')->all();
 
         return view('admin.modules.blog.category.index', compact('categories','allCategories'));
