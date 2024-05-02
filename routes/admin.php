@@ -40,19 +40,6 @@ Route::middleware(['auth', 'verified', 'rbac:admin'])->prefix(Translation::check
         Route::get('/page-edit/{id}', [SeoPages::class, 'seoPageEdit'])->name('admin.ais.page.edit');
         Route::post('/page-save/{id}', [SeoPages::class, 'seoPageSave'])->name('admin.ais.page.save');
 
-
-        Route::get('/ais/ai-forms', [AiSearchController::class, 'aiForms'])
-            ->name('admin.ais.aiForms');
-        Route::get('/ais/ai-forms/new-form', [AiSearchController::class, 'newForm'])
-            ->name('admin.ais.aiForms.newForm');
-        Route::post('/ais/ai-forms/new-form-create', [AiSearchController::class, 'newFormCreate'])
-            ->name('admin.ais.aiForms.newFormCreate');
-        Route::any('/ais/ai-forms/form-edit/{formId}', [AiSearchController::class, 'formEdit'])
-            ->name('admin.ais.aiForms.formEdit')
-            ->where('formId', '[0-9]+');
-        Route::get('/ais/ai-forms/form-delete/{formId}', [AiSearchController::class, 'formDelete'])
-            ->name('admin.ais.aiForms.formDelete')
-            ->where('formId', '[0-9]+');
         Route::get('/update', [\App\Http\Controllers\Admin\UpdateController::class, 'index'])->name('admin.update');
         Route::get('/logs', [\App\Http\Controllers\Admin\LogsController::class, 'index'])->name('admin.logs');
         Route::get('/setLang/{locale}', function (string $locale) {

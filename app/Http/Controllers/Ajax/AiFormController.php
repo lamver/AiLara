@@ -4,17 +4,17 @@
 namespace App\Http\Controllers\Ajax;
 
 use App\Http\Requests\TaskExecuteRequest;
-use App\Models\AiForm;
+use App\Models\Modules\AiForm\AiForm;
 use App\Models\Tasks;
 use App\Services\AiSearchApi;
-use Illuminate\Foundation\Application;
 use Illuminate\Contracts\Foundation\Application as ContractApplication;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View as ContractView;
-use \Illuminate\View\View;
+use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\View\View;
 use JetBrains\PhpStorm\ArrayShape;
 
 /**

@@ -22,22 +22,8 @@ class ModuleController extends Controller
             return abort(404);
         }
 
-        //dd($moduleConf);
-
         $controller = new $moduleConf['controller']();
+
         return $controller->{$moduleConf['action']}($request);
-
-
-
-        $modulesConfig = Config::get('modules');
-
-        foreach ($modulesConfig as $config) {
-            if (\Illuminate\Support\Facades\Request::path() == $config['route_prefix']) {
-                $controller = new $config['controller']();
-                return $controller->{$config['action']}($request);
-            }
-        }
-
-        return abort(404);
     }
 }

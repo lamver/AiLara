@@ -12,7 +12,6 @@
         @stack('top-scripts')
         @yield('stylesheet')
         @stack('styles')
-
         <!-- Bootstrap core CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
@@ -222,7 +221,7 @@
                                         </a>
                                         <ul>
                                             <li>
-                                                <a class="nav-link" href="{{ route('admin.ais.aiForms') }}">
+                                                <a class="nav-link" href="{{ route('admin.module.ai-form.index') }}">
                                                     <span data-feather="bar-chart-2"></span>
                                                     {{ __('admin.Forms') }}
                                                 </a>
@@ -263,14 +262,14 @@
                                     <span data-feather="bar-chart-2"></span>
                                     {{ __('admin.telegram_bots') }}
                                 </a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" href="{{ route('admin.ais.pages') }}">
                                     <span data-feather="bar-chart-2"></span>
                                     {{ __('admin.pages') }}
                                 </a>
-                                <a class="nav-link" href="{{ route('admin.update') }}">
-                                    <span data-feather="bar-chart-2"></span>
-                                    {{ __('admin.update_app') }}
-                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" href="{{ route('admin.logs') }}">
                                     <span data-feather="bar-chart-2"></span>
                                     {{ __('admin.Logs') }}
@@ -289,6 +288,12 @@
                                     {{__('Users')}}
                                 </a>
                              </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('admin.update') }}">
+                                    <span data-feather="bar-chart-2"></span>
+                                    {{ __('admin.update_app') }}
+                                </a>
+                            </li>
                             @if(isset($languages))
                             <li class="nav-item">
                                 <div class="d-flex flex-row bd-highlight">

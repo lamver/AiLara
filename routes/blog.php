@@ -4,6 +4,9 @@ use App\Models\Modules\Blog\Category;
 use App\Services\Translation\Translation;
 use App\Settings\SettingGeneral;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\Blog\PostsController;
+use App\Http\Controllers\Admin\Blog\CategoryController;
+use App\Http\Controllers\Admin\Blog\ImportController;
 
 /*
 |--------------------------------------------------------------------------
