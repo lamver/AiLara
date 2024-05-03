@@ -23,7 +23,7 @@ class Comment extends Model
      */
     public function hasChildren(): bool
     {
-        $this->count() > 0;
+        return $this->count() > 0;
     }
 
     /**
