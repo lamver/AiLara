@@ -35,14 +35,14 @@
 
         const mainFormTemplate = document.getElementById("ai-form-" + formId);
 
-        fetch(`/api/form/template?id=`+formId+`&state=${Math.floor(Math.random() * 10000)}.${Date.now()}`)
+        fetch(`/api/v1/form/template?id=`+formId+`&state=${Math.floor(Math.random() * 10000)}.${Date.now()}`)
             .then(response => response.text())
             .then(html => {
                 mainFormTemplate.innerHTML = html;
                 const scriptMainFormClient = document.createElement("script");
                 scriptMainFormClient.type = "application/javascript";
                 scriptMainFormClient.async = true;
-                scriptMainFormClient.src = `/api/form/js?id=`+formId+`&state=${Math.floor(Math.random() * 10000)}.${Date.now()}`;
+                scriptMainFormClient.src = `/api/v1/form/js?id=`+formId+`&state=${Math.floor(Math.random() * 10000)}.${Date.now()}`;
 
                 document.body.appendChild(scriptMainFormClient);
 
