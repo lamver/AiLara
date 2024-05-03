@@ -2,9 +2,11 @@
 
 namespace App\Models\Modules\AiForm;
 
+use App\Services\Modules\Module;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 /**
@@ -23,6 +25,7 @@ class AiForm extends Model
         'id',
         'name',
         'form_config',
+        'slug',
     ];
 
     public static function getFormConfig($formId = null, $taskId = null): array
@@ -120,6 +123,17 @@ class AiForm extends Model
         $form['form_config'] = json_decode($form['form_config'], true);
 
         return $form;
+    }
+
+    /**
+     * @param $aiFromId
+     *
+     * @return mixed|string
+     */
+    static public function fillAiFormRoute($aiFromId)
+    {
+        $form = self::query()->select(['slug'])->where(['id' => $aiFromId])->first();
+        return 'aiform.view.form.'.$form->slug.'.result.task';
     }
 
     public static function getPromptMask($formId = null, $taskId = null)
@@ -289,5 +303,82 @@ class AiForm extends Model
         }
 
         return $aiFrom;
+    }
+
+    /**
+     * @param string|array $mask
+     * @param array $data
+     *
+     * @return array|string|string[]
+     */
+    static public function fillPromptMask(string|array $mask, array $data) : array|string
+    {
+        $keysArray = array_map(function ($key) {
+            return '{{' . $key . '}}';
+        }, array_keys($data));
+
+        $valuesArray = array_values($data);
+
+        return str_replace($keysArray, $valuesArray, $mask);
+    }
+
+    /**
+     * @param $formId
+     * @param $taskId
+     * @param $paramKey
+     *
+     * @return string
+     */
+    static public function fillParamName($formId, $taskId, $paramKey) : string
+    {
+        if (!$form = self::findFormById($formId)) {
+            return 'unknown';
+        }
+
+        $formConfig = self::formConfigToArray($form);
+
+        if (
+            !isset($formConfig['tasks'])
+            || !isset($formConfig['tasks'][$taskId])
+            || !isset($formConfig['tasks'][$taskId]['params'])
+            || !isset($formConfig['tasks'][$taskId]['params'][$paramKey])
+            || !isset($formConfig['tasks'][$taskId]['params'][$paramKey]['placeholder'])
+        ) {
+            return 'unknown';
+        }
+
+        return $formConfig['tasks'][$taskId]['params'][$paramKey]['placeholder'];
+    }
+
+    /**
+     * @param \App\Models\Modules\AiForm\AiForm $form
+     *
+     * @return mixed
+     */
+    static public function formConfigToArray(AiForm $form): array|bool
+    {
+        try {
+            $formConfig = json_decode($form->form_config, true);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return false;
+        }
+
+        if (!is_array($formConfig)) {
+            return false;
+        }
+
+        return $formConfig;
+    }
+
+    static public function findFormById($formId)
+    {
+        $form = self::query()->find($formId)->first();
+
+        if (empty($form)) {
+            return false;
+        }
+
+        return $form;
     }
 }

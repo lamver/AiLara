@@ -6,6 +6,7 @@ namespace App\Services;
 use App\Settings\SettingGeneral;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class AiSearchApi
@@ -57,10 +58,11 @@ class AiSearchApi
             CURLOPT_POSTFIELDS => $param,
         ];
 
-
         curl_setopt_array($curl, $curlParam);
 
-        $response = curl_exec($curl);
+        if (($response = curl_exec($curl)) === false) {
+            Log::error(curl_error($curl));
+        }
 
         curl_close($curl);
 
