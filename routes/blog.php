@@ -18,7 +18,7 @@ use App\Http\Controllers\Admin\Blog\ImportController;
 |
 */
 /** Admin routes */
-Route::middleware(['auth', 'verified'])->prefix(app(SettingGeneral::class)->admin_prefix . '/module/blog')->group(function () {
+Route::middleware(['auth', 'verified'])->prefix(SettingGeneral::value('admin_prefix') .'/module/blog')->group(function () {
     Route::resource('posts', PostsController::class, [
 /*        'except' => ['show', 'destroy'],*/
         'names' => [

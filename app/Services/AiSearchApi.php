@@ -15,8 +15,8 @@ use Illuminate\Support\Facades\Log;
  */
 class AiSearchApi
 {
-    private string $apiKey = '';
-    private string $apiHost = '';
+    private null|string $apiKey = '';
+    private null|string $apiHost = '';
 
     /**
      * AiSearchApi constructor.
@@ -26,8 +26,8 @@ class AiSearchApi
      */
     public function __construct(string $apiKey = null, string $apiHost = null)
     {
-        $this->apiKey  = $apiKey ?? app(SettingGeneral::class)->api_key_aisearch;
-        $this->apiHost = $apiHost ?? app(SettingGeneral::class)->api_host;
+        $this->apiKey = $apiKey ?? SettingGeneral::value('api_key_aisearch');
+        $this->apiHost = $apiHost ?? SettingGeneral::value('api_host');
 
         return $this;
     }

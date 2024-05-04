@@ -16,7 +16,7 @@ use App\Services\Modules\Module;
 */
 
 /** Admin routes */
-Route::middleware(['auth', 'verified'])->prefix(app(SettingGeneral::class)->admin_prefix . '/module/ai-forms')->group(function () {
+Route::middleware(['auth', 'verified'])->prefix(SettingGeneral::value('admin_prefix') . '/module/ai-forms')->group(function () {
     Route::resource('ai-form', \App\Http\Controllers\Admin\AiForms\AiFormController::class, [
         'names' => [
             'index' => 'admin.module.ai-form.index',

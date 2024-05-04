@@ -95,18 +95,32 @@ class Installer
 
         if (empty($destDir)) {
             $destDir = getcwd();
-            $destDir = str_replace('public' , '', $destDir);
+            $this->addStepLog('No source directory: ' . $destDir);
+
+            if (substr($destDir, -7) === '/public') {
+                $destDir = substr($destDir, 0, -7);
+            }
         }
 
-        if (!is_dir($sourceDir) || !is_dir($destDir)) {
-            $this->addStepLog('No source directory or destination directory');
+        if (!is_dir($sourceDir)) {
+            $this->addStepLog('No source directory: ' . $sourceDir);
+            return false;
+        }
+
+        if (!is_dir($destDir)) {
+            $this->addStepLog('No destination directory:' . $destDir);
             return false;
         }
 
         $files = glob($sourceDir . '/{,.}[!.,!..]*', GLOB_BRACE);
 
         foreach ($files as $file) {
+
             if (is_file($file)) {
+                if (str_contains('install.php', $file)) {
+                    continue;
+                }
+
                 $fileName = basename($file);
                 $destFile = $destDir . '/' . $fileName;
                 $this->addStepLog('copy: ' . $fileName . ' to: ' . $destFile);
@@ -137,7 +151,13 @@ class Installer
     public function vendorInstall(): bool
     {
         $rootDir = getcwd();
-        $rootDir = str_replace('public' , '', $rootDir);
+        $this->addStepLog($rootDir);
+        //$rootDir = str_replace('public' , '', $rootDir);
+
+        if (substr($rootDir, -7) === '/public') {
+            $this->addStepLog("substr($rootDir, -7) === '/public'");
+            $rootDir = substr($rootDir, 0, -7);
+        }
 
         $this->addStepLog($rootDir);
 
