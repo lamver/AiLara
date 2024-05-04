@@ -4,6 +4,7 @@ namespace App\Settings;
 
 use App\Services\Modules\Module;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Spatie\LaravelSettings\Settings;
 
 class SettingGeneral extends Settings
@@ -87,5 +88,24 @@ class SettingGeneral extends Settings
         $settings->seo_description = $dataSettings['seo_description'] ?? "";
 
         return $settings->save();
+    }
+
+    /**
+     * @param string|null $settingName
+     *
+     * @return mixed|null
+     */
+    static public function value(string $settingName = null)
+    {
+        if (is_null($settingName)) {
+            return null;
+        }
+
+        try {
+            return app(SettingGeneral::class)->{$settingName};
+        } catch (\Exception $e) {
+            Log::error('Settings: ' . $e->getMessage());
+        }
+        return null;
     }
 }
