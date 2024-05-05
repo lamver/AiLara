@@ -4,8 +4,8 @@
 namespace App\Services;
 
 use App\Settings\SettingGeneral;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class AiSearchApi
@@ -61,6 +61,10 @@ class AiSearchApi
         curl_setopt_array($curl, $curlParam);
 
         $response = curl_exec($curl);
+
+        if (curl_errno($curl)) {
+             Log::error(__METHOD__ .'----'.curl_error($curl));;
+        }
 
         curl_close($curl);
 

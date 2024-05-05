@@ -353,9 +353,9 @@
                             </select>
                         </div>
 
-                        <div class="mb-3">
+                        <div class="mb-3" id="basicCheck" style="display: none">
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" name="basic" id="basic">
+                                <input class="form-check-input" checked type="checkbox" name="basic" id="basic">
                                 <label class="form-check-label" for="basic">{{__('admin.basic')}}</label>
                             </div>
                         </div>
@@ -445,11 +445,12 @@
                 aiCreateTaskRoute: '{{route('admin.createAiTask')}}',
                 aiGetTaskRoute: '{{route('admin.getAiTask')}}',
                 modalEl: document.getElementById('aiModal'),
-                createAiEl: document.getElementById('createAi'),
                 createAiBtn: document.getElementById('createAi'),
                 insertBtn: document.getElementById('insertBtn'),
                 innerBox: document.getElementById('innerBox'),
+                selectTypeTask: document.getElementById('typeTask'),
                 aiResult: {},
+                basicCheckValue: false,
                 attemptCount: 0,
                 tries: 25,
 
@@ -468,6 +469,18 @@
 
                     this.createAiBtn.addEventListener('click', this.createAiFunc.bind(this));
                     this.insertBtn.addEventListener('click', this.insertFunc.bind(this));
+                    this.selectTypeTask.addEventListener('change', this.selectTypeTaskEvent.bind(this));
+
+                },
+                selectTypeTaskEvent: function (even) {
+                    let basicCheck = this.modalEl.querySelector('#basicCheck');
+                    basicCheck.style.display = "none";
+                    this.basicCheckValue = false;
+
+                    if((even.target.value*1) === 2) {
+                        basicCheck.style.display = "block";
+                        this.basicCheckValue = true;
+                    }
 
                 },
                 createAiFunc: async function () {
@@ -478,8 +491,14 @@
                     if (text.length < 3) return;
 
                     this.createAiBtnAction(true);
+                    let data = {text: text, type: type};
 
-                    let result = await this.fetchAi(this.aiCreateTaskRoute, {text: text, type: type})
+                    if(this.basicCheckValue) {
+                        data.basic = 1;
+                        data.size =  "1024x1024";
+                    }
+
+                    let result = await this.fetchAi(this.aiCreateTaskRoute, data)
 
                     if (result.result) {
                         const intervalId = setInterval(async () => {
@@ -580,6 +599,7 @@
                     this.modalEl.dataset.type = "";
                     this.modalEl.querySelector(".modal-body [name='aiForm']").value = "";
                     this.aiResult = {};
+                    this.createAiBtnAction(false);
                 }
 
             };
