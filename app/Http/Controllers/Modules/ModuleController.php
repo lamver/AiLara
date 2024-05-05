@@ -16,6 +16,12 @@ use Illuminate\Support\Facades\Config;
  */
 class ModuleController extends Controller
 {
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Settings\SettingGeneral $setting_general
+     *
+     * @return mixed|\never
+     */
     public function index(Request $request, SettingGeneral $setting_general)
     {
         if (!$moduleConf = Module::isFrontModule($setting_general->home_module)) {

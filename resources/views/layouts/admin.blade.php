@@ -209,9 +209,9 @@
                                 </a>
                                 <ul>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('admin.ais.commonData') }}">
+                                        <a class="nav-link" href="{{ route('admin.modules.main.config') }}">
                                             <span data-feather="bar-chart-2"></span>
-                                            {{ __('admin.configuration') }}
+                                            {{ __('admin.Configuration') }}
                                         </a>
                                     </li>
                                     <li class="nav-item">
