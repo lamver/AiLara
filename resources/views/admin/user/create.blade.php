@@ -58,6 +58,27 @@
 
         <div class="row mb-3">
             <div class="form-group">
+                <label for="avatar" class="form-label">{{ __('admin.Avatar') }}</label>
+                <input id="avatar" type="text" class="form-control @error('avatar') is-invalid @enderror" name="avatar">
+
+                @error('password')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+                @enderror
+
+            </div>
+        </div>
+
+        <div class="row mb-3 p-2">
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" name="sys_user" id="sysUser">
+                <label class="form-check-label" for="sysUser">{{ __('admin.Sys user') }}</label>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="form-group">
                 <label for="owner-select" class="form-label">{{ __('admin.User role') }}</label>
                 <select id="owner-select" class="form-select @error('owner') is-invalid @enderror" name="owner">
                     @foreach($owners as $owner)

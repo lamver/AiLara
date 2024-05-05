@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified', 'rbac:admin'])->prefix(Translation::checkRoutePrefix())->group(function () {
 
-    Route::prefix(app(SettingGeneral::class)->admin_prefix)->group(function () {
+    Route::prefix(SettingGeneral::value('admin_prefix'))->group(function () {
         Route::get('/', [MainController::class, 'index'])->name('admin.index');
         Route::get('/configuration', [MainController::class, 'configuration'])->name('admin.configuration');
         Route::post('/configuration', [MainController::class, 'configuration'])->name('admin.configuration.save');

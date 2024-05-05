@@ -58,8 +58,6 @@ class Tasks extends Model
             dd($promptMask);
         }
 
-
-
         return self::create($taskData);
     }
 

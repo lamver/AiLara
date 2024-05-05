@@ -13,6 +13,7 @@ use Illuminate\Contracts\View\View as ContractView;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\View\View;
 use JetBrains\PhpStorm\ArrayShape;
@@ -24,8 +25,6 @@ use JetBrains\PhpStorm\ArrayShape;
  */
 class AiFormController extends BaseController
 {
-    public string $maskaAi = "Расскажи что может означать этот сон: {{params}} для человека {{sex}} по имени {{name}} в возрасте {{age}}";
-
     /**
      * @return Factory|View|ContractApplication
      */
@@ -72,14 +71,14 @@ class AiFormController extends BaseController
             return $this->resultError('Too many messages sent from your ip address!');
         }
 
-        $task = Tasks::createTask($request->post());
+        $aiForm = AiForm::query()->find($request->post('form_id'))->first();
 
-        $promptMask = strtr($this->maskaAi, [
-            '{{params}}' => $request->prompt,
-            '{{sex}}' => $request->sex,
-            '{{name}}' => $request->name,
-            '{{age}}' => $request->age,
-        ]);
+        $formConfig = json_decode($aiForm->form_config, true);
+
+        $promptMask = $formConfig['tasks'][$request->post('task_id')]['prompt_mask'];
+
+        $promptMask = AiForm::fillPromptMask($promptMask, $request->post());
+        $task = Tasks::createTask($request->post());
 
         $resultApi = $aiSearchApi->taskCreate(['prompt' => $promptMask]);
 
@@ -87,12 +86,16 @@ class AiFormController extends BaseController
             return $this->resultError("Result returned false");
         }
 
-        $task->task_id = $resultApi['task_id'];
+        $task->task_id = $request->post('task_id');
+        $task->external_task_id = $resultApi['task_id'];
+        $task->user_id = Auth::id() ?? 0;
         $task->save();
+
+        $aiFormRoute = AiForm::fillAiFormRoute($request->post('form_id'));
 
         $result = [
             'task_id' => $resultApi['task_id'],
-            'task_url' => "/" . Tasks::createSlugFromUserParams($request->post()) . '/' . $task->id,
+            'task_url' => route($aiFormRoute, ['slug' => Tasks::createSlugFromUserParams($request->post()), 'id' => $task->id]),
         ];
 
         return $this->resultSuccessfull($result);
@@ -102,7 +105,7 @@ class AiFormController extends BaseController
      * @param array $data
      * @return array
      */
-    #[ArrayShape(['result' => "bool", 'message' => "array"])] private function resultSuccessfull(array $data)
+    #[ArrayShape(['result' => "bool", 'message' => "array"])] private function resultSuccessfull(string|array $data)
     {
         return [
             'result' => true,

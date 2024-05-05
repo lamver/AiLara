@@ -40,9 +40,22 @@ class TaskController extends Controller
         return view('modules.ai-form.index', ['aiForm' => $aiForm]);
     }
 
-    public function viewResultTask(Request $request, $slug, $id)
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param $slug
+     * @param $id
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application
+     */
+    public function view(Request $request, $slug, $id)
     {
-        dd('viewResultTask');
+        $task = Tasks::query()->where(['id' => $id])->first();
+
+        if (empty($task)) {
+            return abort(404);
+        }
+
+        return view('modules.ai-form.view-result', ['task' => $task, 'id' => $id]);
     }
 
     /**
