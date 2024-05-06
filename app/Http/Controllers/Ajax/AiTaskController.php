@@ -35,24 +35,26 @@ class AiTaskController extends BaseController
 
     /**
      * @param Request $request
+     * @param $id
      *
      * @return array|JsonResponse|null
      */
-    public function getTask(Request $request): array|JsonResponse|null
+    public function result(Request $request, $id): array|JsonResponse|null
     {
-        $task = Tasks::find((int)$request->task_id);
+        $task = Tasks::find((int)$id);
 
-        if ( ! $task) {
+        if (!$task) {
             return $this->responseError([], 'Task not found');
         }
 
-        $result = $this->aiSearch->getTaskByTaskId($task->task_id);
+        $result = $this->aiSearch->getTaskByTaskId($task->external_task_id);
 
         if ($result['result'] !== true) {
-            return $this->responseError([], 'Something went wrong.');
+            return $this->responseError([], __('Something went wrong.'));
         }
 
-        $task->status = $result['answer']['status'];
+        $task->status = Tasks::STATUS_DONE_SUCCESSFULLY;
+        $task->result = $result['answer']['answer'];
         $task->save();
 
         return $result;

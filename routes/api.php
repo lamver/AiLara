@@ -21,12 +21,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/form/config', [AiFormController::class, 'getFormConfig'])->name('ajax.ai-form.getFormConfig');
-Route::get('/form/template', [AiFormController::class, 'template'])->name('ajax.ai-form.template');
-Route::get('/form/js', [AiFormController::class, 'js'])->name('ajax.ai-form.js');
-Route::post('/task/execute', [AiFormController::class, 'execute'])->name('ajax.ai-form.execute');
-Route::get('/task/get_task', [AiTaskController::class, 'getTask'])->name('ajax.ai-form.getTask');
-
 Route::prefix('/v1')->group(function () {
+    Route::get('/form/config', [AiFormController::class, 'getFormConfig'])->name('ajax.ai-form.getFormConfig');
+    Route::get('/form/template', [AiFormController::class, 'template'])->name('ajax.ai-form.template');
+    Route::get('/form/js', [AiFormController::class, 'js'])->name('ajax.ai-form.js');
+    Route::post('/task/execute', [AiFormController::class, 'execute'])->name('ajax.ai-form.execute');
+    Route::get('/task/result/{id}', [AiTaskController::class, 'result'])->name('ajax.ai-form.getTask');
     Route::get('/module/blog/load', [PostController::class, 'load'])->name('api.module.blog.post.load');
 });

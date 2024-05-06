@@ -16,7 +16,7 @@ use App\Services\Modules\Module;
 */
 
 /** Admin routes */
-Route::middleware(['auth', 'verified'])->prefix(app(SettingGeneral::class)->admin_prefix . '/module/ai-forms')->group(function () {
+Route::middleware(['auth', 'verified'])->prefix(SettingGeneral::value('admin_prefix') . '/module/ai-forms')->group(function () {
     Route::resource('ai-form', \App\Http\Controllers\Admin\AiForms\AiFormController::class, [
         'names' => [
             'index' => 'admin.module.ai-form.index',
@@ -30,12 +30,15 @@ Route::middleware(['auth', 'verified'])->prefix(app(SettingGeneral::class)->admi
     ]);
 });
 
-/** web routes */
-Route::prefix(Module::getWebRoutePrefix(Module::MODULE_AI_FORM))->group(function () {
-    $allForms = \App\Models\Modules\AiForm\AiForm::query()->get();
+if (Module::isFrontModule(Module::MODULE_AI_FORM)) {
+    Route::prefix(Module::getWebRoutePrefix(Module::MODULE_AI_FORM))->group(function () {
+        $allForms = \App\Models\Modules\AiForm\AiForm::query()->get();
 
-    foreach ($allForms as $form) {
-        Route::get('/'.$form->slug, [\App\Http\Controllers\Modules\Task\TaskController::class, 'viewAiFormPage'])->name('aiform.view.form' . '.' . str_replace("/", ".", $form->slug));
-        Route::get('/'.$form->slug . '/{slug}_{id}', [\App\Http\Controllers\Modules\Task\TaskController::class, 'view'])->name('aiform.view.form' . '.' . str_replace("/", ".", trim($form->slug,'/')) . '.result.task');
-    }
-});
+        foreach ($allForms as $form) {
+            Route::get('/'.$form->slug, [\App\Http\Controllers\Modules\Task\TaskController::class, 'viewAiFormPage'])->name('aiform.view.form' . '.' . str_replace("/", ".", $form->slug));
+            Route::get('/'.$form->slug . '/{slug}_{id}', [\App\Http\Controllers\Modules\Task\TaskController::class, 'view'])->name('aiform.view.form' . '.' . str_replace("/", ".", trim($form->slug,'/')) . '.result.task');
+        }
+    });
+}
+/** web routes */
+

@@ -24,7 +24,7 @@ class TaskExecuteRequest extends FormRequest
             isset($_POST['form_id'])
             && isset($_POST['task_id'])
         ) {
-            $aiForm = AiForm::getFormConfig($_POST['form_id']);
+            $aiForm = \App\Models\Modules\AiForm\AiForm::getFormConfig($_POST['form_id']);
             if (!isset($aiForm['tasks'][$_POST['task_id']])) {
                 $this->failedValidationAnswerJson(['task_id' => $_POST['task_id'] . 'task_id not found']);
             }

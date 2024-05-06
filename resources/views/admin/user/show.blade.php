@@ -20,6 +20,10 @@
                     </svg>
                 @endif
             </li>
+            <li class="list-group-item">
+                <b>{{__('admin.Sys user')}}:</b>
+                @if($user->sys_user) {{__('admin.Yes')}} @else {{__('admin.No')}} @endif
+            </li>
             <li class="list-group-item"><b>{{__('created_at')}}:</b> {{$user->created_at}}</li>
         </ul>
     </div>

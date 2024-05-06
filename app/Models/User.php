@@ -23,6 +23,8 @@ class User extends Authenticatable
         'name',
         'email',
         'status',
+        'avatar',
+        'sys_user',
         'password',
     ];
 
