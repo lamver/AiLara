@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Comment extends Model
 {
+    const STATUS_ACTIVE = 1;
+    const STATUS_DEACTIVE = 0;
    // use NodeTrait;
 
     protected $guarded = ['id', 'created_at', 'updated_at'];

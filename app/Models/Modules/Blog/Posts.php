@@ -4,6 +4,7 @@ namespace App\Models\Modules\Blog;
 
 use App\Helpers\StrMaster;
 use App\Models\User;
+use App\Traits\Commentable;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,6 +17,7 @@ use Spatie\Feed\FeedItem;
 class Posts extends Model implements Feedable
 {
     use HasFactory;
+    use Commentable;
 
     const STATUS = [
         'Published',
