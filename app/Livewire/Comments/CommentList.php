@@ -4,9 +4,7 @@ namespace App\Livewire\Comments;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
-use Livewire\Attributes\On;
 use Livewire\Component;
-use App\Models\Modules\Blog\Posts;
 use App\Models\Comment;
 
 class CommentList extends Component
@@ -22,7 +20,7 @@ class CommentList extends Component
         'commentUpdate' => 'commentUpdate',
         'deleteComment' => 'deleteComment',
         'replyComment' => 'replyComment',
-        'newComment' => 'newComment',
+        'listRender' => 'listRender',
     ];
 
     /**
@@ -46,7 +44,7 @@ class CommentList extends Component
     /**
      * @return void
      */
-    public function newComment(): void
+    public function listRender(): void
     {
         $this->render();
     }

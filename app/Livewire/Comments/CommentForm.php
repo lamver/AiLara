@@ -53,7 +53,7 @@ class CommentForm extends Component
 
         if (Auth::check()) {
             $this->post->comment($activeComment, Auth::user());
-            $this->dispatch('newComment');
+            $this->dispatch('listRender');
         }
 
         $this->reset('content');

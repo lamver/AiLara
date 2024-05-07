@@ -62,6 +62,7 @@ class CommentItem extends Component
     {
         $this->reset('editCommentId');
         $this->reset('editCommentValue');
+        $this->dispatch('listRender');
     }
 
     /**
