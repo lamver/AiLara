@@ -10,7 +10,7 @@
                     @if(count($category->childs))
                         <li class="nav-item dropdown">
                             @php
-                                $categoryUri = '/' . \App\Models\Modules\Blog\Category::getCategoryUrlById($category->id);
+                                $categoryUri =  \App\Models\Modules\Blog\Category::getCategoryUrlById($category->id);
                             @endphp
                             @if($categoryUri == request()->getRequestUri())
                             <a class="nav-link dropdown-toggle" title="{{ $category->seo_description }}" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -28,15 +28,14 @@
                     @else
                         <li>
                             @php
-                                $categoryUri = '/' . \App\Models\Modules\Blog\Category::getCategoryUrlById($category->id);
+                                $categoryUri = \App\Models\Modules\Blog\Category::getCategoryUrlById($category->id);
                             @endphp
-
                             @if($categoryUri == request()->getRequestUri())
                             <a title="{{ $category->seo_description }}" href="#" class="nav-link px-2 link-secondary disabled">
                                 <b>{{ $category->title }}</b>
                             </a>
                             @else
-                                <a title="{{ $category->seo_description }}" href="/{{ \App\Models\Modules\Blog\Category::getCategoryUrlById($category->id) }}" class="nav-link px-2 link-secondary">{{ $category->title }}</a>
+                                <a title="{{ $category->seo_description }}" href="{{ \App\Models\Modules\Blog\Category::getCategoryUrlById($category->id) }}" class="nav-link px-2 link-secondary">{{ $category->title }}</a>
                             @endif
                         </li>
                     @endif

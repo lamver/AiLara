@@ -8,59 +8,86 @@
     <h1>{{ $existingPage->uri }}</h1>
     <form method="post" class="form-control" action="{{ route('admin.ais.page.save', ['id' => $existingPage->id]) }}">
         @csrf
-        <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">meta_title</label>
-            <input type="text" name="meta_title" value="{{ $existingPage->meta_title }}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-            <div id="emailHelp" class="form-text"></div>
+        <label for="exampleInputEmail1" class="form-label">meta_title</label>
+        <div class="input-group">
+            <input type="text" name="meta_title" value="{{ $existingPage->meta_title }}" class="form-control" id="metaTitle" aria-describedby="emailHelp">
+            <span data-type-id="metaTitle" class="input-group-text" data-bs-toggle="modal"
+                  data-bs-target="#aiModal"> &nbsp;<i class="fa fa-child"></i>&nbsp; ai
+            </span>
         </div>
+        <div id="emailHelp" class="form-text mb-3"></div>
 
-        <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">meta_description</label>
-            <textarea class="form-control" name="meta_description">{{ $existingPage->meta_description }}</textarea>
-            <div id="emailHelp" class="form-text"></div>
+        <label for="exampleInputEmail1" class="form-label">meta_description</label>
+        <div class="input-group ">
+            <textarea class="form-control" name="meta_description" id="metaDescription">{{ $existingPage->meta_description }}</textarea>
+            <span data-type-id="metaDescription" class="input-group-text" data-bs-toggle="modal"
+                  data-bs-target="#aiModal"> &nbsp;<i class="fa fa-child"></i>&nbsp; ai
+            </span>
         </div>
+        <div id="emailHelp" class="form-text mb-3"></div>
 
-        <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">meta_keywords</label>
-            <input type="text" name="meta_keywords" value="{{ $existingPage->meta_keywords }}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-            <div id="emailHelp" class="form-text"></div>
+        <label for="exampleInputEmail1" class="form-label">meta_keywords</label>
+        <div class="input-group">
+            <input type="text" name="meta_keywords" value="{{ $existingPage->meta_keywords }}" class="form-control" id="metaKeywords" aria-describedby="emailHelp">
+            <span data-type-id="metaKeywords" class="input-group-text" data-bs-toggle="modal"
+                  data-bs-target="#aiModal"> &nbsp;<i class="fa fa-child"></i>&nbsp; ai
+            </span>
         </div>
+        <div id="emailHelp" class="form-text mb-3"></div>
 
-        <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">meta_image_path</label>
-            <input type="text" name="meta_image_path" value="{{ $existingPage->meta_image_path }}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-            <div id="emailHelp" class="form-text"></div>
+        <label for="exampleInputEmail1" class="form-label">meta_image_path</label>
+        <div class="input-group">
+            <input type="text" name="meta_image_path" value="{{ $existingPage->meta_image_path }}" class="form-control" id="metaImagePath" aria-describedby="emailHelp">
+            <span data-type-id="metaImagePath" class="input-group-text" data-bs-toggle="modal"
+                  data-bs-target="#aiModal"> &nbsp;<i class="fa fa-child"></i>&nbsp; ai
+            </span>
         </div>
+        <div id="emailHelp" class="form-text mb-3"></div>
 
-        <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">preview_title</label>
-            <input type="text" name="preview_title" value="{{ $existingPage->preview_title }}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-            <div id="emailHelp" class="form-text"></div>
+        <label for="exampleInputEmail1" class="form-label">preview_title</label>
+        <div class="input-group">
+            <input type="text" name="preview_title" value="{{ $existingPage->preview_title }}" class="form-control" id="previewTitle" aria-describedby="emailHelp">
+            <span data-type-id="previewTitle" class="input-group-text" data-bs-toggle="modal"
+                  data-bs-target="#aiModal"> &nbsp;<i class="fa fa-child"></i>&nbsp; ai
+            </span>
         </div>
+        <div id="emailHelp" class="form-text mb-3"></div>
 
-        <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">preview_description</label>
-            <textarea class="form-control" name="preview_description">{{ $existingPage->preview_description }}</textarea>
-            <div id="emailHelp" class="form-text"></div>
+        <label for="exampleInputEmail1" class="form-label">preview_description</label>
+        <div class="input-group">
+            <textarea class="form-control" name="preview_description" id="previewDescription">{{ $existingPage->preview_description }}</textarea>
+            <span data-type-id="previewDescription" class="input-group-text" data-bs-toggle="modal"
+                  data-bs-target="#aiModal"> &nbsp;<i class="fa fa-child"></i>&nbsp; ai
+            </span>
         </div>
+        <div id="emailHelp" class="form-text mb-3"></div>
 
-        <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">preview_image_path</label>
-            <input type="text" name="preview_image_path" value="{{ $existingPage->preview_image_path }}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-            <div id="emailHelp" class="form-text"></div>
+        <label for="exampleInputEmail1" class="form-label">preview_image_path</label>
+        <div class="input-group">
+            <input type="text" name="preview_image_path" value="{{ $existingPage->preview_image_path }}" class="form-control" id="previewImagePath" aria-describedby="emailHelp">
+            <span data-type-id="previewImagePath" class="input-group-text" data-bs-toggle="modal"
+                  data-bs-target="#aiModal"> &nbsp;<i class="fa fa-child"></i>&nbsp; ai
+            </span>
         </div>
+        <div id="emailHelp" class="form-text mb-3"></div>
 
-        <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">preview_icon_svg_code</label>
-            <input type="text" name="preview_icon_svg_code" value="{{ $existingPage->preview_icon_svg_code }}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-            <div id="emailHelp" class="form-text"></div>
+        <label for="exampleInputEmail1" class="form-label">preview_icon_svg_code</label>
+        <div class="input-group">
+            <input type="text" name="preview_icon_svg_code" value="{{ $existingPage->preview_icon_svg_code }}" class="form-control" id="previewIconSvgCode" aria-describedby="emailHelp">
+            <span data-type-id="previewIconSvgCode" class="input-group-text" data-bs-toggle="modal"
+                  data-bs-target="#aiModal"> &nbsp;<i class="fa fa-child"></i>&nbsp; ai
+            </span>
         </div>
+        <div id="emailHelp" class="form-text mb-3"></div>
 
-        <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">seo_title</label>
-            <input type="text" name="seo_title" value="{{ $existingPage->seo_title }}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-            <div id="emailHelp" class="form-text"></div>
+        <label for="exampleInputEmail1" class="form-label">seo_title</label>
+        <div class="input-group">
+            <input type="text" name="seo_title" value="{{ $existingPage->seo_title }}" class="form-control" id="seoTitle" aria-describedby="emailHelp">
+            <span data-type-id="seoTitle" class="input-group-text" data-bs-toggle="modal"
+                  data-bs-target="#aiModal"> &nbsp;<i class="fa fa-child"></i>&nbsp; ai
+            </span>
         </div>
+        <div id="emailHelp" class="form-text mb-3"></div>
 
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">seo_description</label>

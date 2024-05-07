@@ -70,11 +70,33 @@
             </div>
         </div>
 
-        <div class="mb-5 form-group">
+        <div class="mb-3 form-group">
             <div class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" name="status"
                        @if($user->status) checked @endif id="userStatus">
                 <label class="form-check-label" for="userStatus">{{__('user_status')}}</label>
+            </div>
+        </div>
+
+        <div class="mb-3 form-group">
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" name="sys_user"
+                       @if($user->sys_user) checked @endif id="sysUser">
+                <label class="form-check-label" for="sysUser">{{__('admin.Sys user')}}</label>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="form-group">
+                <label for="avatar" class="form-label">{{ __('admin.Avatar') }}</label>
+                <input id="avatar" type="text" value="{{ old('avatar', $user->avatar) }}" class="form-control @error('avatar') is-invalid @enderror" name="avatar">
+
+                @error('avatar')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+                @enderror
+
             </div>
         </div>
 

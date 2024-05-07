@@ -3,15 +3,10 @@
 namespace App\Settings;
 
 use App\Services\Modules\Module;
-use Illuminate\Http\Request;
-use Spatie\LaravelSettings\Settings;
+use Illuminate\Support\Facades\Log;
 
-class SettingGeneral extends Settings
+class SettingGeneral extends Data
 {
-    const TYPE_STRING = 'string';
-    const TYPE_TEXT = 'text';
-    const TYPE_INT = 'integer';
-    const TYPE_BOOLEAN = 'boolean';
 
     const TYPE_ARRAY = 'array';
 
@@ -101,7 +96,6 @@ class SettingGeneral extends Settings
         $settings->logo_title = $dataSettings['logo_title'] ?? "";
         $settings->logo_height_px = $dataSettings['logo_height_px'];
         $settings->logo_width_px = $dataSettings['logo_width_px'];
-        $settings->logo_width_px = $dataSettings['logo_width_px'];
         $settings->counter_external_code = $dataSettings['counter_external_code'] ?? "";
         $settings->api_key_aisearch = $dataSettings['api_key_aisearch'] ?? "";
         $settings->api_host = $dataSettings['api_host'] ?? "";
@@ -122,5 +116,24 @@ class SettingGeneral extends Settings
         }
 
         return $settings->save();
+    }
+
+    /**
+     * @param string|null $settingName
+     *
+     * @return mixed|null
+     */
+    static public function value(string $settingName = null)
+    {
+        if (is_null($settingName)) {
+            return null;
+        }
+
+        try {
+            return app(SettingGeneral::class)->{$settingName};
+        } catch (\Exception $e) {
+            Log::error('Settings: ' . $e->getMessage());
+        }
+        return null;
     }
 }

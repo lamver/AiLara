@@ -21,7 +21,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Config::set('accessUi.path', app(SettingGeneral::class)->admin_prefix . '/access-ui');
-        Config::set('translation-manager.route.prefix', app(SettingGeneral::class)->admin_prefix . '/translations');
+        Config::set('accessUi.path', SettingGeneral::value('admin_prefix') . '/access-ui');
+        Config::set('translation-manager.route.prefix', SettingGeneral::value('admin_prefix') . '/translations');
     }
 }

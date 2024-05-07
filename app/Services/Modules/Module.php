@@ -4,6 +4,8 @@
 namespace App\Services\Modules;
 
 
+use App\Models\ModulesCommonConfig;
+
 class Module
 {
     const MODULE_BLOG = 'MODULE_BLOG';
@@ -69,6 +71,19 @@ class Module
      */
     static public function isFrontModule(string $moduleConst) : bool|array
     {
+        $modulesConfig = ModulesCommonConfig::loadModulesMainConfig();
+
+        if ($modulesConfig) {
+            foreach ($modulesConfig as $config) {
+                if (
+                    $config->const_module_name == $moduleConst
+                    && !$config->use_on_front
+                ) {
+                    return false;
+                }
+            }
+        }
+
         if (isset(self::MODULE_CONFIG[$moduleConst]) && self::MODULE_CONFIG[$moduleConst]['use_on_front']) {
             return self::MODULE_CONFIG[$moduleConst];
         }
@@ -83,8 +98,21 @@ class Module
      */
     static public function getWebRoutePrefix($moduleConst = self::MODULE_AI_FORM)
     {
+        $modulesConfig = ModulesCommonConfig::loadModulesMainConfig();
+
+        if ($modulesConfig) {
+            foreach ($modulesConfig as $config) {
+                if ($config->const_module_name == $moduleConst) {
+                    if (empty($config->prefix_uri)) {
+                        return '';
+                    }
+                    return '/' . $config->prefix_uri;
+                }
+            }
+        }
+
         if (isset(self::MODULE_CONFIG[$moduleConst])) {
-            return self::MODULE_CONFIG[$moduleConst]['route_prefix'];
+            return '/' . self::MODULE_CONFIG[$moduleConst]['route_prefix'];
         }
 
         return '/unknown';

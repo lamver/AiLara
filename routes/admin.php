@@ -2,20 +2,14 @@
 
 use App\Http\Controllers\Admin\AiQueryController;
 use App\Http\Controllers\Admin\Integration\AdminTelegramBotController;
+use App\Http\Controllers\Admin\MainController;
 use App\Http\Controllers\Admin\BackupController;
 use App\Http\Controllers\Admin\UserController;
-
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Config;
-
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\MainController;
-use App\Http\Controllers\Admin\Integration\AiSearchController;
 use App\Http\Controllers\AiSearch\ControlPanel\SeoPages;
-
 use App\Services\Translation\Translation;
 use App\Settings\SettingGeneral;
-
+use App\Http\Controllers\Admin\ModuleMainController;
 
 
 /*
@@ -31,14 +25,15 @@ use App\Settings\SettingGeneral;
 
 Route::middleware(['auth', 'verified', 'rbac:admin'])->prefix(Translation::checkRoutePrefix())->group(function () {
 
-    Route::prefix(app(SettingGeneral::class)->admin_prefix)->group(function () {
+    Route::prefix(SettingGeneral::value('admin_prefix'))->group(function () {
         Route::get('/', [MainController::class, 'index'])->name('admin.index');
         Route::get('/configuration', [MainController::class, 'configuration'])->name('admin.configuration');
         Route::post('/configuration', [MainController::class, 'configuration'])->name('admin.configuration.save');
         Route::get('/configuration/robots_txt', [MainController::class, 'robotsTxt'])->name('admin.configuration.robots_txt');
         Route::post('/configuration/robots_txt', [MainController::class, 'robotsTxt'])->name('admin.configuration.robots_txt.save');
 
-        Route::get('/ais/common-data', [AiSearchController::class, 'commonData'])->name('admin.ais.commonData');
+        Route::get('/modules/common-configuration', [ModuleMainController::class, 'commonConfiguration'])->name('admin.modules.main.config');
+        Route::post('/modules/common-configuration', [ModuleMainController::class, 'commonConfigurationSave'])->name('admin.modules.main.config.save');
 
         Route::get('/routes', [SeoPages::class, 'routeList'])->name('admin.ais.pages');
         Route::get('/page-edit/{id}', [SeoPages::class, 'seoPageEdit'])->name('admin.ais.page.edit');
