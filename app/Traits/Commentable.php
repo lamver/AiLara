@@ -63,7 +63,7 @@ trait Commentable
      *
      * @return static
      */
-    public function comment($data, Model $creator, Model $parent = null)
+    public function comment(array $data, Model $creator, Model $parent = null)
     {
         $commentableModel = $this->commentableModel();
 
@@ -83,7 +83,7 @@ trait Commentable
      *
      * @return mixed
      */
-    public function updateComment($id, $data, Model $parent = null)
+    public function updateComment(int $id, array $data, Model $parent = null)
     {
         $commentableModel = $this->commentableModel();
 
@@ -101,7 +101,7 @@ trait Commentable
      *
      * @return mixed
      */
-    public function deleteComment($id): bool
+    public function deleteComment(int $id): bool
     {
         $commentableModel = $this->commentableModel();
 
