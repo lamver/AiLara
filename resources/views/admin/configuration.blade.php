@@ -1,5 +1,13 @@
 @extends('layouts.admin')
 @section('content')
+    @php
+        $addAiTo = [
+            'favicon',
+            'logo_path',
+            'seo_description',
+            'site_name',
+        ];
+    @endphp
     <form method="post" class="row g-3">
         @csrf
         @foreach($config as $configName => $data)
@@ -22,10 +30,18 @@
                     </div>
             @endif
             @if ($theType === App\Settings\SettingGeneral::TYPE_STRING)
-                <div class="mb-12">
-                    <label class="form-label" style="font-size: 18px">  {{ __($configName) }}</label>
-                    <input class="form-control" name="{{ $configName }}" value="{{ $data }}"/>
-                </div>
+                    <label for="input_{{$configName}}" class="form-label mb-12" style="font-size: 18px">  {{ __($configName) }}</label>
+                    <div class="input-group mt-0">
+                            <input class="form-control" id="input_{{$configName}}" name="{{ $configName }}" value="{{ $data }}"/>
+                        @if(in_array($configName,$addAiTo))
+                            <span data-type-id="input_{{ $configName }}"
+                                  class="input-group-text"
+                                  data-bs-toggle="modal"
+                                  data-bs-target="#aiModal">
+                                &nbsp;<i class="fa fa-child"></i>&nbsp; ai
+                            </span>
+                        @endif
+                    </div>
             @endif
             @if ($theType === App\Settings\SettingGeneral::TYPE_TEXT)
                 <div class="mb-12">
