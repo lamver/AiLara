@@ -50,6 +50,8 @@ class UserController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'avatar' => $request->avatar,
+            'sys_user' => (bool) $request->sys_user,
             'password' => Hash::make($request->password),
         ]);
 
@@ -89,6 +91,8 @@ class UserController extends Controller
         $user->fill([
             'email' => $request->email,
             'name' => $request->name,
+            'avatar' => $request->avatar ?? "",
+            'sys_user' => (bool) $request->sys_user,
             'status' =>  (empty($request->status) ? User::STATUS_OFF : User::STATUS_ON),
         ]);
 

@@ -3,8 +3,10 @@
 
 namespace App\Services;
 
+use App\Settings\SettingGeneral;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class AiSearchApi
@@ -13,29 +15,29 @@ use Illuminate\Support\Facades\Http;
  */
 class AiSearchApi
 {
-    private string $apiKey = '';
-    private string $apiHost = '';
+    private null|string $apiKey = '';
+    private null|string $apiHost = '';
 
     /**
      * AiSearchApi constructor.
      *
-     * @param string $apiKey
-     * @param string $apiHost
+     * @param string|null $apiKey
+     * @param string|null $apiHost
      */
     public function __construct(string $apiKey = null, string $apiHost = null)
     {
-        $this->apiKey  = $apiKey ?? Config::get('ailara.api_key_aisearch');
-        $this->apiHost = $apiHost ?? Config::get('ailara.api_host');
+        $this->apiKey = $apiKey ?? SettingGeneral::value('api_key_aisearch');
+        $this->apiHost = $apiHost ?? SettingGeneral::value('api_host');
 
-/*        dd($this);*/
         return $this;
     }
 
     /**
-     * @param string $prompt
+     * @param array $param
+     *
      * @return mixed
      */
-    public function taskCreate($param = [])
+    public function taskCreate(array $param = [])
     {
         $curl = curl_init();
 
@@ -56,10 +58,11 @@ class AiSearchApi
             CURLOPT_POSTFIELDS => $param,
         ];
 
-
         curl_setopt_array($curl, $curlParam);
 
-        $response = curl_exec($curl);
+        if (($response = curl_exec($curl)) === false) {
+            Log::error(curl_error($curl));
+        }
 
         curl_close($curl);
 
@@ -100,7 +103,10 @@ class AiSearchApi
         return json_decode($response, true);
     }
 
-    public function getAllTypesTask()
+    /**
+     * @return mixed
+     */
+    public function getAllTypesTask() : mixed
     {
         $curl = curl_init();
 

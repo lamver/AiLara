@@ -41,6 +41,14 @@ class UpdateController extends BaseController
             $result = false;
         }
 
+        if ($result) {
+            $composerProcess = Update::composerUpdate();
+
+            foreach ($composerProcess as $process) {
+                $updateLog[] = 'File ' . $process . ' was updated';
+            }
+        }
+
         $fileCandidateToUpdate = Update::getFileToCandidateUpdate();
 
         if ($result && count($fileCandidateToUpdate) > 0) {
@@ -62,14 +70,6 @@ class UpdateController extends BaseController
         }
 
         if ($result) {
-            $composerProcess = Update::composerUpdate();
-
-            foreach ($composerProcess as $process) {
-                $updateLog[] = 'File ' . $process . ' was updated';
-            }
-        }
-
-        if ($result) {
             $updateLog[] = 'Migrate ' . Update::migrate();
         }
 
@@ -78,6 +78,8 @@ class UpdateController extends BaseController
         Artisan::call('route:clear');
         Artisan::call('route:cache');
         Artisan::call('view:clear');
+
+        Update::clearExtractPath();
 
         return view('admin.update', ['updateLog' => $updateLog, 'result' => $result]);
     }

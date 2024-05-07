@@ -2,8 +2,9 @@
     <script>
 @endif
 const identifier = {{ $_GET['id'] }};
+console.log(identifier)
 let configJson = [];
-fetch(`/api/form/config?id={{ $_GET['id'] }}&state=${Math.floor(Math.random() * 10000)}.${Date.now()}`)
+fetch(`/api/v1/form/config?id={{ $_GET['id'] }}&state=${Math.floor(Math.random() * 10000)}.${Date.now()}`)
     .then(response => response.json())
     .then(json => {
         configJson = json;
@@ -147,9 +148,7 @@ fetch(`/api/form/config?id={{ $_GET['id'] }}&state=${Math.floor(Math.random() * 
                 paramInput.require = params[k]['required'];
                 paramInput.placeholder = params[k]['placeholder'];
                 paramInput.addEventListener('input', function() {
-
                     this.value = this.value.replace(/\D/g, '');
-
                 });
                 paramInputBlock.appendChild(paramInput);
 
@@ -210,7 +209,7 @@ fetch(`/api/form/config?id={{ $_GET['id'] }}&state=${Math.floor(Math.random() * 
                 formValues[key] = value;
             }
 
-            fetch('/api/task/execute', {
+            fetch('{{ route('ajax.ai-form.execute') }}', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -219,10 +218,9 @@ fetch(`/api/form/config?id={{ $_GET['id'] }}&state=${Math.floor(Math.random() * 
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log('ff')
-                    console.log(data);
                     if (data.result) {
-                        localStorage.setItem('taskId',data.data.task_id)
+                        localStorage.setItem('taskId', data.data.task_id)
+                        console.log(data);
                         location.href = data.data.task_url;
                     }
                 })

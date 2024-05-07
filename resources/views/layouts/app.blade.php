@@ -11,7 +11,7 @@
     <meta name="theme-color" content="#6777ef"/>
     <link rel="apple-touch-icon" href="{{ asset('logo.PNG') }}">
     <link rel="manifest" href="{{ asset('/manifest.json') }}">
-    <link rel="shortcut icon" href="/images/codeflow_favicon.png" type="image/png">
+    <link rel="shortcut icon" href="{{ app(\App\Settings\SettingGeneral::class)->favicon }}" type="image/png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     @yield('stylesheet')
     @stack('meta_noindex')
@@ -27,13 +27,65 @@
     @yield('breadcrumbs')
 </div>
 @yield('content')
-<div class="container">
-    <footer class="py-3 my-4">
-        <ul class="nav justify-content-center pb-3 mb-3">
-        </ul>
-        <p class="text-center text-muted">© @php echo date("Y", time()) @endphp Powered by <a target="_blank" href="https://aisearch.ru">AiSearch TECH</a>, Inc</p>
-    </footer>
-</div>
+    <div class="container" style="min-width: 95%">
+        <footer class="py-5">
+            <div class="row">
+                <div class="col-6 col-md-2 mb-3">
+<!--                    <h5>Forms</h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Home</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Features</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">About</a></li>
+                    </ul>-->
+                </div>
+
+                <div class="col-6 col-md-2 mb-3">
+<!--                    <h5>Blog Category</h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Home</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Features</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">About</a></li>
+                    </ul>-->
+                </div>
+
+                <div class="col-6 col-md-2 mb-3">
+<!--                    <h5>Pages</h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Home</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Features</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">About</a></li>
+                    </ul>-->
+                </div>
+
+                <div class="col-md-5 offset-md-1 mb-3">
+<!--                    <form>
+                        <h5>Subscribe to our newsletter</h5>
+                        <p>Monthly digest of what's new and exciting from us.</p>
+                        <div class="d-flex flex-column flex-sm-row w-100 gap-2">
+                            <label for="newsletter1" class="visually-hidden">Email address</label>
+                            <input id="newsletter1" type="text" class="form-control" placeholder="Email address">
+                            <button class="btn btn-primary" type="button">Subscribe</button>
+                        </div>
+                    </form>-->
+                </div>
+            </div>
+
+            <div class="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top">
+                <p>© @php echo date("Y", time()) @endphp Powered by <a target="_blank" href="https://aisearch.ru">AiSearch TECH</a>, Inc</p>
+                <ul class="list-unstyled d-flex">
+<!--                    <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#twitter"></use></svg></a></li>
+                    <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#instagram"></use></svg></a></li>
+                    <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#facebook"></use></svg></a></li>-->
+                </ul>
+            </div>
+        </footer>
+    </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 <script>
     const html = document.querySelector('html');
@@ -139,7 +191,7 @@
 
 </script>
 
-<script src="{{ asset('/sw.js') }}"></script>
+<script src="{{ asset('/sw.js') }}?v=5"></script>
 <script>
     if ("serviceWorker" in navigator) {
         // Register a service worker hosted at the root of the
@@ -157,6 +209,6 @@
     }
 </script>
 @stack('bottom-scripts')
-</body>
 {!! (new \App\Settings\SettingGeneral())->counter_external_code !!}
+</body>
 </html>

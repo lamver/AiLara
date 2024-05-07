@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Settings\SettingGeneral;
+use App\Services\Modules\Module;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,10 +15,30 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-$routNamePrefix = 'aiform';
 /** Admin routes */
-Route::middleware(['auth', 'verified'])->prefix(\Illuminate\Support\Facades\Config::get('ailara.admin_prefix') . '/module')->group(function () {
-
+Route::middleware(['auth', 'verified'])->prefix(SettingGeneral::value('admin_prefix') . '/module/ai-forms')->group(function () {
+    Route::resource('ai-form', \App\Http\Controllers\Admin\AiForms\AiFormController::class, [
+        'names' => [
+            'index' => 'admin.module.ai-form.index',
+            'create' => 'admin.module.ai-form.create',
+            'store' => 'admin.module.ai-form.store',
+            'edit' => 'admin.module.ai-form.edit',
+            'update' => 'admin.module.ai-form.update',
+            'show' => 'admin.module.ai-form.show',
+            'destroy' => 'admin.module.ai-form.destroy',
+        ],
+    ]);
 });
 
+if (Module::isFrontModule(Module::MODULE_AI_FORM)) {
+    Route::prefix(Module::getWebRoutePrefix(Module::MODULE_AI_FORM))->group(function () {
+        $allForms = \App\Models\Modules\AiForm\AiForm::query()->get();
+
+        foreach ($allForms as $form) {
+            Route::get('/'.$form->slug, [\App\Http\Controllers\Modules\Task\TaskController::class, 'viewAiFormPage'])->name('aiform.view.form' . '.' . str_replace("/", ".", $form->slug));
+            Route::get('/'.$form->slug . '/{slug}_{id}', [\App\Http\Controllers\Modules\Task\TaskController::class, 'view'])->name('aiform.view.form' . '.' . str_replace("/", ".", trim($form->slug,'/')) . '.result.task');
+        }
+    });
+}
 /** web routes */
+

@@ -7,16 +7,16 @@
         <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
         <meta name="generator" content="Hugo 0.84.0">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <title>AiLara dashboard</title>
+        <title>{{ app(\App\Settings\SettingGeneral::class)->app_name }}</title>
         <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/dashboard/">
         @stack('top-scripts')
         @yield('stylesheet')
         @stack('styles')
-
         <!-- Bootstrap core CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Ubuntu:regular,bold"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css">
         <!-- Favicons -->
         <link rel="apple-touch-icon" href="/docs/5.0/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
         <link rel="icon" href="/docs/5.0/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
@@ -25,7 +25,6 @@
         <link rel="mask-icon" href="/docs/5.0/assets/img/favicons/safari-pinned-tab.svg" color="#7952b3">
         <link rel="icon" href="/docs/5.0/assets/img/favicons/favicon.ico">
         <meta name="theme-color" content="#7952b3">
-
         @stack('stylesheet')
         <style>
             .bd-placeholder-img {
@@ -152,7 +151,6 @@
         <!-- <link href="dashboard.css" rel="stylesheet"> -->
     </head>
     <body>
-
         <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
             <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">AiLara</a>
             <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
@@ -207,34 +205,28 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="#">
                                     <span data-feather="users"></span>
-                                    {{ __('admin.ai_search') }}
-                                </a>
-                                <ul>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('admin.ais.commonData') }}">
-                                            <span data-feather="bar-chart-2"></span>
-                                            {{ __('admin.common_data') }}
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('admin.ais.aiForms') }}">
-                                            <span data-feather="bar-chart-2"></span>
-                                            {{ __('admin.ai_forms') }}
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">
-                                    <span data-feather="users"></span>
                                     {{ __('admin.modules') }}
                                 </a>
                                 <ul>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('admin.ais.commonData') }}">
+                                        <a class="nav-link" href="{{ route('admin.modules.main.config') }}">
                                             <span data-feather="bar-chart-2"></span>
-                                            {{ __('admin.configuration') }}
+                                            {{ __('admin.Configuration') }}
                                         </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">
+                                            <span data-feather="bar-chart-2"></span>
+                                            {{ __('admin.Ai forms') }}
+                                        </a>
+                                        <ul>
+                                            <li>
+                                                <a class="nav-link" href="{{ route('admin.module.ai-form.index') }}">
+                                                    <span data-feather="bar-chart-2"></span>
+                                                    {{ __('admin.Forms') }}
+                                                </a>
+                                            </li>
+                                        </ul>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="#">
@@ -270,14 +262,14 @@
                                     <span data-feather="bar-chart-2"></span>
                                     {{ __('admin.telegram_bots') }}
                                 </a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" href="{{ route('admin.ais.pages') }}">
                                     <span data-feather="bar-chart-2"></span>
-                                    {{ __('admin.Routes') }}
+                                    {{ __('admin.pages') }}
                                 </a>
-                                <a class="nav-link" href="{{ route('admin.update') }}">
-                                    <span data-feather="bar-chart-2"></span>
-                                    {{ __('admin.update_app') }}
-                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" href="{{ route('admin.logs') }}">
                                     <span data-feather="bar-chart-2"></span>
                                     {{ __('admin.Logs') }}
@@ -296,6 +288,12 @@
                                     {{__('Users')}}
                                 </a>
                              </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('admin.update') }}">
+                                    <span data-feather="bar-chart-2"></span>
+                                    {{ __('admin.update_app') }}
+                                </a>
+                            </li>
                             @if(isset($languages))
                             <li class="nav-item">
                                 <div class="d-flex flex-row bd-highlight">

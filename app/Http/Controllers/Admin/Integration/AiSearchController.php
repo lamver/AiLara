@@ -8,6 +8,7 @@ use App\Services\AiSearchApi;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View as ContractsView;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Str;
 use \Illuminate\View\View;
 use Illuminate\Foundation\Application;
 use Illuminate\Contracts\Foundation\Application as ContractApplication;
@@ -28,8 +29,6 @@ class AiSearchController extends BaseController
 
     public function __construct()
     {
-        $this->aiSearch = new AiSearchApi(Config::get('ailara.api_key_aisearch'), Config::get('ailara.api_host'));
-
         return $this;
     }
 
@@ -48,6 +47,11 @@ class AiSearchController extends BaseController
         return view('admin.integration.ais.common-data', ['result' => $result]);
     }
 
+    /**
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Foundation\Application|\Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
     public function pages(Request $request): Application|View|Factory
     {
         try {
@@ -57,16 +61,6 @@ class AiSearchController extends BaseController
         }
 
         return view('admin.integration.pages', ['result' => $result]);
-    }
-
-    /**
-     * @return Application|View|Factory
-     */
-    public function aiForms(): Application|View|Factory
-    {
-        $aiFormsConfig = AiForm::query()->orderBy('id', 'desc')->get();
-
-        return view('admin.integration.ais.ai-forms', ['aiFormsConfig' => $aiFormsConfig]);
     }
 
     /**
@@ -92,6 +86,8 @@ class AiSearchController extends BaseController
 
         $aiFormModel = new AiForm();
         $aiFormModel->name = $request->post('name');
+        $aiFormModel->content_on_page = $request->post('content_on_page');
+        $aiFormModel->slug = $request->post('slug') ?? Str::slug($request->post('name'));
         $aiFormModel->form_config = json_encode($formConfigArray); //$request->post('form_config');
         $aiFormModel->save();
 
@@ -112,7 +108,9 @@ class AiSearchController extends BaseController
 
         $aiForm = AiForm::find($formId);
         $aiForm->name = $request->name;
-        $aiForm->form_config = $request->form_config;
+        $aiForm->form_config = $request->post('form_config');
+        $aiForm->content_on_page = $request->post('content_on_page');
+        $aiForm->slug = $request->post('slug') ?? Str::slug($request->post('name'));
         $aiForm->save();
 
         return redirect()->route('admin.ais.aiForms');

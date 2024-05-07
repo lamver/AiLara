@@ -3,15 +3,18 @@
 namespace App\Models\Modules\Blog;
 
 use App\Helpers\StrMaster;
+use App\Models\Modules\Blog\TraitsScenario\TranslateAndRewrite;
 use App\Services\AiSearchApi;
 use Illuminate\Support\Facades\Log;
 
 class ImportScenario
 {
-
+ use TranslateAndRewrite;
     /**
      * @param $text
      * @param bool $url
+     * @param string|array|null $skip
+     *
      * @return array
      */
     static public function rewrite($text, bool $url = false, string|array $skip = null): array
@@ -49,6 +52,7 @@ class ImportScenario
 
         if (StrMaster::checkStrInString($answer['content'], $skip)) {
             Log::channel('import')->log('warning', 'skip');
+            $answer['result'] = false;
 
             return $answer;
         }
@@ -140,31 +144,10 @@ class ImportScenario
     }
 
     /**
-     * @param AiSearchApi $task
-     * @param $id
-     * @param bool $onlyUrlFiles
-     * @return mixed
-     */
-    static public function getResult(AiSearchApi $task, $id, bool $onlyUrlFiles = false): mixed
-    {
-        $result = $task->getTaskByTaskId($id);
-
-        if (!$result['result'] || $result['answer']['status'] == 0 ) {
-            sleep(1);
-            return self::getResult($task, $id, $onlyUrlFiles);
-        }
-
-        if ($onlyUrlFiles && isset($result['answer']['url_files'])) {
-            return $result['answer']['url_files'];
-        }
-
-        return $result['answer']['answer'];
-    }
-
-
-    /**
      * @param $text
      * @param bool $url
+     * @param string|array|null $skip
+     *
      * @return array
      */
     static public function translate($text, bool $url = false, string|array $skip = null): array
@@ -299,5 +282,30 @@ class ImportScenario
         //dd($answer);
         return $answer;
     }
+
+    /**
+     * @param AiSearchApi $task
+     * @param $id
+     * @param bool $onlyUrlFiles
+     * @return mixed
+     */
+    static public function getResult(AiSearchApi $task, $id, bool $onlyUrlFiles = false): mixed
+    {
+        $result = $task->getTaskByTaskId($id);
+
+        if (!$result['result'] || $result['answer']['status'] == 0 ) {
+            sleep(1);
+            return self::getResult($task, $id, $onlyUrlFiles);
+        }
+
+        if ($onlyUrlFiles && isset($result['answer']['url_files'])) {
+            return $result['answer']['url_files'];
+        }
+
+        return $result['answer']['answer'];
+    }
+
+
+
 
 }

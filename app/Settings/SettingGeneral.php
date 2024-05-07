@@ -2,6 +2,9 @@
 
 namespace App\Settings;
 
+use App\Services\Modules\Module;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Spatie\LaravelSettings\Settings;
 
 class SettingGeneral extends Settings
@@ -34,8 +37,6 @@ class SettingGeneral extends Settings
 
     /** @var string */
     public string $counter_external_code;
-    /** @var int */
-    public int $test;
 
     /** @var string */
     public string $api_key_aisearch;
@@ -45,8 +46,11 @@ class SettingGeneral extends Settings
 
     /**  @var string */
     public string $admin_prefix;
-
-    // public bool $api_key;
+    public string $home_module;
+    public string $favicon;
+    public string $custom_css;
+    public string $seo_title;
+    public string $seo_description;
 
     /**
      * Get the group name.
@@ -56,5 +60,52 @@ class SettingGeneral extends Settings
     public static function group(): string
     {
         return 'general';
+    }
+
+    /**
+     * @param array $dataSettings
+     * @param \App\Settings\SettingGeneral $settings
+     *
+     * @return \App\Settings\SettingGeneral
+     */
+    public function prepareAndSave(array $dataSettings, SettingGeneral $settings): SettingGeneral
+    {
+        $settings->site_name = $dataSettings['site_name'] ?? "";
+        $settings->site_active = (bool)$dataSettings['site_active'];
+        $settings->app_name = $dataSettings['app_name'] ?? "";
+        $settings->logo_path = $dataSettings['logo_path'] ?? "";
+        $settings->logo_title = $dataSettings['logo_title'] ?? "";
+        $settings->logo_height_px = $dataSettings['logo_height_px'];
+        $settings->logo_width_px = $dataSettings['logo_width_px'];
+        $settings->logo_width_px = $dataSettings['logo_width_px'];
+        $settings->counter_external_code = $dataSettings['counter_external_code'] ?? "";
+        $settings->api_key_aisearch = $dataSettings['api_key_aisearch'] ?? "";
+        $settings->api_host = $dataSettings['api_host'] ?? "";
+        $settings->admin_prefix = $dataSettings['admin_prefix'] ?? "";
+        $settings->home_module = (isset(Module::MODULE_CONFIG[$dataSettings['home_module']])) ? $dataSettings['home_module'] : Module::MODULE_AI_FORM;
+        $settings->favicon = $dataSettings['favicon'] ?? "";
+        $settings->custom_css = $dataSettings['custom_css'] ?? "";
+        $settings->seo_description = $dataSettings['seo_description'] ?? "";
+
+        return $settings->save();
+    }
+
+    /**
+     * @param string|null $settingName
+     *
+     * @return mixed|null
+     */
+    static public function value(string $settingName = null)
+    {
+        if (is_null($settingName)) {
+            return null;
+        }
+
+        try {
+            return app(SettingGeneral::class)->{$settingName};
+        } catch (\Exception $e) {
+            Log::error('Settings: ' . $e->getMessage());
+        }
+        return null;
     }
 }

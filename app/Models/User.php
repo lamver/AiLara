@@ -23,6 +23,8 @@ class User extends Authenticatable
         'name',
         'email',
         'status',
+        'avatar',
+        'sys_user',
         'password',
     ];
 
@@ -65,6 +67,15 @@ class User extends Authenticatable
     public function getInheritanceParent(): ?Owner
     {
         return Inheritance::where('owner_id', $this->getOwner()->id)->first()?->ownerParent()->first();
+    }
+
+    static public function getAvatarUrl(User $user)
+    {
+        if (!isset($user->avatar)) {
+            return '/images/avatar/no_avatar.png';
+        }
+
+        return $user->avatar;
     }
 
 }

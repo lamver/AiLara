@@ -1,7 +1,12 @@
 <?php
 
 use App\Models\Modules\Blog\Category;
+use App\Settings\SettingGeneral;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\Blog\PostsController;
+use App\Http\Controllers\Admin\Blog\CategoryController;
+use App\Http\Controllers\Admin\Blog\ImportController;
+use App\Services\Modules\Module;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,8 +19,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 /** Admin routes */
-Route::middleware(['auth', 'verified'])->prefix(\Illuminate\Support\Facades\Config::get('ailara.admin_prefix') . '/module')->group(function () {
-    Route::resource('posts', \App\Http\Controllers\Admin\Blog\PostsController::class, [
+Route::middleware(['auth', 'verified'])->prefix(SettingGeneral::value('admin_prefix') .'/module/blog')->group(function () {
+    Route::resource('posts', PostsController::class, [
 /*        'except' => ['show', 'destroy'],*/
         'names' => [
             'index' => 'admin.blog.post.index',
@@ -28,7 +33,7 @@ Route::middleware(['auth', 'verified'])->prefix(\Illuminate\Support\Facades\Conf
         ],
     ]);
 
-    Route::resource('category', \App\Http\Controllers\Admin\Blog\CategoryController::class, [
+    Route::resource('category', CategoryController::class, [
         'names' => [
             'index' => 'admin.blog.category.index',
             'create' => 'admin.blog.category.create',
@@ -40,7 +45,7 @@ Route::middleware(['auth', 'verified'])->prefix(\Illuminate\Support\Facades\Conf
         ],
     ]);
 
-    Route::resource('import', \App\Http\Controllers\Admin\Blog\ImportController::class, [
+    Route::resource('import', ImportController::class, [
         'names' => [
             'index' => 'admin.blog.import.index',
             'create' => 'admin.blog.import.create',
@@ -53,16 +58,16 @@ Route::middleware(['auth', 'verified'])->prefix(\Illuminate\Support\Facades\Conf
     ]);
 });
 
-/** web routes */
-Route::prefix(\Illuminate\Support\Facades\Config::get('modules.blog.route_prefix'))->group(function () {
-    $routeName = \Illuminate\Support\Facades\Config::get('modules.blog.route_prefix') == '/' ? 'index' : 'blog.post.index';
-    Route::get('/', [\App\Http\Controllers\Modules\Blog\PostsController::class, 'index'])->name($routeName);
+if (Module::isFrontModule(Module::MODULE_BLOG)) {
+    /** web routes */
+    Route::prefix(Module::getWebRoutePrefix(Module::MODULE_BLOG))->group(function () {
+        $categorySlugsRoute = Category::getFullUrlsToAllCategory();
 
-    $categorySlugsRoute = Category::getFullUrlsToAllCategory();
+        foreach ($categorySlugsRoute as $slug) {
+            Route::get('/'.$slug, [\App\Http\Controllers\Modules\Blog\PostsController::class, 'category'])->name('blog.post.cat' . '.' . str_replace("/", ".", $slug));
+            Route::get('/'.$slug . 'feed', [\App\Http\Controllers\Modules\Blog\PostsController::class, 'rss'])->name('blog.post.cat' . '.' . str_replace("/", ".", trim($slug,'/')) . '.rss');
+            Route::get('/'.$slug . '{slug}_{id}', [\App\Http\Controllers\Modules\Blog\PostsController::class, 'view'])->name('blog.post.cat' . '.' . str_replace("/", ".", trim($slug,'/')) . '.view.post');
+        }
+    });
+}
 
-    foreach ($categorySlugsRoute as $slug) {
-        Route::get('/'.$slug, [\App\Http\Controllers\Modules\Blog\PostsController::class, 'category'])->name('blog.post.cat' . '.' . str_replace("/", ".", $slug));
-        Route::get('/'.$slug . 'feed', [\App\Http\Controllers\Modules\Blog\PostsController::class, 'rss'])->name('blog.post.cat' . '.' . str_replace("/", ".", trim($slug,'/')) . '.rss');
-        Route::get('/'.$slug . '{slug}_{id}', [\App\Http\Controllers\Modules\Blog\PostsController::class, 'view'])->name('blog.post.cat' . '.' . str_replace("/", ".", trim($slug,'/')) . '.view.post');
-    }
-});

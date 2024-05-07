@@ -18,17 +18,15 @@ class Update
      */
     static public function downloadArchiveRepository(): bool
     {
-        if (stripos(url()->current(), 'localhost')) {
-            return true;
-        }
+        $repo = file_get_contents(self::URL_REPOSITORY);
 
-        $r = file_get_contents(self::URL_REPOSITORY);
-
-
-        return Storage::put('update/main.zip', $r);
+        return Storage::put('update/main.zip', $repo);
     }
 
-    static public function extractArchiveRepository()
+    /**
+     * @return bool
+     */
+    static public function extractArchiveRepository() : bool
     {
         $zip = new \ZipArchive;
         $zip_path = storage_path('app/'.self::APP_PATH_TO_UPDATE_ARCHIVE);
@@ -51,7 +49,6 @@ class Update
     {
         $directoryPath = pathinfo($fileCandidate['pathWithoutDirExtract'])['dirname'];
         Log::channel('update')->log('debug', '$directoryPath: ' . $directoryPath);
-
         Log::channel('update')->log('debug', $fileCandidate['pathWithoutDirExtract']);
         try {
             if (file_exists($fileCandidate['pathWithoutDirExtract'])) {
@@ -72,8 +69,6 @@ class Update
                 chmod($fileCandidate['pathWithoutDirExtract'], 0744);
             }
 
-
-
             if (stripos(url()->current(), 'localhost')) {
                 return true;
             } else {
@@ -91,13 +86,17 @@ class Update
      */
     static public function composerUpdate(): array
     {
-        $resultProcess = self::vendorInstall();
+        return self::vendorInstall();
+    }
 
+    /**
+     * @return bool
+     */
+    static public function clearExtractPath() : bool
+    {
         $pathToExtractFiles = storage_path('app/'.Update::APP_PATH_TO_UPDATE_ARCHIVE_EXTRACT_FILES.'/AiLara-main');
 
-        self::deleteDirectory($pathToExtractFiles);
-
-        return $resultProcess;
+        return self::deleteDirectory($pathToExtractFiles);
     }
 
     /**
@@ -233,7 +232,13 @@ class Update
         return $size;
     }
 
-    public static function getFileToCandidateUpdate($dir = null, &$fc = []) {
+    /**
+     * @param null $dir
+     * @param array $fc
+     *
+     * @return array|mixed
+     */
+    public static function getFileToCandidateUpdate($dir = null, array &$fc = []) {
 
         $pathToExtractFiles = storage_path('app/'.Update::APP_PATH_TO_UPDATE_ARCHIVE_EXTRACT_FILES.'/AiLara-main');
 
@@ -244,48 +249,24 @@ class Update
         $files = scandir($dir);
 
         foreach($files as $file) {
-            if ($file != '.' && $file != '..') {
+            if (!in_array($file, ['.', '..'])) {
                 $path = $dir.'/'.$file;
 
                 $pathWithoutDirExtract = str_replace($pathToExtractFiles, '', $path);
 
-                if (stripos($pathWithoutDirExtract, '/vendor/')) {
-                    continue;
-                }
+                $exclude = [
+                    '/vendor/',
+                    '/.git/',
+                    '/.idea/',
+                    '/storage/',
+                    '/public/robots.txt',
+                    '/.gitattributes',
+                    '/.env',
+                    '.htaccess',
+                    '.editorconfig',
+                ];
 
-                if (stripos($pathWithoutDirExtract, '/.git/')) {
-                    continue;
-                }
-
-                if (stripos($pathWithoutDirExtract, '/.idea/')) {
-                    continue;
-                }
-
-                if (stripos($pathWithoutDirExtract, '/public/')) {
-                    continue;
-                }
-
-                if (stripos($pathWithoutDirExtract, '/public/robots.txt')) {
-                    continue;
-                }
-
-                if (stripos($pathWithoutDirExtract, '/storage/')) {
-                    continue;
-                }
-
-                if (stripos($pathWithoutDirExtract, '/.gitattributes')) {
-                    continue;
-                }
-
-                if (stripos($pathWithoutDirExtract, '/.env')) {
-                    continue;
-                }
-
-                if (stripos($pathWithoutDirExtract, '.htaccess')) {
-                    continue;
-                }
-
-                if (stripos($pathWithoutDirExtract, '.editorconfig')) {
+                if (self::checkIfSubstringExists($pathWithoutDirExtract, $exclude)) {
                     continue;
                 }
 
@@ -304,4 +285,25 @@ class Update
 
         return $fc;
     }
+
+    /**
+     * @param string $str
+     * @param string|array $sub
+     *
+     * @return bool
+     */
+    static public function checkIfSubstringExists(string $str, string|array $sub) : bool
+    {
+        if (is_array($sub)) {
+            foreach($sub as $substring) {
+                if(str_contains($str, $substring)) {
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            return str_contains($str, $sub);
+        }
+    }
+
 }

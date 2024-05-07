@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Settings\SettingGeneral;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +21,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Config::set('accessUi.path', SettingGeneral::value('admin_prefix') . '/access-ui');
+        Config::set('translation-manager.route.prefix', SettingGeneral::value('admin_prefix') . '/translations');
     }
 }

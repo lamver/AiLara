@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Modules\AiForm\AiForm;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -56,8 +57,6 @@ class Tasks extends Model
         if ($promptMask = AiForm::getPromptMask($param['form_id'], $param['task_id'])) {
             dd($promptMask);
         }
-
-
 
         return self::create($taskData);
     }

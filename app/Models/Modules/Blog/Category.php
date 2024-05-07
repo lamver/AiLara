@@ -52,6 +52,10 @@ class Category extends Model
             $model->slug = Str::slug($model->title);
         }
 
+        if ($model->parent_id == 0) {
+            $model->parent_id = null;
+        }
+
         try {
             return $model->save();
         } catch (\Exception $exception) {
@@ -260,11 +264,32 @@ class Category extends Model
         return $data;
     }
 
+    /**
+     * @param string $column
+     *
+     * @return string
+     */
     static public function columnName($column = '')
     {
         $column = str_replace("_", " ", $column);
         $column = ucfirst($column);
 
         return $column;
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return \Illuminate\Support\HigherOrderCollectionProxy|mixed|string
+     */
+    static public function getCategoryNameById(int $id) : mixed
+    {
+        $categoryName = self::query()->select('title')->where(['id' => $id])->get();
+
+        if (empty($categoryName)) {
+            return 'Unknown';
+        }
+
+        return $categoryName->title;
     }
 }
