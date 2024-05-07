@@ -3,16 +3,10 @@
 namespace App\Settings;
 
 use App\Services\Modules\Module;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Spatie\LaravelSettings\Settings;
 
-class SettingGeneral extends Settings
+class SettingGeneral extends Data
 {
-    const TYPE_STRING = 'string';
-    const TYPE_TEXT = 'text';
-    const TYPE_INT = 'integer';
-    const TYPE_BOOLEAN = 'boolean';
 
     /** @var string */
     public string $site_name;
@@ -76,7 +70,6 @@ class SettingGeneral extends Settings
         $settings->logo_path = $dataSettings['logo_path'] ?? "";
         $settings->logo_title = $dataSettings['logo_title'] ?? "";
         $settings->logo_height_px = $dataSettings['logo_height_px'];
-        $settings->logo_width_px = $dataSettings['logo_width_px'];
         $settings->logo_width_px = $dataSettings['logo_width_px'];
         $settings->counter_external_code = $dataSettings['counter_external_code'] ?? "";
         $settings->api_key_aisearch = $dataSettings['api_key_aisearch'] ?? "";

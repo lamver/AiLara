@@ -28,6 +28,9 @@ Route::middleware(['auth', 'verified'])->prefix(SettingGeneral::value('admin_pre
             'destroy' => 'admin.module.ai-form.destroy',
         ],
     ]);
+
+    Route::get('/', [\App\Http\Controllers\Admin\AiForms\AiFormController::class, 'settings'])->name('admin.module.ai-form.settings');
+    Route::post('/', [\App\Http\Controllers\Admin\AiForms\AiFormController::class, 'settingsUpdate'])->name('admin.module.ai-form.settings.update');
 });
 
 if (Module::isFrontModule(Module::MODULE_AI_FORM)) {
