@@ -11,8 +11,9 @@ class AiFormController extends Controller
 {
     /**
      * Display a listing of the resource.
+     * @param Request $request
      */
-    public function index()
+    public function index(Request $request)
     {
         $aiFormsConfig = AiForm::query()->orderBy('id', 'desc')->get();
 

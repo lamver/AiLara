@@ -103,13 +103,16 @@ class Module
         if ($modulesConfig) {
             foreach ($modulesConfig as $config) {
                 if ($config->const_module_name == $moduleConst) {
-                    return $config->prefix_uri;
+                    if (empty($config->prefix_uri)) {
+                        return '';
+                    }
+                    return '/' . $config->prefix_uri;
                 }
             }
         }
 
         if (isset(self::MODULE_CONFIG[$moduleConst])) {
-            return self::MODULE_CONFIG[$moduleConst]['route_prefix'];
+            return '/' . self::MODULE_CONFIG[$moduleConst]['route_prefix'];
         }
 
         return '/unknown';

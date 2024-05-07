@@ -64,6 +64,11 @@ Route::middleware(['auth', 'verified'])->prefix(Translation::checkRoutePrefix())
 if (Module::isFrontModule(Module::MODULE_BLOG)) {
     /** web routes */
     Route::prefix(Module::getWebRoutePrefix(Module::MODULE_BLOG))->group(function () {
+
+        if (Module::getWebRoutePrefix(Module::MODULE_BLOG) != '') {
+            Route::get('/', [\App\Http\Controllers\Modules\Blog\PostsController::class, 'index'])->name('blog.post.index');
+        }
+
         $categorySlugsRoute = Category::getFullUrlsToAllCategory();
 
         foreach ($categorySlugsRoute as $slug) {
