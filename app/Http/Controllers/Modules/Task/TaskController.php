@@ -26,6 +26,10 @@ class TaskController extends Controller
     {
         $aiForm = AiForm::loadDefaultForm();
 
+        if (empty($aiForm)) {
+            return abort(404, 'Ai form not found');
+        }
+
         return view('modules.ai-form.index', ['aiForm' => $aiForm]);
     }
 

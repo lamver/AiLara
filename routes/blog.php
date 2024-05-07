@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\Blog\PostsController;
 use App\Http\Controllers\Admin\Blog\CategoryController;
 use App\Http\Controllers\Admin\Blog\ImportController;
+use App\Services\Modules\Module;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,13 +58,21 @@ Route::middleware(['auth', 'verified'])->prefix(SettingGeneral::value('admin_pre
     ]);
 });
 
-/** web routes */
-Route::prefix(\App\Services\Modules\Module::getWebRoutePrefix(\App\Services\Modules\Module::MODULE_BLOG))->group(function () {
-    $categorySlugsRoute = Category::getFullUrlsToAllCategory();
+if (Module::isFrontModule(Module::MODULE_BLOG)) {
+    /** web routes */
+    Route::prefix(Module::getWebRoutePrefix(Module::MODULE_BLOG))->group(function () {
 
-    foreach ($categorySlugsRoute as $slug) {
-        Route::get('/'.$slug, [\App\Http\Controllers\Modules\Blog\PostsController::class, 'category'])->name('blog.post.cat' . '.' . str_replace("/", ".", $slug));
-        Route::get('/'.$slug . 'feed', [\App\Http\Controllers\Modules\Blog\PostsController::class, 'rss'])->name('blog.post.cat' . '.' . str_replace("/", ".", trim($slug,'/')) . '.rss');
-        Route::get('/'.$slug . '{slug}_{id}', [\App\Http\Controllers\Modules\Blog\PostsController::class, 'view'])->name('blog.post.cat' . '.' . str_replace("/", ".", trim($slug,'/')) . '.view.post');
-    }
-});
+        if (Module::getWebRoutePrefix(Module::MODULE_BLOG) != '') {
+            Route::get('/', [\App\Http\Controllers\Modules\Blog\PostsController::class, 'index'])->name('blog.post.index');
+        }
+
+        $categorySlugsRoute = Category::getFullUrlsToAllCategory();
+
+        foreach ($categorySlugsRoute as $slug) {
+            Route::get('/'.$slug, [\App\Http\Controllers\Modules\Blog\PostsController::class, 'category'])->name('blog.post.cat' . '.' . str_replace("/", ".", $slug));
+            Route::get('/'.$slug . 'feed', [\App\Http\Controllers\Modules\Blog\PostsController::class, 'rss'])->name('blog.post.cat' . '.' . str_replace("/", ".", trim($slug,'/')) . '.rss');
+            Route::get('/'.$slug . '{slug}_{id}', [\App\Http\Controllers\Modules\Blog\PostsController::class, 'view'])->name('blog.post.cat' . '.' . str_replace("/", ".", trim($slug,'/')) . '.view.post');
+        }
+    });
+}
+

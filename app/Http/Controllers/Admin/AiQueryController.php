@@ -16,13 +16,8 @@ class AiQueryController
      */
     public function createTask(Request $request): Response
     {
-        $param = [
-            'prompt' => $request->get('text'),
-            'type_task' => $request->get('type')
-        ];
 
-        $result = (new AiSearchApi)->taskCreate($param);
-
+        $result = (new AiSearchApi)->taskCreate($request->all());
 
         return response(json_encode($result));
 

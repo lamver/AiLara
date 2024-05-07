@@ -209,7 +209,7 @@
                                 </a>
                                 <ul>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('admin.ais.commonData') }}">
+                                        <a class="nav-link" href="{{ route('admin.modules.main.config') }}">
                                             <span data-feather="bar-chart-2"></span>
                                             {{ __('admin.Configuration') }}
                                         </a>
@@ -323,135 +323,81 @@
                     @yield('content')
                     <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
 
-<!--                    <h2>Section title</h2>
-                    <div class="table-responsive">
-                        <table class="table table-striped table-sm">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Header</th>
-                                    <th scope="col">Header</th>
-                                    <th scope="col">Header</th>
-                                    <th scope="col">Header</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1,001</td>
-                                    <td>random</td>
-                                    <td>data</td>
-                                    <td>placeholder</td>
-                                    <td>text</td>
-                                </tr>
-                                <tr>
-                                    <td>1,002</td>
-                                    <td>placeholder</td>
-                                    <td>irrelevant</td>
-                                    <td>visual</td>
-                                    <td>layout</td>
-                                </tr>
-                                <tr>
-                                    <td>1,003</td>
-                                    <td>data</td>
-                                    <td>rich</td>
-                                    <td>dashboard</td>
-                                    <td>tabular</td>
-                                </tr>
-                                <tr>
-                                    <td>1,003</td>
-                                    <td>information</td>
-                                    <td>placeholder</td>
-                                    <td>illustrative</td>
-                                    <td>data</td>
-                                </tr>
-                                <tr>
-                                    <td>1,004</td>
-                                    <td>text</td>
-                                    <td>random</td>
-                                    <td>layout</td>
-                                    <td>dashboard</td>
-                                </tr>
-                                <tr>
-                                    <td>1,005</td>
-                                    <td>dashboard</td>
-                                    <td>irrelevant</td>
-                                    <td>text</td>
-                                    <td>placeholder</td>
-                                </tr>
-                                <tr>
-                                    <td>1,006</td>
-                                    <td>dashboard</td>
-                                    <td>illustrative</td>
-                                    <td>rich</td>
-                                    <td>data</td>
-                                </tr>
-                                <tr>
-                                    <td>1,007</td>
-                                    <td>placeholder</td>
-                                    <td>tabular</td>
-                                    <td>information</td>
-                                    <td>irrelevant</td>
-                                </tr>
-                                <tr>
-                                    <td>1,008</td>
-                                    <td>random</td>
-                                    <td>data</td>
-                                    <td>placeholder</td>
-                                    <td>text</td>
-                                </tr>
-                                <tr>
-                                    <td>1,009</td>
-                                    <td>placeholder</td>
-                                    <td>irrelevant</td>
-                                    <td>visual</td>
-                                    <td>layout</td>
-                                </tr>
-                                <tr>
-                                    <td>1,010</td>
-                                    <td>data</td>
-                                    <td>rich</td>
-                                    <td>dashboard</td>
-                                    <td>tabular</td>
-                                </tr>
-                                <tr>
-                                    <td>1,011</td>
-                                    <td>information</td>
-                                    <td>placeholder</td>
-                                    <td>illustrative</td>
-                                    <td>data</td>
-                                </tr>
-                                <tr>
-                                    <td>1,012</td>
-                                    <td>text</td>
-                                    <td>placeholder</td>
-                                    <td>layout</td>
-                                    <td>dashboard</td>
-                                </tr>
-                                <tr>
-                                    <td>1,013</td>
-                                    <td>dashboard</td>
-                                    <td>irrelevant</td>
-                                    <td>text</td>
-                                    <td>visual</td>
-                                </tr>
-                                <tr>
-                                    <td>1,014</td>
-                                    <td>dashboard</td>
-                                    <td>illustrative</td>
-                                    <td>rich</td>
-                                    <td>data</td>
-                                </tr>
-                                <tr>
-                                    <td>1,015</td>
-                                    <td>random</td>
-                                    <td>tabular</td>
-                                    <td>information</td>
-                                    <td>text</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>-->
                 </main>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="aiModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">{{__('admin.field')}}: <span></span></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">{{__('admin.ai_type')}}</label>
+                            <select class="form-select" id="typeTask">
+                                <option value="1">{{__('admin.task_text')}}</option>
+                                <option value="2">{{__('admin.task_image')}}</option>
+                                <option value="3">{{__('admin.task_write_text')}}</option>
+                                <option value="6">{{__('admin.task_answer')}}</option>
+                                <option value="7">{{__('admin.task_write_rewrite')}}</option>
+                                <option value="11">{{__('admin.task_make_title')}}</option>
+                                <option value="20">{{__('admin.task_seo_title')}}</option>
+                                <option value="21">{{__('admin.task_seo_description')}}</option>
+                                <option value="22">{{__('admin.task_seo_article')}}</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3" id="basicCheck" style="display: none">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" checked type="checkbox" name="basic" id="basic">
+                                <label class="form-check-label" for="basic">{{__('admin.basic')}}</label>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">{{__('admin.text')}}</label>
+                            <textarea class="form form-control" name="aiForm" placeholder="{{ __('ask_ai') }}"></textarea>
+                        </div>
+                        <div class="mb-3" id="innerBox" style="display: none">
+                            <div class="mb-2">{{__('admin.result')}}</div>
+                            <div id="innerResult" class="shadow-lg p-3 mb-5 bg-body rounded" style="text-align: center"></div>
+                        </div>
+
+                        <button id="createAi" type="button" class="btn btn-primary">
+                            <span>{{__('admin.create')}}</span>
+                            <svg style="fill: rgb(255, 255, 255); display: none" width="24" height="24" viewBox="0 0 24 24"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="4" cy="12" r="3">
+                                    <animate id="spinner_qFRN" begin="0;spinner_OcgL.end+0.25s" attributeName="cy"
+                                             calcMode="spline" dur="0.6s" values="12;6;12"
+                                             keySplines=".33,.66,.66,1;.33,0,.66,.33"></animate>
+                                </circle>
+                                <circle cx="12" cy="12" r="3">
+                                    <animate begin="spinner_qFRN.begin+0.1s" attributeName="cy" calcMode="spline" dur="0.6s"
+                                             values="12;6;12" keySplines=".33,.66,.66,1;.33,0,.66,.33"></animate>
+                                </circle>
+                                <circle cx="20" cy="12" r="3">
+                                    <animate id="spinner_OcgL" begin="spinner_qFRN.begin+0.2s" attributeName="cy"
+                                             calcMode="spline" dur="0.6s" values="12;6;12"
+                                             keySplines=".33,.66,.66,1;.33,0,.66,.33"></animate>
+                                </circle>
+                            </svg>
+                        </button>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="insertBtn" class="btn btn-primary" disabled>
+                            {{__('admin.insert')}}
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{__('admin.close')}}</button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -493,6 +439,173 @@
 
                 location.href = href;
             }
+
+            const AiManager = {
+
+                aiCreateTaskRoute: '{{route('admin.createAiTask')}}',
+                aiGetTaskRoute: '{{route('admin.getAiTask')}}',
+                modalEl: document.getElementById('aiModal'),
+                createAiBtn: document.getElementById('createAi'),
+                insertBtn: document.getElementById('insertBtn'),
+                innerBox: document.getElementById('innerBox'),
+                selectTypeTask: document.getElementById('typeTask'),
+                aiResult: {},
+                basicCheckValue: false,
+                attemptCount: 0,
+                tries: 25,
+
+                init: function () {
+
+                    this.modalEl.addEventListener('show.bs.modal', (event) => {
+                        this.modalEl.dataset.typeId = event.relatedTarget.dataset.typeId
+                        let modelTitle = this.modalEl.querySelector('.modal-header .modal-title span');
+                        modelTitle.innerText = document.querySelector(`[for='${event.relatedTarget.dataset.typeId}']`).innerText
+
+                    });
+
+                    this.modalEl.addEventListener('hide.bs.modal', () => {
+                        this.reset();
+                    });
+
+                    this.createAiBtn.addEventListener('click', this.createAiFunc.bind(this));
+                    this.insertBtn.addEventListener('click', this.insertFunc.bind(this));
+                    this.selectTypeTask.addEventListener('change', this.selectTypeTaskEvent.bind(this));
+
+                },
+                selectTypeTaskEvent: function (even) {
+                    let basicCheck = this.modalEl.querySelector('#basicCheck');
+                    basicCheck.style.display = "none";
+                    this.basicCheckValue = false;
+
+                    if((even.target.value*1) === 2) {
+                        basicCheck.style.display = "block";
+                        this.basicCheckValue = true;
+                    }
+
+                },
+                createAiFunc: async function () {
+
+                    let text = this.modalEl.querySelector(".modal-body [name='aiForm']").value
+                    let type = this.modalEl.querySelector(".modal-body #typeTask").value;
+
+                    if (text.length < 3) return;
+
+                    this.createAiBtnAction(true);
+                    let data = {text: text, type: type};
+
+                    if(this.basicCheckValue) {
+                        data.basic = 1;
+                        data.size =  "1024x1024";
+                    }
+
+                    let result = await this.fetchAi(this.aiCreateTaskRoute, data)
+
+                    if (result.result) {
+                        const intervalId = setInterval(async () => {
+                            this.aiResult = await this.fetchGetAiTask(result.task_id, intervalId);
+                            if (this.aiResult?.status !== 1) return;
+
+                            this.createAiBtnAction(false);
+                            this.innerBox.style.display = 'block';
+                            this.insertBtn.disabled = false;
+                            this.attemptCount = 0;
+
+                            if (this.aiResult?.url_files?.length > 0) {
+                                this.responseImg();
+                                return false;
+                            }
+                            this.aiResult.answer = this.aiResult.answer.replace(/<\/?[^>]+(>|$)/g, "");
+                            this.innerBox.querySelector('#innerResult').innerText = this.aiResult.answer;
+
+
+                        }, 3000);
+                    }
+
+                },
+                fetchAi: async function (url, data) {
+
+                    let result = await fetch(url, {
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Accept": "application/json",
+                            "X-Requested-With": "XMLHttpRequest",
+                            "X-CSRF-Token": document.querySelector('input[name="_token"]').value
+                        },
+                        method: "post",
+                        credentials: "same-origin",
+                        body: JSON.stringify(data)
+                    });
+
+                    return await result.json();
+
+                },
+                fetchGetAiTask: async function (id, intervalId) {
+
+                    let response = await this.fetchAi(this.aiGetTaskRoute, {id: id});
+                    let {result, answer} = await response;
+
+                    if (result && answer.status === 1 || ++this.attemptCount >= this.tries) {
+                        clearInterval(intervalId);
+                        return answer;
+                    }
+
+                    return answer;
+
+                },
+                responseImg: function () {
+
+                    let html = "";
+                    let index = 0;
+                    for (const img of this.aiResult.url_files) {
+                        index++
+                        html += `<input type="radio" name="img" id="myCheckbox${index}" style="display: none" value="${img}">
+                         <label for="myCheckbox${index}"><img src="${img}" ></label>`;
+                    }
+
+                    this.innerBox.querySelector('#innerResult').innerHTML = html;
+
+                    for (let el of document.querySelectorAll('#innerResult input[type="radio"]')) {
+                        el.addEventListener('change', () => {
+                            this.aiResult = {'answer': el.value}
+                        });
+                    }
+
+                },
+                insertFunc: function () {
+
+                    document.getElementById(this.modalEl.dataset.typeId).value = this.aiResult.answer;
+                    bootstrap.Modal.getInstance(this.modalEl).hide();
+
+                },
+                createAiBtnAction: function (status) {
+
+                    if (status) {
+                        this.createAiBtn.disabled = true;
+                        this.createAiBtn.querySelector('span').style.display = "none";
+                        this.createAiBtn.querySelector('svg').style.display = "block";
+                        return;
+                    }
+
+                    this.createAiBtn.disabled = false;
+                    this.createAiBtn.querySelector('span').style.display = "block";
+                    this.createAiBtn.querySelector('svg').style.display = "none";
+
+                },
+                reset: function () {
+                    this.innerBox.querySelector('#innerResult').innerText = "";
+                    this.innerBox.style.display = 'none';
+                    this.insertBtn.disabled = true;
+                    this.modalEl.dataset.typeId = ""
+                    this.modalEl.dataset.type = "";
+                    this.modalEl.querySelector(".modal-body [name='aiForm']").value = "";
+                    this.aiResult = {};
+                    this.createAiBtnAction(false);
+                }
+
+            };
+
+            AiManager.init();
+
         </script>
 
     </body>

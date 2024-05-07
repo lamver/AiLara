@@ -73,13 +73,25 @@
             @continue
         @endif
         @if(in_array($param->Type, ['varchar(255)']))
-                <input type="text" class="form-control" id="label_{{ $param->Field }}" name="{{ $param->Field }}" value="{{ $model->{$param->Field} ?? ''  }}" aria-describedby="emailHelp" placeholder="{{ $param->Comment}}">
-                <small id="emailHelp" class="form-text text-muted">{{ $param->Comment}}</small>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="label_{{ $param->Field }}" name="{{ $param->Field }}" value="{{ $model->{$param->Field} ?? ''  }}" aria-describedby="emailHelp" placeholder="{{ $param->Comment}}">
+                    <span data-type-id="label_{{ $param->Field }}" class="input-group-text" data-bs-toggle="modal" data-bs-target="#aiModal">
+                            &nbsp;<i class="fa fa-child"></i>&nbsp; ai
+                    </span>
+                </div>
+                <small id="emailHelp" class="form-text text-muted d-block">{{ $param->Comment}}</small>
                 @continue
         @endif
         @if(in_array($param->Type, ['text', 'longtext']))
-            <textarea class="form form-control" id="label_{{ $param->Field }}" name="{{ $param->Field }}" placeholder="{{ $param->Comment}}">{{ $model->{$param->Field}  ?? '' }}</textarea>
-            <small id="emailHelp" class="form-text text-muted">{{ $param->Comment}}</small>
+                <div class="input-group">
+                    <textarea class="form form-control" id="label_{{ $param->Field }}" name="{{ $param->Field }}"
+                              placeholder="{{ $param->Comment}}">{{ $model->{$param->Field}  ?? '' }}</textarea>
+                    <span data-type-id="label_{{ $param->Field }}" class="input-group-text" data-bs-toggle="modal"
+                          data-bs-target="#aiModal">
+                            &nbsp;<i class="fa fa-child"></i>&nbsp; ai
+                    </span>
+                </div>
+                <small id="emailHelp" class="form-text text-muted d-block">{{ $param->Comment}}</small>
             @continue
         @endif
         @if(in_array($param->Type, ['timestamp']))
