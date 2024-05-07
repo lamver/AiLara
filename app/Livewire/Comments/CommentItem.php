@@ -94,7 +94,8 @@ class CommentItem extends Component
      */
     public function cancelReply(): void
     {
-        $this->replyCommentId = null;
+        $this->reset('replyCommentId');
+        $this->dispatch('listRender');
     }
 
     /**

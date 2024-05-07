@@ -63,7 +63,7 @@
     @if($comment->children)
         @foreach($comment->children as $children)
             <div style="margin-left: 35px">
-                <livewire:Comments.comment-item :comment="$children" key="{{ now() }}"/>
+                <livewire:Comments.comment-item :comment="$children" key="'child_'.{{ now() }} .'-'.{{ $children->id }}"/>
             </div>
         @endforeach
     @endif
