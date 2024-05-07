@@ -101,18 +101,14 @@ class SiteMapCommand extends Command
 
         foreach ($categories as $category) {
 
-            //echo $category->id . PHP_EOL;
             Posts::where(['status' => 'Published'])->where(['post_category_id' => $category->id])->chunk(100, function($posts) use ($sitemapPosts) {
                 foreach ($posts as $post) {
-
                     $setUpdatedAt = Carbon::create($post->updated_at);
 
                     $sitemapPosts->add(Url::create(Posts::createUrlFromPost($post))
                         ->setLastModificationDate($setUpdatedAt)
                         ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
                         ->setPriority(0.8));
-
-                    //echo $post->title . PHP_EOL;
                 }
             });
 
