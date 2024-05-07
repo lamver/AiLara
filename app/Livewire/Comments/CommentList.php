@@ -11,8 +11,8 @@ use App\Models\Comment;
 
 class CommentList extends Component
 {
-    /** @var Posts */
-    public Posts $post;
+    /** @var Object */
+    public Object $post;
 
     /** @var int */
     public int $replyCommentId;
@@ -26,10 +26,10 @@ class CommentList extends Component
     ];
 
     /**
-     * @param Posts $post
+     * @param Object $post
      * @return void
      */
-    public function mount(Posts $post): void
+    public function mount(Object $post): void
     {
         $this->post = $post;
     }
