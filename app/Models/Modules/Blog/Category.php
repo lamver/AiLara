@@ -3,6 +3,7 @@
 namespace App\Models\Modules\Blog;
 
 use App\Helpers\StrMaster;
+use App\Services\Modules\Module;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -200,6 +201,7 @@ class Category extends Model
     }
 
     static public function findCategoryIdByUrl($url) {
+        //dd($url);
         $categories = self::query()->select(['id', 'parent_id','slug'])->get()->toArray();
         $urlParts = explode('/', $url);
         $currentCategoryId = null;
@@ -216,7 +218,12 @@ class Category extends Model
         return $currentCategoryId;
     }
 
-    static public function getCategoryUrlById($category_id) {
+    /**
+     * @param $category_id
+     * @return array|string|string[]
+     */
+    static public function getCategoryUrlById($category_id): array|string
+    {
         $categories = self::query()->select(['id', 'parent_id','slug'])->get()->toArray();
         $path = [];
 
@@ -224,14 +231,18 @@ class Category extends Model
         while ($category_id !== null) {
             foreach ($categories as $category) {
                 if ($category['id'] == $category_id) {
-                    array_unshift($path, $category['slug']);
+                    array_unshift($path,  '/' . $category['slug']);
                     $category_id = $category['parent_id'];
                     break;
                 }
             }
         }
 
-        return implode('/', $path);
+        array_unshift($path,  Module::getWebRoutePrefix(Module::MODULE_BLOG));
+
+        $path = implode('/', $path);
+
+        return str_replace("//", "/", $path);
     }
 
     /**
@@ -239,6 +250,11 @@ class Category extends Model
      */
     static public function getBreadCrumbsByUri($uri): array
     {
+        if ($uri[0] != '/') {
+            $uri = '/' . $uri;
+        }
+
+        $uri = str_replace(Module::getWebRoutePrefix(Module::MODULE_BLOG), '', $uri);
         $uriToUri = explode("/", $uri);
 
         $uriConcat = '';
@@ -254,10 +270,13 @@ class Category extends Model
 
             $category = self::findCategoryIdByUrl($uriConcat);
 
-            $category = self::query()->select(['id', 'parent_id','slug', 'title'])->where(['id' => $category])->first();
+            if (empty($category)) {
+                continue;
+            }
 
+            $category = self::query()->select(['id', 'parent_id', 'slug', 'title'])->where(['id' => $category])->first();
             $data[] = [
-                'name' => StrMaster::htmlTagClear($category->title), 'uri' => '/'.$uriConcat,
+                'name' => StrMaster::htmlTagClear($category->title), 'uri' => Module::getWebRoutePrefix(Module::MODULE_BLOG) . '/'.$uriConcat,
             ];
         }
 
