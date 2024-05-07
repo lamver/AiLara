@@ -23,11 +23,15 @@ class ModulesCommonConfig extends Model
 
         foreach ($configs as $config) {
 
-            if (isset($data[$config->const_module_name . '_prefix_uri'])) { //dd($data[$config->const_module_name . '_prefix_uri']);
+            if (array_key_exists($config->const_module_name . '_prefix_uri', $data)) {
                 $config->prefix_uri = $data[$config->const_module_name . '_prefix_uri'];
+
+                if (is_null($config->prefix_uri)) {
+                    $config->prefix_uri = '';
+                }
             }
 
-            if (isset($data[$config->const_module_name . '_use_on_front'])) {
+            if (array_key_exists($config->const_module_name . '_use_on_front', $data)) {
                 $config->use_on_front = $data[$config->const_module_name . '_use_on_front'];
             } else {
                 $config->use_on_front = false;

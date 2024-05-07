@@ -61,8 +61,12 @@ Route::middleware(['auth', 'verified'])->prefix(SettingGeneral::value('admin_pre
 if (Module::isFrontModule(Module::MODULE_BLOG)) {
     /** web routes */
     Route::prefix(Module::getWebRoutePrefix(Module::MODULE_BLOG))->group(function () {
+
+        if (Module::getWebRoutePrefix(Module::MODULE_BLOG) != '') {
+            Route::get('/', [\App\Http\Controllers\Modules\Blog\PostsController::class, 'index'])->name('blog.post.index');
+        }
+
         $categorySlugsRoute = Category::getFullUrlsToAllCategory();
-        Route::get('/', [\App\Http\Controllers\Modules\Blog\PostsController::class, 'index'])->name('blog.post.index');
 
         foreach ($categorySlugsRoute as $slug) {
             Route::get('/'.$slug, [\App\Http\Controllers\Modules\Blog\PostsController::class, 'category'])->name('blog.post.cat' . '.' . str_replace("/", ".", $slug));
