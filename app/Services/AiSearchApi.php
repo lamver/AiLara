@@ -4,7 +4,6 @@
 namespace App\Services;
 
 use App\Settings\SettingGeneral;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -62,6 +61,10 @@ class AiSearchApi
 
         if (($response = curl_exec($curl)) === false) {
             Log::error(curl_error($curl));
+        }
+
+        if (curl_errno($curl)) {
+             Log::error(__METHOD__ .'----'.curl_error($curl));;
         }
 
         curl_close($curl);
