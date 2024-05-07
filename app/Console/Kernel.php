@@ -4,9 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use App\Settings\SettingGeneral;
-use Exception;
-use Illuminate\Support\Facades\Config;
+use App\Services\Backup\Backup;
 
 class Kernel extends ConsoleKernel
 {
@@ -15,51 +13,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
         $schedule->command('app:blog-import')->everyFourHours();
         $schedule->command('sitemap:generate')->everySixHours();
 
-        $this->backupSchedule($schedule);
-
-    }
-
-    /**
-     * @param $schedule
-     * @return void
-     */
-    protected function backupSchedule($schedule): void {
-        $settingGeneral = new SettingGeneral();
-
-        if ($settingGeneral->backup_status) {
-            $this->setBackupSettings($settingGeneral);
-            foreach ($settingGeneral->backup_frequency as $key => $value) {
-
-                if ($value) {
-                    try {
-                        $schedule->command('backup:run')->{$key}();
-                    }catch (Exception $exception) {
-                        echo $exception->getMessage();
-                    }
-
-                    return;
-                }
-
-            }
-        }
-
-    }
-
-    /**
-     * @param SettingGeneral $settingGeneral
-     * @return void
-     */
-    protected function setBackupSettings(SettingGeneral $settingGeneral): void {
-
-        if ($settingGeneral->backup_musqldump) {
-            Config::set('backup.backup.source.databases', [
-                'mysql',
-            ]);
-        }
+        Backup::backupSchedule($schedule);
 
     }
 
