@@ -210,7 +210,7 @@ class Posts extends Model implements Feedable
 
     static public function createUrlFromPost(Posts $post)
     {
-        return '/'.Category::getCategoryUrlById($post->post_category_id) . '/' . Str::slug(Str::limit(strip_tags($post->title))) . '_' .$post->id;
+        return Category::getCategoryUrlById($post->post_category_id) . '/' . Str::slug(Str::limit(strip_tags($post->title))) . '_' .$post->id;
     }
 
     static public function getUrlPostById($id)
