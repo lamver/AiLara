@@ -215,7 +215,7 @@
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="#">
+                                        <a class="nav-link" href="{{ route('admin.module.ai-form.settings') }}">
                                             <span data-feather="bar-chart-2"></span>
                                             {{ __('admin.Ai forms') }}
                                         </a>
