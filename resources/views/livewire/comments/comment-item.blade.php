@@ -1,8 +1,47 @@
 <div>
     <div class="card mb-3">
         <div class="card-body">
-            <h5 class="card-title">{{ $comment->title }}</h5>
-            <p class="card-text">{{ $comment->body }}</p>
+            <div class="row">
+                <div class="col-10">
+                    <h5 class="card-title">{{ $comment->title }}</h5>
+                </div>
+
+                @if(!$editCommentId && Auth::check())
+                    <div class="btn-group col-2">
+                        @if(Auth::user()->id === $comment->creator_id)
+                            <button type="button" class="btn btn-primary btn-sm"
+                                    wire:click.prevent="startEditingComment({{ $comment->id }}, '{{$comment->body}}')">
+                                {{__('Edit')}}
+                            </button>
+                            <button type="button" class="btn btn-danger btn-sm"
+                                    wire:confirm="{{__('delete')}} ?"
+                                    wire:click.prevent="deleteComment({{$comment->id}})"> {{__('Delete')}}
+                            </button>
+                        @else
+                            @if(!$replyCommentId)
+                                <button type="button" class="btn btn-info btn-sm"
+                                        wire:click.prevent="startReply({{ $comment->id }})">
+                                    {{__('Reply')}}
+                                </button>
+                            @endif
+                        @endif
+                    </div>
+                @endif
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <p class="card-text">{{ $comment->body }}</p>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-4">
+                    <img style="width: 100px" src="{{$comment->creator()->first()->avatar ?? asset('images/avatar/no_avatar.png') }}" class="rounded float-start" alt="...">
+                </div>
+                <div class="col-md-12 mt-1">
+                    {{$comment->formatCreatedAt()}}
+                </div>
+            </div>
 
             @if($editCommentId === $comment->id)
 
@@ -21,7 +60,7 @@
             @endif
 
             @if($replyCommentId === $comment->id)
-                <div class="flex-1 mb-3 ml-3">
+                <div class="flex-1 mb-3 ml-3 mt-3">
                   <textarea
                       class="form-control mb-3"
                       name="comment"
@@ -32,28 +71,6 @@
                     @error('replyCommentBody')
                     <x-input-error class="mt-2 text-sm" :messages="$message"/>
                     @enderror
-                </div>
-            @endif
-
-            @if(!$editCommentId && Auth::check())
-                <div class="btn-group">
-                    @if(Auth::user()->id === $comment->creator_id)
-                        <button type="button" class="btn btn-primary"
-                                wire:click.prevent="startEditingComment({{ $comment->id }}, '{{$comment->body}}')">
-                            {{__('Edit')}}
-                        </button>
-                        <button type="button" class="btn btn-danger"
-                                wire:confirm="{{__('delete')}} ?"
-                                wire:click.prevent="deleteComment({{$comment->id}})"> {{__('Delete')}}
-                        </button>
-                    @else
-                        @if(!$replyCommentId)
-                            <button type="button" class="btn btn-info"
-                                    wire:click.prevent="startReply({{ $comment->id }})">
-                                {{__('Reply')}}
-                            </button>
-                        @endif
-                    @endif
                 </div>
             @endif
 

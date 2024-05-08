@@ -10,6 +10,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Carbon;
 
 class Comment extends Model
 {
@@ -104,5 +105,19 @@ class Comment extends Model
         return false;
     }
 
+    /**
+     * @return string
+     */
+    public function formatCreatedAt (): string
+    {
+        $commentDate = Carbon::createFromFormat('Y-m-d H:i:s', $this->created_at);
+
+        return match (true) {
+            $commentDate->diffInHours() < 24 => $commentDate->shortRelativeDiffForHumans(date("Y-m-d h:i:s", time())),
+            $commentDate->isCurrentYear() => $commentDate->format('M d H:i'),
+            default => $commentDate->format('Y M d H:i')
+        };
+
+    }
 
 }

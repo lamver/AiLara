@@ -32,6 +32,11 @@
                                     @method('DELETE')
                                     <button class="btn btn-link" type="submit" onclick="return confirm('Are you sure?')">Delete</button>
                                 </form>
+                                <div class="row">
+                                      <div class="col">
+                                          {{__('admin.Comment count')}}: ( {{$postData->commentCount()}} )
+                                      </div>
+                                </div>
                             </td>
                             @continue
                         @endif

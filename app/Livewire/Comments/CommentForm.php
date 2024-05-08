@@ -41,7 +41,7 @@ class CommentForm extends Component
     public function submitComment(): void
     {
         $validatedData = $this->validate([
-            'title' => 'required|string|max:255',
+            'title' => 'sometimes|nullable|string|max:255',
             'content' => 'required|string|max:255',
         ]);
 
