@@ -10,7 +10,7 @@
                     <div class="btn-group col-2">
                         @if(Auth::user()->id === $comment->creator_id)
                             <button type="button" class="btn btn-primary btn-sm"
-                                    wire:click.prevent="startEditingComment({{ $comment->id }}, '{{$comment->body}}')">
+                                    wire:click.prevent="startEditingComment( {{ $comment->id }}, {{$comment}} )">
                                 {{__('Edit')}}
                             </button>
                             <button type="button" class="btn btn-danger btn-sm"
@@ -31,15 +31,7 @@
 
             <div class="row">
                 <div class="col">
-                    <p class="card-text">{{ $comment->body }}</p>
-                </div>
-            </div>
-            <div class="row mt-3">
-                <div class="col-md-4">
-                    <img style="width: 100px" src="{{$comment->creator()->first()->avatar ?? asset('images/avatar/no_avatar.png') }}" class="rounded float-start" alt="...">
-                </div>
-                <div class="col-md-12 mt-1">
-                    {{$comment->formatCreatedAt()}}
+                    <p class="card-text">{!! Str::markdown($comment->body) !!}</p>
                 </div>
             </div>
 
@@ -49,7 +41,9 @@
                     <textarea
                         class="form-control mb-3"
                         name="editCommentValue"
-                        wire:model.lazy="editCommentValue"> {{$comment->body}} </textarea>
+                        wire:model.lazy="editCommentValue"
+                        rows="4"
+                    > {{$comment->body}} </textarea>
                     <button class="btn btn-success"
                             wire:click="updateComment({{ $comment->id }})">{{__('Save')}}</button>
                     <button class="btn btn-danger" wire:click="cancelEditedComment">{{__('Cancel')}}</button>
@@ -73,6 +67,15 @@
                     @enderror
                 </div>
             @endif
+
+            <div class="row mt-3">
+                <div class="col-md-4">
+                    <img style="width: 100px" src="{{$comment->creator()->first()->avatar ?? asset('images/avatar/no_avatar.png') }}" class="rounded float-start" alt="...">
+                </div>
+                <div class="col-md-12 mt-1">
+                    {{$comment->formatCreatedAt()}}
+                </div>
+            </div>
 
         </div>
     </div>
