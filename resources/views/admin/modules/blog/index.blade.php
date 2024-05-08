@@ -15,7 +15,7 @@
             <thead>
             <tr>
                 @foreach($columns as $column)
-                    <th scope="col">{{ __('admin.'. str_replace('_', ' ', $column->Field) ) }}</th>
+                    <th scope="col">{{ __strTrans($column->Field, 'admin') }}</th>
                 @endforeach
             </tr>
             </thead>
