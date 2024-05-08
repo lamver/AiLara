@@ -170,6 +170,7 @@ class Posts extends Model implements Feedable
             ->summary($description ?? "")
             ->updated($this->updated_at)
             ->link(self::createUrlFromPost($this))
+            ->image($this->image )
             ->authorName($user->name ?? "")
             ->authorEmail('');
     }

@@ -208,7 +208,7 @@ class PostsController extends Controller
             'feed::rss',
             $items->description ?? "",
             '',
-            'rss',
+                $items->image ?? "",
         );
 
         return $rss->toResponse($request);
