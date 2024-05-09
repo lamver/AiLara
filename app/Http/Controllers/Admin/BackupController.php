@@ -37,6 +37,7 @@ class BackupController extends BaseController
     }
 
     /**
+     * @param SettingGeneral $settingGeneral
      * @return RedirectResponse
      */
     public function makeBackup(SettingGeneral $settingGeneral): RedirectResponse
@@ -45,8 +46,8 @@ class BackupController extends BaseController
             $backupJob = BackupJobFactory::createFromArray($this->getBackupSettings($settingGeneral));
             $backupJob->run();
         } catch (BindingResolutionException|Exception $e) {
-            Log::error($e->getMessage());
-            return redirect()->route('admin.backup.index')->withErrors(['msg' => 'Somthing went wrong']);
+            Log::channel('backup')->error($e->getMessage());
+            return redirect()->route('admin.backup.index')->withErrors(['msg' => __('admin.Something went wrong')]);
         }
 
         return redirect()->route('admin.backup.index');

@@ -27,7 +27,7 @@ class Backup
                 $schedule->command('backup:run')->{$period}();
 
             } catch (Exception $exception) {
-                Log::error(__METHOD__ . '---' . $exception->getMessage());
+                Log::channel('backup')->error(__METHOD__ . '---' . $exception->getMessage());
             }
         }
 
