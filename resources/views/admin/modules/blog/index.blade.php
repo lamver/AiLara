@@ -34,7 +34,14 @@
                                 </form>
                                 <div class="row">
                                       <div class="col">
-                                          {{__('admin.Comment count')}}: ( {{$postData->commentCount()}} )
+                                         {{__('admin.Comment count')}}:
+                                          @if($postData->commentCount() > 0)
+                                          <a href="{{ route('admin.comment.index',['commentableId' => $postData->id])}}">
+                                              ( {{$postData->commentCount()}} )
+                                          </a>
+                                          @else
+                                              (0)
+                                          @endif
                                       </div>
                                 </div>
                             </td>

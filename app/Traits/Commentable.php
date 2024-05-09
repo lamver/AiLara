@@ -57,8 +57,8 @@ trait Commentable
 
 
     /**
-     * @param $data
-     * @param Model      $creator
+     * @param array $data
+     * @param Model $creator
      * @param Model|null $parent
      *
      * @return static
@@ -77,13 +77,13 @@ trait Commentable
     }
 
     /**
-     * @param $id
-     * @param $data
+     * @param int $id
+     * @param array $data
      * @param Model|null $parent
      *
      * @return mixed
      */
-    public function updateComment(int $id, array $data, Model $parent = null)
+    public function updateComment(int $id, array $data, Model $parent = null): mixed
     {
         $commentableModel = $this->commentableModel();
 
@@ -97,7 +97,7 @@ trait Commentable
     }
 
     /**
-     * @param $id
+     * @param int $id
      *
      * @return mixed
      */

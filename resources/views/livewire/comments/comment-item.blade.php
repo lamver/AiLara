@@ -1,5 +1,5 @@
 <div>
-    <div class="card mb-3">
+    <div class="card mb-3" id="commentBox-{{$comment->id}}">
         <div class="card-body">
             <div class="row">
                 <div class="col-10">
