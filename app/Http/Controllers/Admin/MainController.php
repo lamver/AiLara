@@ -23,7 +23,6 @@ class MainController extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
-
     public function index(Request $request)
     {
         try {
