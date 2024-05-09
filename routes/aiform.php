@@ -1,5 +1,6 @@
 <?php
 
+use App\Services\Translation\Translation;
 use Illuminate\Support\Facades\Route;
 use App\Settings\SettingGeneral;
 use App\Services\Modules\Module;
@@ -16,18 +17,20 @@ use App\Services\Modules\Module;
 */
 
 /** Admin routes */
-Route::middleware(['auth', 'verified'])->prefix(SettingGeneral::value('admin_prefix') . '/module/ai-forms')->group(function () {
-    Route::resource('ai-form', \App\Http\Controllers\Admin\AiForms\AiFormController::class, [
-        'names' => [
-            'index' => 'admin.module.ai-form.index',
-            'create' => 'admin.module.ai-form.create',
-            'store' => 'admin.module.ai-form.store',
-            'edit' => 'admin.module.ai-form.edit',
-            'update' => 'admin.module.ai-form.update',
-            'show' => 'admin.module.ai-form.show',
-            'destroy' => 'admin.module.ai-form.destroy',
-        ],
-    ]);
+Route::middleware(['auth', 'verified'])->prefix(Translation::checkRoutePrefix())->group(function () {
+    Route::prefix(SettingGeneral::value('admin_prefix') . '/module/ai-forms')->group(function () {
+        Route::resource('ai-form', \App\Http\Controllers\Admin\AiForms\AiFormController::class, [
+            'names' => [
+                'index' => 'admin.module.ai-form.index',
+                'create' => 'admin.module.ai-form.create',
+                'store' => 'admin.module.ai-form.store',
+                'edit' => 'admin.module.ai-form.edit',
+                'update' => 'admin.module.ai-form.update',
+                'show' => 'admin.module.ai-form.show',
+                'destroy' => 'admin.module.ai-form.destroy',
+            ],
+        ]);
+    });
 });
 
 if (Module::isFrontModule(Module::MODULE_AI_FORM)) {
