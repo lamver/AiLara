@@ -255,6 +255,12 @@
                                         </ul>
 
                                     </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{ route('admin.comment.index') }}">
+                                            <span data-feather="bar-chart-2"></span>
+                                            {{ __('admin.Comments') }}
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
                             <li class="nav-item">

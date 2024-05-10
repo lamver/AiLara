@@ -41,6 +41,14 @@
         @endif
         @endauth
     </div>
+
+    <div class="container">
+        <div class="mb-3">
+            <livewire:Comments.comment-form :post="$post"/>
+        </div>
+        <livewire:Comments.comment-list :post="$post"/>
+    </div>
+
 @endsection
 @push('bottom-scripts')
     <script>

@@ -37,4 +37,7 @@ return array (
   'task_seo_description' => 'Seo description',
   'task_seo_article' => 'Seo article',
 
+  'Comment count' => 'Comment count',
+  'Comments' => 'Comments',
+
 );
