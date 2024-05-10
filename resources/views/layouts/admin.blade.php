@@ -364,6 +364,10 @@
                             <label class="form-label">{{__('admin.text')}}</label>
                             <textarea class="form form-control" name="aiForm" placeholder="{{ __('ask_ai') }}"></textarea>
                         </div>
+
+                        <div class="alert alert-danger" style="display: none">
+                        </div>
+
                         <div class="mb-3" id="innerBox" style="display: none">
                             <div class="mb-2">{{__('admin.result')}}</div>
                             <div id="innerResult" class="shadow-lg p-3 mb-5 bg-body rounded" style="text-align: center"></div>
@@ -453,24 +457,42 @@
                 basicCheckValue: false,
                 attemptCount: 0,
                 tries: 25,
+                inProcess: false,
 
                 init: function () {
 
                     this.modalEl.addEventListener('show.bs.modal', (event) => {
                         this.modalEl.dataset.typeId = event.relatedTarget.dataset.typeId
                         let modelTitle = this.modalEl.querySelector('.modal-header .modal-title span');
-                        modelTitle.innerText = document.querySelector(`[for='${event.relatedTarget.dataset.typeId}']`).innerText
+                        modelTitle.innerText = document.querySelector(`[for='${event.relatedTarget.dataset.typeId}']`)?.innerText ?? ""
 
                     });
 
-                    this.modalEl.addEventListener('hide.bs.modal', () => {
-                        this.reset();
-                    });
-
+                    this.modalEl.addEventListener('hide.bs.modal', this.modalClose.bind(this));
                     this.createAiBtn.addEventListener('click', this.createAiFunc.bind(this));
                     this.insertBtn.addEventListener('click', this.insertFunc.bind(this));
                     this.selectTypeTask.addEventListener('change', this.selectTypeTaskEvent.bind(this));
 
+                    window.addEventListener('beforeunload', this.beforeunload.bind(this));
+
+                },
+                modalClose: function (event) {
+                    if(this.inProcess && !confirm('{{__('admin.Close')}} ?')) {
+                        event.preventDefault();
+                        event.stopImmediatePropagation();
+                        return false
+                    }
+
+                    this.reset();
+                },
+                beforeunload: function (event) {
+                    if (this.inProcess) {
+                        // Показываем диалоговое окно подтверждения
+                        let confirmationMessage = '{{__('admin.Are you sure')}} ?';
+                        event.returnValue = confirmationMessage; // Необходимо для старых версий браузеров
+                        // Если пользователь согласился, возвращаем null (иначе диалоговое окно отменится)
+                        return confirmationMessage;
+                    }
                 },
                 selectTypeTaskEvent: function (even) {
                     let basicCheck = this.modalEl.querySelector('#basicCheck');
@@ -487,11 +509,13 @@
 
                     let text = this.modalEl.querySelector(".modal-body [name='aiForm']").value
                     let type = this.modalEl.querySelector(".modal-body #typeTask").value;
+                    this.inProcess = true;
+                    this.errorHandler(false);
 
                     if (text.length < 3) return;
 
                     this.createAiBtnAction(true);
-                    let data = {text: text, type: type};
+                    let data = {prompt: text, type: type};
 
                     if(this.basicCheckValue) {
                         data.basic = 1;
@@ -516,10 +540,16 @@
                             }
                             this.aiResult.answer = this.aiResult.answer.replace(/<\/?[^>]+(>|$)/g, "");
                             this.innerBox.querySelector('#innerResult').innerText = this.aiResult.answer;
+                            this.inProcess = false;
 
 
                         }, 3000);
+
+                        return;
                     }
+
+                    this.errorHandler(true, result.message);
+                    this.reset();
 
                 },
                 fetchAi: async function (url, data) {
@@ -591,15 +621,28 @@
                     this.createAiBtn.querySelector('svg').style.display = "none";
 
                 },
+                errorHandler: function (show, msg = "") {
+                    let dangerBox = this.modalEl.querySelector('.alert-danger');
+
+                    if(show) {
+                        dangerBox.innerText = msg;
+                        dangerBox.style.display = 'block';
+                        return;
+                    }
+
+                    dangerBox.innerText = "";
+                    dangerBox.style.display = 'none';
+
+                },
                 reset: function () {
                     this.innerBox.querySelector('#innerResult').innerText = "";
                     this.innerBox.style.display = 'none';
                     this.insertBtn.disabled = true;
                     this.modalEl.dataset.typeId = ""
-                    this.modalEl.dataset.type = "";
                     this.modalEl.querySelector(".modal-body [name='aiForm']").value = "";
                     this.aiResult = {};
                     this.createAiBtnAction(false);
+                    this.inProcess = false;
                 }
 
             };
