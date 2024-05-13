@@ -87,7 +87,7 @@ class Posts extends Model implements Feedable
      * @return bool
      */
     static public function updatePost($id, $data): bool
-    {
+    { //dd($data);
         $modelParams = self::getModelParams();
 
         $model = Posts::find($id);

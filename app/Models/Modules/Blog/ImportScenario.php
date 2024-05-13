@@ -304,8 +304,4 @@ class ImportScenario
 
         return $result['answer']['answer'];
     }
-
-
-
-
 }
