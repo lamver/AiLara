@@ -83,7 +83,7 @@
             </div>
             <textarea style="display: none" name="content" id="content" class="form-control" rows="30">@if(isset($post)) {{ $post->content }} @endif</textarea>
             <div id="editor_content" style="font-size: 16px; height: 600px;">
-                @if(isset($post)) {!! $post->content !!} @endif
+                @if(isset($post)) {!! \App\Helpers\StrMaster::applyHtml($post->content) !!} @endif
             </div>
             <p></p>
             <div class="form-floating mb-3">
