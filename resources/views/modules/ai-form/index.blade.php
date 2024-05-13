@@ -22,13 +22,13 @@
             z-index: 0;
         }
 
-        h2 a {
+        .post_card h2 a {
             color: white;
             text-decoration: none;
             max-width: 90%;
         }
 
-        h2 {
+        .post_card h2 {
             bottom: 40%;
             left: 5%;
             position: absolute;
@@ -49,12 +49,12 @@
             <div class="col-md-12">
                 <div class="px-2 py-3 my-5 text-center">
                     @if(!empty($aiForm->title_h1))
-                    <h1 class="display-5 fw-bold">
+                    <h1 class="display-3 fw-bold">
                         {{ $aiForm->title_h1 }}
                     </h1>
                     @endif
                     @if(!empty($aiForm->title_h2))
-                    <h2>
+                    <h2 class="display-6 fw-bold">
                         {{ $aiForm->title_h2 }}
                     </h2>
                     @endif
@@ -79,12 +79,13 @@
                 {{ $form->name }}
             @endforeach
         @endif
-
-        <div class="row">
+        <div style="clear: both"></div>
+        <div class="row post_card">
             @if($settings->home_page_view_posts && !empty($settings->home_page_category_ids) && !empty(json_decode($settings->home_page_category_ids, true)))
                 @php
-                    $posts = \App\Models\Modules\Blog\Posts::getPostsByCategoryId(json_decode($settings->home_page_category_ids, true), 10);
+                    $posts = \App\Models\Modules\Blog\Posts::getPostsByCategoryId(json_decode($settings->home_page_category_ids, true), 12);
                 @endphp
+
                 @foreach($posts as $post)
                     {{--{{ $post->title }} <br>--}}
 
@@ -112,6 +113,7 @@
                {{--{{ json_encode($posts) }}--}}
             @endif
         </div>
+        trgret
     </div>
 
 
