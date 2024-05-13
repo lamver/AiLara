@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Modules\Task;
 
+use App\Helpers\ImageMaster;
+use App\Helpers\SeoTools;
+use App\Helpers\Settings;
 use App\Http\Controllers\Controller;
 use App\Models\Modules\AiForm\AiForm;
 use App\Models\Tasks;
 use App\Services\Modules\Module;
+use App\Settings\SettingAiFrom;
 use Illuminate\Http\Request;
 
 /**
@@ -30,7 +34,22 @@ class TaskController extends Controller
             return abort(404, 'Ai form not found');
         }
 
-        return view('modules.ai-form.index', ['aiForm' => $aiForm]);
+        $settings = Settings::load(SettingAiFrom::class);
+
+        $param = [
+            'title'         => $settings->home_page_seo_title,
+            'description'   => $settings->home_page_seo_description,
+            'canonicalUrl'  => '/',
+            //'type'          => 'page',
+        ];
+
+        if (!empty($settings->image)) {
+            $param['image'] = ImageMaster::resizeImgFromCdn($settings->image, 300, 300);
+        }
+
+        SeoTools::setSeoParam($param);
+
+        return view('modules.ai-form.index', ['aiForm' => $aiForm, 'settings' => $settings]);
     }
 
     public function viewAiFormPage(Request $request)
@@ -41,7 +60,7 @@ class TaskController extends Controller
             return abort(404);
         }
 
-        return view('modules.ai-form.index', ['aiForm' => $aiForm]);
+        return view('modules.ai-form.form', ['aiForm' => $aiForm]);
     }
 
     /**

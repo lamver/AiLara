@@ -192,16 +192,36 @@ class Posts extends Model implements Feedable
         return $prepared;
     }
 
-    static public function getPostsByCategoryId($categoryId)
+    /**
+     * @param int|array $categoryId
+     * @return mixed
+     */
+    static public function getPostsByCategoryId(int|array $categoryId, $perPage = 30): mixed
     {
-        return self::createUrlToPosts(Posts::query()->where(['post_category_id' => $categoryId])->where(['status' => 'Published'])->orderBy('id', 'DESC')->paginate(30));
+        if (is_array($categoryId) && !empty($categoryId)) {
+            return self::createUrlToPosts(
+                Posts::query()
+                    ->whereRaw('post_category_id IN ('.implode(',', $categoryId).')')
+                    ->where(['status' => 'Published'])
+                    ->orderBy('id', 'DESC')
+                    ->paginate($perPage)
+            );
+        }
+
+        return self::createUrlToPosts(
+            Posts::query()
+                ->where(['post_category_id' => $categoryId])
+                ->where(['status' => 'Published'])
+                ->orderBy('id', 'DESC')
+                ->paginate($perPage)
+        );
     }
 
     /**
      * @param $posts
      * @return mixed
      */
-    static public function createUrlToPosts($posts)
+    static public function createUrlToPosts($posts): mixed
     {
         foreach ($posts as $post) {
             $post->urlToPost = self::createUrlFromPost($post);
