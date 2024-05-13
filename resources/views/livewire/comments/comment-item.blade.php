@@ -5,7 +5,7 @@
                 <div class="col-10">
                     <h5 class="card-title">{{ $comment->title }}</h5>
                 </div>
-
+                {{ $editCommentId }} {{ Auth::check() }}
                 @if(!$editCommentId && Auth::check())
                     <div class="btn-group col-2">
                         @if(Auth::user()->id === $comment->creator_id)
