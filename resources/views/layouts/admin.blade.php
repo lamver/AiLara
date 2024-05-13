@@ -246,6 +246,12 @@
                                                     {{ __('admin.category') }}
                                                 </a>
                                             </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="{{ route('admin.comment.index') }}">
+                                                    <span data-feather="bar-chart-2"></span>
+                                                    {{ __('admin.Comments') }}
+                                                </a>
+                                            </li>
                                             <li>
                                                 <a class="nav-link" href="{{ route('admin.blog.import.index') }}">
                                                     <span data-feather="bar-chart-2"></span>
@@ -253,13 +259,6 @@
                                                 </a>
                                             </li>
                                         </ul>
-
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('admin.comment.index') }}">
-                                            <span data-feather="bar-chart-2"></span>
-                                            {{ __('admin.Comments') }}
-                                        </a>
                                     </li>
                                 </ul>
                             </li>

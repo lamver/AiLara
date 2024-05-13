@@ -163,7 +163,11 @@ class Import extends Model
         return 'UNKNOWN';
     }
 
-    static public function execute(Import $import)
+    /**
+     * @param Import $import
+     * @return void
+     */
+    static public function execute(Import $import): void
     {
         if ($import->source_type == Import::SOURCE_TYPE_RSS) {
             self::executeRss($import);
