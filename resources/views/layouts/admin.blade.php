@@ -258,7 +258,14 @@
                                                     {{ __('admin.import') }}
                                                 </a>
                                             </li>
+                                            <li>
+                                                <a class="nav-link" href="{{ route('admin.blog.settings.index') }}">
+                                                    <span data-feather="bar-chart-2"></span>
+                                                    {{ __('admin.Settings') }}
+                                                </a>
+                                            </li>
                                         </ul>
+
                                     </li>
                                 </ul>
                             </li>

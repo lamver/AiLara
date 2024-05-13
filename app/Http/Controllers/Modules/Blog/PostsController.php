@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 use Spatie\Feed\Feed;
 
 class PostsController extends Controller
@@ -216,6 +217,10 @@ class PostsController extends Controller
                 $query->where('status', Posts::STATUS[0]);
             }])
             ->limit(self::RSS_ITEMS_LENGTH)->first();
+
+        foreach ($items->Posts as $post) {
+            $post->description = strip_tags(str::limit($post->description ?? "", Posts::RSS_CONTENT_LN));
+        }
 
         $rss = new Feed(
             $items->title ?? "",

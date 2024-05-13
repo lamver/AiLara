@@ -238,14 +238,15 @@ class Posts extends Model implements Feedable
     public function toFeedItem(): FeedItem
     {
         $user = $this->user()->first();
-        $description = strip_tags(str::limit($this->description ?? "", self::RSS_CONTENT_LN));
+
         return FeedItem::create()
             ->id($this->id)
             ->title($this->title ?? "")
-            ->summary($description ?? "")
+            ->summary($this->description ?? "")
             ->updated($this->updated_at)
             ->link(self::createUrlFromPost($this))
             ->image($this->image )
+            ->category($this->category->title)
             ->authorName($user->name ?? "")
             ->authorEmail('');
     }
