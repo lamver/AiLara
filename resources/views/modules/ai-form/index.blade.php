@@ -12,13 +12,13 @@
         .info-block-top:before {
             content: "";
             position: absolute;
-            height: 80%;
+            height: 100%;
             width: 100%;
             bottom: 0;
             left: 0;
             right: 0;
             background-image: -webkit-gradient(linear, left top, left bottom, from(transparent), to(black));
-            background-image: linear-gradient(180deg, transparent, black);
+            background-image: linear-gradient(280deg, transparent, black);
             z-index: 0;
         }
 
@@ -91,7 +91,7 @@
 
                     <div class="col-md-4 top-four-post">
                         <div class="shadow-sm rounded info-block-top lazy-load-image" data-bg-url="{{ \App\Helpers\ImageMaster::resizeImgFromCdn($post->image, 800, 900) }}" style="height: 250px; background-image: url('{{ \App\Helpers\ImageMaster::getRandomSprite() }}'); background-size: 100%;">
-                            <h2 class="text-overlay" style="font-size: 1.2em; bottom: 50%">
+                            <h2 class="text-overlay display-4 fw-bold" style="font-size: 1.2em; bottom: 50%">
                                 <a class="stretched-link" href="{{ $post->urlToPost }}">{{ \App\Helpers\StrMaster::htmlTagClear($post->title, 50) }}</a>
                             </h2>
                             <div class="text-overlay" style="position: absolute; bottom: 10%; left: 5%; color: white; font-size: 0.8em;">
@@ -113,10 +113,7 @@
                {{--{{ json_encode($posts) }}--}}
             @endif
         </div>
-        trgret
     </div>
-
-
 @endsection
 @push('bottom-scripts')
     <script>
