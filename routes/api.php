@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Ajax\AiTaskController;
+use App\Http\Controllers\Api\V1\Module\Blog\ExportController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Ajax\AiFormController;
@@ -28,4 +29,5 @@ Route::prefix('/v1')->group(function () {
     Route::post('/task/execute', [AiFormController::class, 'execute'])->name('ajax.ai-form.execute');
     Route::get('/task/result/{id}', [AiTaskController::class, 'result'])->name('ajax.ai-form.getTask');
     Route::get('/module/blog/load', [PostController::class, 'load'])->name('api.module.blog.post.load');
+    Route::get('/module/blog/post/export/{api_secret_key_rss_export}', [ExportController::class, 'export'])->name('api.module.blog.post.export');
 });
