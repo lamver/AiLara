@@ -5,7 +5,7 @@
 @section('page_options')
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group me-2">
-            <a href="{{ route('admin.module.ai-form.create') }}" type="button" class="btn btn-sm btn-outline-success">{{ __('admin.Create') }}</a>
+            <a href="{{ route('admin.blog.post.create') }}" type="button" class="btn btn-sm btn-outline-success">{{ __('admin.Create') }}</a>
         </div>
     </div>
 @endsection

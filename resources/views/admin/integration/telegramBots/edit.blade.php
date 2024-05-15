@@ -28,6 +28,7 @@
         <div class="mb-3">
             <label class="form-check-label" for="status">{{ __('Select form') }}</label>
             <select class="form-select" name="form_id" aria-label="">
+                <option value="">{{__('admin.Empty')}}</option>
                 @foreach($forms as $form)
                     <option @if($form->id === $bot->aiFrom->id) selected @endif value="{{$form->id}}">{{$form->name}}</option>
                 @endforeach

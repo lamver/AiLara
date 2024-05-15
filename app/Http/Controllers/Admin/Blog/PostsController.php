@@ -5,11 +5,11 @@ namespace App\Http\Controllers\Admin\Blog;
 use App\Http\Controllers\Controller;
 use App\Models\Modules\Blog\Category;
 use App\Models\Modules\Blog\Posts;
+use App\Models\TelegramBot;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Schema;
 
 class PostsController extends Controller
 {
@@ -23,7 +23,11 @@ class PostsController extends Controller
         $posts = Posts::loadPostsList();
         $columns = Posts::getModelParams();
 
-        return view('admin.modules.blog.index', ['posts' => $posts, 'columns' => $columns]);
+        return view('admin.modules.blog.index', [
+            'posts' => $posts,
+            'columns' => $columns,
+            'telegramBots' => TelegramBot::all(),
+        ]);
     }
 
     /**
@@ -36,7 +40,11 @@ class PostsController extends Controller
         $allCategories = Category::pluck('title','id')->all();
         $categoryTree = compact('categories','allCategories');
 
-        return view('admin.modules.blog.create', ['modelParams' => $modelParams, 'categoryTree' => $categoryTree]);
+        return view('admin.modules.blog.create', [
+            'modelParams' => $modelParams,
+            'categoryTree' => $categoryTree,
+            'telegramBots' => TelegramBot::all(),
+        ]);
     }
 
     /**
@@ -73,7 +81,12 @@ class PostsController extends Controller
         $allCategories = Category::pluck('title','id')->all();
         $categoryTree = compact('categories','allCategories');
 
-        return view('admin.modules.blog.create', ['modelParams' => $modelParams, 'post' => $post, 'categoryTree' => $categoryTree]);
+        return view('admin.modules.blog.create', [
+            'modelParams' => $modelParams,
+            'post' => $post,
+            'categoryTree' => $categoryTree,
+            'telegramBots' => TelegramBot::all(),
+        ]);
     }
 
     /**

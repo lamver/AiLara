@@ -262,6 +262,15 @@
         <textarea class="form form-control" id="label_{{ $param->Field }}" name="{{ $param->Field }}" placeholder="{{ $param->Comment}}">{{ $post->{$param->Field}  ?? '' }}</textarea>
         <small id="emailHelp" class="form-text text-muted">{{ $param->Comment}}</small>
     @endforeach
+    <div class="mb-3">
+        <label class="form-check-label" for="telegramBotId">{{ __('admin.Telegram bot') }}</label>
+        <select class="form-select" id="telegramBotId" name="telegram_bot_id">
+            <option value="">{{__('admin.Empty')}}</option>
+            @foreach($telegramBots as $bot)
+                <option @if(isset($post) && $bot->id === $post->telegramBot?->id) selected @endif value="{{$bot->id}}">{{$bot->name}}</option>
+            @endforeach
+        </select>
+    </div>
     <br>
     <button class="btn btn-primary" type="submit">{{ $btnName }}</button>
 </form>

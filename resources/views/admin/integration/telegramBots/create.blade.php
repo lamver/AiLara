@@ -24,7 +24,8 @@
 
         <div class="mb-3">
             <label class="form-check-label" for="formId">{{ __('Select form') }}</label>
-            <select class="form-select" id="formId" name="form_id" aria-label="">
+            <select class="form-select" id="formId" name="form_id" >
+                <option value="">{{__('admin.Empty')}}</option>
                 @foreach($forms as $form)
                     <option value="{{$form->id}}">{{$form->name}}</option>
                 @endforeach
