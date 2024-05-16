@@ -119,6 +119,13 @@ class TgBroadsace
 
         foreach ($this->chats as $chat) {
 
+            $res = $chat->photo('https://aisearch.ru/cdn-cgi/image/fit=contain,width=1024,height=1024,compression=fast/files/175/547517/foto_dlya_stati_s_zagolovkom_cenovaya_voina_na_rynke_elektrokarov_v_kitae_usilivaetsya_i_melkie_igro_547517.png')
+                ->send()
+                ->getBody()
+                ->getContents();
+
+            Log::error(json_decode($res));
+
             $result = json_decode($chat->{$type}($message)->send()->getBody()->getContents(), true);
 
             if ($result['ok']) {

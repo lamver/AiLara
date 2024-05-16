@@ -26,7 +26,7 @@ class BlogPostsObserver
             $imagePost = '<img src="' . $post->image . '"/>';
         }
 
-        $broadside->toAllByBotId($botId, Posts::class, $post->id)->html($imagePost . $post->content);
+        $broadside->toAllByBotId($botId, Posts::class, $post->id)->html($post->content);
 
         return true;
 
