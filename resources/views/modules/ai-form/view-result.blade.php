@@ -42,7 +42,7 @@
     let id = {{$id}};
     let responseHtml = document.querySelector('#response');
     let counter = 1;
-    let interval = 10000; // 10 секунд
+    let interval = 10000; // 5 секунд
     let intervalEnd = 120000 // 2 минуты.
 
     let fetchTast = () => {
@@ -60,7 +60,7 @@
                     responseHtml.innerHTML = '<div class="alert alert-danger"> Something went wrong. <br> please refresh page </div>';
                 }
 
-                if (json.answer.status !== 1) {
+                if (json.answer.status !== {{ \App\Models\Tasks::STATUS_DONE_SUCCESSFULLY }}) {
                     setTimeout(() => fetchTast(), interval);
                     counter++;
                     return false
@@ -74,14 +74,16 @@
     };
 
 
-   let task = {!! json_encode($task) !!};
+   //let task = {!! json_encode($task) !!};
 
-   if (task.result === false || task?.answer?.status !== 1) {
+   //if (task.result === false || task?.answer?.status !== 1) {
+   //if (task.result === false || task?.answer?.status !== 1) {
+    @if($task['status'] == 1)
         fetchTast();
-    }
+        @endif
+    //}
 
    @endif
 
 </script>
-
 @endpush

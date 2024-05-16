@@ -13,7 +13,8 @@ use Spatie\Feed\Feed;
 class ExportController extends ApiBaseController
 {
     const RSS_ITEMS_LENGTH = 100;
-    public function export(Request $request, SettingBlog $settingBlog, $key)
+
+    public function export(Request $request, SettingBlog $settingBlog, $key = null)
     {
         if (!Auth::check() && strcmp($key, $settingBlog->api_secret_key_rss_export) !== 0) {
             return response()->json( $this->error('Unauthorized'), 401 );
@@ -50,5 +51,4 @@ class ExportController extends ApiBaseController
             'feed::rss',
         );
     }
-
 }

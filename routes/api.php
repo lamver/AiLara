@@ -29,5 +29,6 @@ Route::prefix('/v1')->group(function () {
     Route::post('/task/execute', [AiFormController::class, 'execute'])->name('ajax.ai-form.execute');
     Route::get('/task/result/{id}', [AiTaskController::class, 'result'])->name('ajax.ai-form.getTask');
     Route::get('/module/blog/load', [PostController::class, 'load'])->name('api.module.blog.post.load');
-    Route::get('/module/blog/post/export/{api_secret_key_rss_export}', [ExportController::class, 'export'])->name('api.module.blog.post.export');
+    Route::get('/module/blog/post/export/{api_secret_key_rss_export?}', [ExportController::class, 'export'])
+        ->name('api.module.blog.post.export');
 });

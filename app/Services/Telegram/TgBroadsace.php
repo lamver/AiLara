@@ -136,7 +136,6 @@ class TgBroadsace
             }
 
             Log::error(json_decode($result));
-
         }
 
     }

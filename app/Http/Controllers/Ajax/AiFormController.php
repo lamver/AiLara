@@ -48,6 +48,7 @@ class AiFormController extends BaseController
     public function getFormConfig(Request $request)
     {
         $form = AiForm::getForm((int)$request->id);
+
         return $form['form_config'];
     }
 
@@ -60,7 +61,7 @@ class AiFormController extends BaseController
     {
         $executed = RateLimiter::attempt(
             'send-message:' . $request->ip(),
-            $perMinute = 5,
+            $perMinute = 50,
             function () {
                 // Send message...
             },
@@ -71,13 +72,18 @@ class AiFormController extends BaseController
             return $this->resultError('Too many messages sent from your ip address!');
         }
 
-        $aiForm = AiForm::query()->find($request->post('form_id'))->first();
+        try {
+            $aiForm = AiForm::query()->find($request->post('form_id'))->first();
+        } catch (\Exception $e) {
+            return $this->resultError($e->getMessage());
+        }
 
         $formConfig = json_decode($aiForm->form_config, true);
 
         $promptMask = $formConfig['tasks'][$request->post('task_id')]['prompt_mask'];
 
         $promptMask = AiForm::fillPromptMask($promptMask, $request->post());
+
         $task = Tasks::createTask($request->post());
 
         $resultApi = $aiSearchApi->taskCreate(['prompt' => $promptMask]);
@@ -94,7 +100,8 @@ class AiFormController extends BaseController
         $aiFormRoute = AiForm::fillAiFormRoute($request->post('form_id'));
 
         $result = [
-            'task_id' => $resultApi['task_id'],
+            'task_id' => $task->id,
+            'external_task_id' => $resultApi['task_id'],
             'task_url' => route($aiFormRoute, ['slug' => Tasks::createSlugFromUserParams($request->post()), 'id' => $task->id]),
         ];
 
@@ -102,7 +109,7 @@ class AiFormController extends BaseController
     }
 
     /**
-     * @param array $data
+     * @param string|array $data
      * @return array
      */
     #[ArrayShape(['result' => "bool", 'message' => "array"])] private function resultSuccessfull(string|array $data)

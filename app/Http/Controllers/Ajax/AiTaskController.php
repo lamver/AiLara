@@ -47,17 +47,18 @@ class AiTaskController extends BaseController
             return $this->responseError([], 'Task not found');
         }
 
-        $result = $this->aiSearch->getTaskByTaskId($task->external_task_id);
+        if (in_array($task->status, [Tasks::STATUS_CREATED, Tasks::STATUS_IN_PROGRESS])) {
+            $result = $this->aiSearch->getTaskByTaskId($task->external_task_id);
 
-        if ($result['result'] !== true) {
-            return $this->responseError([], __('Something went wrong.'));
+            if ($result['result'] === true) {
+                $task->status = Tasks::STATUS_DONE_SUCCESSFULLY;
+                $task->result = $result['answer']['answer'];
+                $task->save();
+                //return $this->responseError([], __('Something went wrong.'));
+            }
         }
 
-        $task->status = Tasks::STATUS_DONE_SUCCESSFULLY;
-        $task->result = $result['answer']['answer'];
-        $task->save();
-
-        return $result;
+        return $this->responseSuccess($task->toArray());
     }
 
 }

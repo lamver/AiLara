@@ -25,8 +25,9 @@ class TaskExecuteRequest extends FormRequest
             && isset($_POST['task_id'])
         ) {
             $aiForm = \App\Models\Modules\AiForm\AiForm::getFormConfig($_POST['form_id']);
+
             if (!isset($aiForm['tasks'][$_POST['task_id']])) {
-                $this->failedValidationAnswerJson(['task_id' => $_POST['task_id'] . 'task_id not found']);
+                $this->failedValidationAnswerJson(['task_id' => $_POST['task_id'] . ' task_id not found']);
             }
 
             $rules = [];
@@ -54,7 +55,6 @@ class TaskExecuteRequest extends FormRequest
             }
 
             return $rules;
-            //dd($rules);
         } else {
             return [
                 'form_id' => 'required|int',
