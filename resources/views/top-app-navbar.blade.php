@@ -64,7 +64,13 @@
             }
 
             function isHomePage() {
-                if (window.location.href === "{{ env('APP_URL') }}/") { console.log('gggggg');
+                let appUrl = "{{ env('APP_URL') }}";
+
+                if (appUrl.charAt(appUrl.length - 1) !== "/") {
+                    appUrl += "/";
+                }
+
+                if (window.location.href === appUrl) {
                     return true;
                 }
 
