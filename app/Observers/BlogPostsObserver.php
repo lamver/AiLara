@@ -19,7 +19,7 @@ class BlogPostsObserver
 
         $botId = $post->telegramBot->id;
         $broadside = new TgBroadsace();
-        $broadside->toAllByBotId($botId, Posts::class, $post->id)->text($post->content);
+        $broadside->toAllByBotId($botId, Posts::class, $post->id)->html($post->content);
 
         return true;
 
