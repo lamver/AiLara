@@ -3,17 +3,24 @@
 namespace App\Models\Modules\Blog;
 
 use App\Helpers\StrMaster;
+use App\Models\TelegramBot;
+use App\Models\telegramMessages;
 use App\Models\User;
+use App\Observers\BlogPostsObserver;
 use App\Traits\Commentable;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Spatie\Feed\Feedable;
 use Spatie\Feed\FeedItem;
 
+#[ObservedBy([BlogPostsObserver::class])]
 class Posts extends Model implements Feedable
 {
     use HasFactory;
@@ -68,7 +75,7 @@ class Posts extends Model implements Feedable
         $model = new self();
 
         foreach ($modelParams as $params) {
-            if (isset($data[$params->Field])) {
+            if (array_key_exists($params->Field, $data)) {
                 $model->{$params->Field} = $data[$params->Field];
             }
         }
@@ -87,13 +94,13 @@ class Posts extends Model implements Feedable
      * @return bool
      */
     static public function updatePost($id, $data): bool
-    { //dd($data);
+    {
         $modelParams = self::getModelParams();
 
         $model = Posts::find($id);
 
         foreach ($modelParams as $params) {
-            if (isset($data[$params->Field])) {
+            if (array_key_exists($params->Field, $data)) {
                 $model->{$params->Field} = $data[$params->Field];
             }
         }
@@ -287,6 +294,22 @@ class Posts extends Model implements Feedable
     public function category()
     {
         return $this->belongsTo(Category::class, 'post_category_id', 'id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function telegramBot(): BelongsTo
+    {
+        return $this->belongsTo(TelegramBot::class, 'telegram_bot_id', 'id');
+    }
+
+    /**
+     * @return MorphMany
+     */
+    public function telegramMessages(): MorphMany
+    {
+        return $this->morphMany(telegramMessages::class, 'model');
     }
 
     static public function getUniqIdsFromCollections(Collection $collections)

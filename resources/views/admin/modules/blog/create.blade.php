@@ -162,7 +162,15 @@
             <input type="date" class="form-control" id="label_created_at" name="created_at" value="{{ $post->created_at ?? ''  }}" placeholder="date time">
             <label for="label_created_at">updated_at</label>
             <input type="date" class="form-control" id="label_created_at" name="created_at" value="{{ $post->updated_at ?? ''  }}" placeholder="date time">
-
+            <div class="mb-3">
+                <label class="form-check-label" for="telegramBotId">{{ __('admin.Telegram bot') }}</label>
+                <select class="form-select" id="telegramBotId" name="telegram_bot_id">
+                    <option value="">{{__('admin.Empty')}}</option>
+                    @foreach($telegramBots as $bot)
+                        <option @if(isset($post) && $bot->id === $post->telegramBot?->id) selected @endif value="{{$bot->id}}">{{$bot->name}}</option>
+                    @endforeach
+                </select>
+            </div>
         </div>
     </div>
     @method($method)
@@ -189,6 +197,7 @@
     'source_url',
     'image',
     'unique_id_after_import',
+    'telegram_bot_id',
     ]))
         @continue
     @endif
@@ -262,6 +271,7 @@
         <textarea class="form form-control" id="label_{{ $param->Field }}" name="{{ $param->Field }}" placeholder="{{ $param->Comment}}">{{ $post->{$param->Field}  ?? '' }}</textarea>
         <small id="emailHelp" class="form-text text-muted">{{ $param->Comment}}</small>
     @endforeach
+
     <br>
     <button class="btn btn-primary" type="submit">{{ $btnName }}</button>
 </form>

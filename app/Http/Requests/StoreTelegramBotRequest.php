@@ -25,7 +25,7 @@ class StoreTelegramBotRequest extends FormRequest
         return [
             'name' => ['string', 'unique:telegraph_bots'],
             'token' => ['string', 'unique:telegraph_bots'],
-            'form_id' => ['string'],
+            'form_id' => ['sometimes', 'nullable'],
         ];
     }
 }
