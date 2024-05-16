@@ -19,7 +19,14 @@ class BlogPostsObserver
 
         $botId = $post->telegramBot->id;
         $broadside = new TgBroadsace();
-        $broadside->toAllByBotId($botId, Posts::class, $post->id)->html($post->content);
+
+        $imagePost = '';
+
+        if ($post->image) {
+            $imagePost = '<img src="' . $post->image . '"/>';
+        }
+
+        $broadside->toAllByBotId($botId, Posts::class, $post->id)->html($imagePost . $post->content);
 
         return true;
 
