@@ -124,7 +124,7 @@ class TgBroadsace
                 ->getBody()
                 ->getContents();
 
-            Log::error(json_decode($res));
+            Log::error($res);
 
             $result = json_decode($chat->{$type}($message)->send()->getBody()->getContents(), true);
 
