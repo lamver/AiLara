@@ -6,6 +6,7 @@ use DefStudio\Telegraph\Models\TelegraphChat;
 use App\Models\telegramMessages;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Str;
 
 class TgBroadsace
 {
@@ -123,10 +124,7 @@ class TgBroadsace
 
             //$result = json_decode($chat->{$type}($message)->thumbnail($photo)->send()->getBody()->getContents(), true);
 
-
-            $result = json_decode($chat->photo($photo)->html($message)->send()->getBody()->getContents(), true);
-
-
+            $result = json_decode($chat->photo($photo)->html(Str::limit($message, 1000))->send()->getBody()->getContents(), true);
 
             if ($result['ok']) {
 
