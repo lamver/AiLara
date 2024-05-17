@@ -37,7 +37,7 @@
 @push('bottom-scripts')
 <script>
     console.log('start status {{ $task['status'] }}');
-    @if($task['status'] == \App\Models\Tasks::STATUS_CREATED)
+    @if((int) $task['status'] == (int) \App\Models\Tasks::STATUS_CREATED)
     console.log('start {{ \App\Models\Tasks::STATUS_CREATED }}')
     let id = {{$id}};
     let responseHtml = document.querySelector('#response');
