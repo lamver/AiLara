@@ -4,6 +4,7 @@
 const identifier = {{ $_GET['id'] }};
 console.log(identifier)
 let configJson = [];
+console.log("form_id: " + {{ $_GET["id"] }});
 fetch(`/api/v1/form/config?id={{ $_GET['id'] }}&state=${Math.floor(Math.random() * 10000)}.${Date.now()}`)
     .then(response => response.json())
     .then(json => {

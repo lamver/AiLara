@@ -133,8 +133,8 @@
                 @endforeach
             </select>
             <label for="label_post_category_id">post_category_id</label>
-            <select id="label_post_category_id" name="post_category_id" class="form form-control">
-                <option value=""> - no parent cat -</option>
+            <select required id="label_post_category_id" name="post_category_id" class="form form-control">
+                <option value="">{{ __('admin.Select category') }}</option>
                 @foreach($categoryTree['categories'] as $category)
                     <option @if(isset($post) && $post->post_category_id ==  $category->id) selected @endif value="{{$category->id}}">{{$category->id}} {{$category->title}}</option>
                     @if(count($category->childs)) {{--{{ print_r($category->childs[0]->title) }}--}}
