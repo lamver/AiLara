@@ -36,15 +36,17 @@
 @endsection
 @push('bottom-scripts')
 <script>
+    console.log('start status {{ $task['status'] }}');
     @if($task['status'] === \App\Models\Tasks::STATUS_CREATED)
+    console.log('start {{ \App\Models\Tasks::STATUS_CREATED }}')
     let id = {{$id}};
     let responseHtml = document.querySelector('#response');
     let counter = 1;
     let interval = 10000; // 5 секунд
     let intervalEnd = 120000 // 2 минуты.
-
+console.log('before fetchTast')
     let fetchTast = () => {
-
+console.log('after fetchTast')
         // Stop the recursion
         if ((interval * counter) >= intervalEnd) {
             responseHtml.innerHTML = '<div class="alert alert-secondary">In process...</div>';
