@@ -12,7 +12,7 @@
             <div class="col-md-10">
                 <h1>{{ $taskUserParams['prompt'] }}</h1>
                 <div class="px-2 py-3" id="response">
-                    @if($task['status'] === \App\Models\Tasks::STATUS_DONE_SUCCESSFULLY)
+                    @if((int)$task['status'] === \App\Models\Tasks::STATUS_DONE_SUCCESSFULLY)
                         <div class="card">
                             <div class="card-body">
                                 <h1 class="card-title">
