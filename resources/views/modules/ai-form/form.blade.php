@@ -33,7 +33,7 @@
         const formId = {{ $aiForm->id }};
         const aiFormContainer = 'ai-form-container';
         const mainFormTemplate = document.getElementById("ai-form-" + formId);
-
+console.log('ai form id = ' + formId)
         fetch(`/api/v1/form/template?id=`+formId+`&state=${Math.floor(Math.random() * 10000)}.${Date.now()}`)
             .then(response => response.text())
             .then(html => {

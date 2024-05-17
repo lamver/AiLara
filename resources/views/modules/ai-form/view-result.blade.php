@@ -34,9 +34,7 @@
         </div>
     </div>
 @endsection
-
 @push('bottom-scripts')
-
 <script>
     @if($task['status'] === \App\Models\Tasks::STATUS_CREATED)
     let id = {{$id}};
@@ -55,35 +53,26 @@
         fetch(`{{ route('ajax.ai-form.getTask', ['id' => $id]) }}`)
             .then(response => response.json())
             .then(json => {
+                console.log(json);
 
-                if (json.result !== true) {
-                    responseHtml.innerHTML = '<div class="alert alert-danger"> Something went wrong. <br> please refresh page </div>';
-                }
-
-                if (json.answer.status !== {{ \App\Models\Tasks::STATUS_DONE_SUCCESSFULLY }}) {
+                if (json.data.status !== {{ \App\Models\Tasks::STATUS_DONE_SUCCESSFULLY }}) {
                     setTimeout(() => fetchTast(), interval);
                     counter++;
                     return false
                 }
 
-                console.log(json);
+                if (json.data.status === {{ \App\Models\Tasks::STATUS_DONE_ERROR }}) {
+                    responseHtml.innerHTML = `<div class="card"> <div class="card-body"><p class="card-text">{{ __('Something went wrong') }}.</p>`;
+                }
 
-                responseHtml.innerHTML = `<div class="card"> <div class="card-body"><p class="card-text">${json.answer.answer} </p>`;
+                if (json.data.status === {{ \App\Models\Tasks::STATUS_DONE_SUCCESSFULLY }}) {
+                    responseHtml.innerHTML = `<div class="card"> <div class="card-body"><p class="card-text">${json.data.result}</p>`;
+                }
 
             }).catch(error => console.log(error));
     };
 
-
-   //let task = {!! json_encode($task) !!};
-
-   //if (task.result === false || task?.answer?.status !== 1) {
-   //if (task.result === false || task?.answer?.status !== 1) {
-    @if($task['status'] == 1)
-        fetchTast();
-        @endif
-    //}
-
-   @endif
-
+    fetchTast();
+    @endif
 </script>
 @endpush

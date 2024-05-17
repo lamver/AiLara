@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Ajax;
+namespace App\Http\Controllers\Api\V1\Module\AiForm;
 
 use App\Models\Tasks;
 use App\Services\AiSearchApi;
@@ -54,7 +54,6 @@ class AiTaskController extends BaseController
                 $task->status = Tasks::STATUS_DONE_SUCCESSFULLY;
                 $task->result = $result['answer']['answer'];
                 $task->save();
-                //return $this->responseError([], __('Something went wrong.'));
             }
         }
 
