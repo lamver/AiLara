@@ -50,11 +50,11 @@ class AiTaskController extends BaseController
         if (in_array($task->status, [Tasks::STATUS_CREATED, Tasks::STATUS_IN_PROGRESS])) {
             $result = $this->aiSearch->getTaskByTaskId($task->external_task_id);
 
-            //return $this->responseSuccess($result);
             if (
                 $result['result'] === true
                 && isset($result['answer'])
-                && $result['answer'] == 1
+                && isset($result['answer']['status'])
+                && $result['answer']['status'] == 1
             ) {
                 $task->status = Tasks::STATUS_DONE_SUCCESSFULLY;
                 $task->result = $result['answer']['answer'];
