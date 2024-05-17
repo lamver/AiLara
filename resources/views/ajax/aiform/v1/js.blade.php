@@ -253,11 +253,11 @@ fetch(`/api/v1/form/config?id={{ $_GET['id'] }}&state=${Math.floor(Math.random()
         const form = document.getElementById(formId);
         const formData = new FormData(form);
         const formDataObj = Object.fromEntries(formData.entries());
-        localStorage.setItem('formState', JSON.stringify(formDataObj));
+        localStorage.setItem('formState_' + identifier, JSON.stringify(formDataObj));
     }
 
     function restoreFormData() {
-        const savedFormData = localStorage.getItem('formState');
+        const savedFormData = localStorage.getItem('formState_' + identifier);
         const formId = 'ai_form_' + identifier;
         const form = document.getElementById(formId);
         if(savedFormData) {
