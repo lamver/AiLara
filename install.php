@@ -161,7 +161,7 @@ class Installer
 
         $this->addStepLog($rootDir);
 
-        $vendorZipPath = $rootDir.'vendor.zip';
+        $vendorZipPath = $rootDir.'/vendor.zip';
 
         if (file_exists($vendorZipPath)) {
             $this->addStepLog('Archive vendor.zip exists');
@@ -171,7 +171,7 @@ class Installer
             return false;
         }
 
-        $extractLocation = $rootDir.'vendor';
+        $extractLocation = $rootDir.'/vendor';
 
         $zip = new \ZipArchive;
 
