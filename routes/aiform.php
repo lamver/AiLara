@@ -28,10 +28,18 @@ Route::middleware(['auth', 'verified'])->prefix(SettingGeneral::value('admin_pre
             'destroy' => 'admin.module.ai-form.destroy',
         ],
     ]);
+
+    Route::get('/', [\App\Http\Controllers\Admin\AiForms\AiFormController::class, 'settings'])->name('admin.module.ai-form.settings');
+    Route::post('/', [\App\Http\Controllers\Admin\AiForms\AiFormController::class, 'settingsUpdate'])->name('admin.module.ai-form.settings.update');
 });
 
 if (Module::isFrontModule(Module::MODULE_AI_FORM)) {
     Route::prefix(Module::getWebRoutePrefix(Module::MODULE_AI_FORM))->group(function () {
+
+        if (Module::getWebRoutePrefix(Module::MODULE_AI_FORM) != '') {
+            Route::get('/', [\App\Http\Controllers\Modules\Task\TaskController::class, 'index'])->name('aiform.index');
+        }
+
         $allForms = \App\Models\Modules\AiForm\AiForm::query()->get();
 
         foreach ($allForms as $form) {

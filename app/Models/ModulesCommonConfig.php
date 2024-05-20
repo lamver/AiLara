@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
@@ -45,6 +46,9 @@ class ModulesCommonConfig extends Model
         }
 
         self::loadModulesMainConfig(false);
+
+        Artisan::call('route:clear');
+        Artisan::call('route:cache');
 
         return true;
     }

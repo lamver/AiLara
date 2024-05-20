@@ -5,12 +5,11 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Models\ModulesCommonConfig;
-use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller as BaseController;
 
 class ModuleMainController extends BaseController
 {
-
     /**
      * @param \Illuminate\Http\Request $request
      *

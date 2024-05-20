@@ -23,7 +23,6 @@ class MainController extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
-
     public function index(Request $request)
     {
         try {
@@ -91,6 +90,33 @@ class MainController extends BaseController
         $robotsTxtContent = file_get_contents($robotsTxtPath);
 
         return view('admin.robots-txt', ['robotsTxtContent' => $robotsTxtContent]);
+    }
+
+    public static function optimizeApp(Request $request)
+    {
+        $optimizeLog = [];
+
+        Artisan::call('config:clear');
+        $optimizeLog[] = Artisan::output();
+        Artisan::call('view:clear');
+        $optimizeLog[] = Artisan::output();
+        Artisan::call('route:clear');
+        $optimizeLog[] = Artisan::output();
+/*        Artisan::call('dump-autoload');
+        $optimizeLog[] = Artisan::output();*/
+        Artisan::call('clear-compiled');
+        $optimizeLog[] = Artisan::output();
+        Artisan::call('optimize');
+        $optimizeLog[] = Artisan::output();
+
+        try {
+            Artisan::call('app:composer');
+            $optimizeLog[] = Artisan::output();
+        } catch (\Exception $e) {
+            $optimizeLog[] = $e->getMessage();
+        }
+
+        return view('admin.optimize-app', ['optimizeLog' => $optimizeLog]);
     }
 
 }

@@ -5,7 +5,7 @@
 @section('page_options')
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group me-2">
-            <a href="{{ route('admin.module.ai-form.create') }}" type="button" class="btn btn-sm btn-outline-success">{{ __('admin.Create') }}</a>
+            <a href="{{ route('admin.blog.post.create') }}" type="button" class="btn btn-sm btn-outline-success">{{ __('admin.Create') }}</a>
         </div>
     </div>
 @endsection
@@ -32,6 +32,18 @@
                                     @method('DELETE')
                                     <button class="btn btn-link" type="submit" onclick="return confirm('Are you sure?')">{{ __('admin.Delete') }}</button>
                                 </form>
+                                <div class="row">
+                                      <div class="col">
+                                         {{__('admin.Comment count')}}:
+                                          @if($postData->commentCount() > 0)
+                                          <a href="{{ route('admin.comment.index',['commentableId' => $postData->id])}}">
+                                              ( {{$postData->commentCount()}} )
+                                          </a>
+                                          @else
+                                              (0)
+                                          @endif
+                                      </div>
+                                </div>
                             </td>
                             @continue
                         @endif

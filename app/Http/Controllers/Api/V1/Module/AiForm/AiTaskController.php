@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Ajax;
+namespace App\Http\Controllers\Api\V1\Module\AiForm;
 
 use App\Models\Tasks;
 use App\Services\AiSearchApi;
@@ -47,17 +47,22 @@ class AiTaskController extends BaseController
             return $this->responseError([], 'Task not found');
         }
 
-        $result = $this->aiSearch->getTaskByTaskId($task->external_task_id);
+        if (in_array($task->status, [Tasks::STATUS_CREATED, Tasks::STATUS_IN_PROGRESS])) {
+            $result = $this->aiSearch->getTaskByTaskId($task->external_task_id);
 
-        if ($result['result'] !== true) {
-            return $this->responseError([], __('Something went wrong.'));
+            if (
+                $result['result'] === true
+                && isset($result['answer'])
+                && isset($result['answer']['status'])
+                && $result['answer']['status'] == 1
+            ) {
+                $task->status = Tasks::STATUS_DONE_SUCCESSFULLY;
+                $task->result = $result['answer']['answer'];
+                $task->save();
+            }
         }
 
-        $task->status = Tasks::STATUS_DONE_SUCCESSFULLY;
-        $task->result = $result['answer']['answer'];
-        $task->save();
-
-        return $result;
+        return $this->responseSuccess($task->toArray());
     }
 
 }

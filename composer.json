@@ -5,7 +5,7 @@
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
-        "php": "^8.1",
+        "php": "^8.2",
         "artesaos/seotools": "^1.2",
         "barryvdh/laravel-translation-manager": "*",
         "davejamesmiller/laravel-breadcrumbs": "^5.3",
@@ -17,6 +17,7 @@
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
         "laravel/ui": "^4.5",
+        "livewire/livewire": "^3.4",
         "ovac/idoc": "^1.6",
         "phattarachai/laravel-mobile-detect": "^1.0",
         "spatie/laravel-feed": "^4.4",

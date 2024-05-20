@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers\Admin\AiForms;
 
+use App\Helpers\Settings;
 use App\Http\Controllers\Controller;
 use App\Models\Modules\AiForm\AiForm;
 use App\Models\Modules\Blog\Category;
+use App\Settings\SettingAiFrom;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
 class AiFormController extends Controller
@@ -84,5 +89,25 @@ class AiFormController extends Controller
         }
 
         return redirect(route('admin.module.ai-form.index'));
+    }
+
+    /**
+     * @param Request $request
+     * @return Application|Factory|View|\Illuminate\Foundation\Application
+     */
+    public function settings(Request $request)
+    {
+        $settings = Settings::load(SettingAiFrom::class);
+
+        return view('admin.modules.aiform.settings', ['settings' => $settings->toArray()]);
+    }
+
+    public function settingsUpdate(Request $request, SettingAiFrom $settings)
+    {
+        if (!empty($request->post())) {
+            $settings->prepareAndSave($request->post(), $settings);
+        }
+
+        return redirect(route('admin.module.ai-form.settings'));
     }
 }
