@@ -5,8 +5,6 @@ namespace App\Settings;
 class SettingBlog extends Data
 {
     public string $api_secret_key_rss_export;
-    public string $telegram_bot;
-
     public static function group(): string
     {
         return 'blog';
@@ -21,7 +19,6 @@ class SettingBlog extends Data
     {
 
         $settings->api_secret_key_rss_export = $dataSettings['api_secret_key_rss_export'] ?? '';
-        $settings->telegram_bot = $dataSettings['telegram_bot'] ?? "";
 
         return $settings->save();
     }

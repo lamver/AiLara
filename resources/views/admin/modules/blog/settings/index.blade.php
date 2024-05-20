@@ -15,16 +15,6 @@
             </div>
         </div>
 
-        <div class="mb-3">
-            <label class="form-check-label" for="telegramBotId">{{ __('admin.Telegram bot') }}</label>
-            <select class="form-select" id="telegramBotId" name="telegram_bot">
-                <option value="">{{__('admin.Empty')}}</option>
-                @foreach($telegramBots as $bot)
-                    <option @if((int)$settings->telegram_bot === (int)$bot->id) selected @endif value="{{$bot->id}}">{{$bot->name}}</option>
-                @endforeach
-            </select>
-        </div>
-
         <div class="row mb-0">
             <div class="col-md-6">
                 <button type="submit" class="btn btn-primary">

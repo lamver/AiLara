@@ -35,11 +35,9 @@ class SettingsController extends Controller
 
         $request->validate([
             'api_secret_key_rss_export' => 'required|string|min:10',
-            'telegram_bot' => 'sometimes|nullable|string',
         ]);
 
         $settingBlog->api_secret_key_rss_export = $request->get('api_secret_key_rss_export');
-        $settingBlog->telegram_bot = $request->get('telegram_bot') ?? "";
         $settingBlog->save();
 
         return redirect(route('admin.blog.settings.index'));
