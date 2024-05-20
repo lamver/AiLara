@@ -36,9 +36,9 @@ class Composer extends Command
             exec('composer require ' . $this->argument('packet'));
         }
 
-        echo self::createVendorZip();
+        $this->output = self::createVendorZip();
 
-        echo PHP_EOL;
+        //echo PHP_EOL;
     }
 
     /**

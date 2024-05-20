@@ -41,6 +41,7 @@ Route::middleware(['auth', 'verified', 'rbac:admin'])->prefix(Translation::check
 
         Route::get('/update', [\App\Http\Controllers\Admin\UpdateController::class, 'index'])->name('admin.update');
         Route::get('/logs', [\App\Http\Controllers\Admin\LogsController::class, 'index'])->name('admin.logs');
+        Route::get('/optimize-app', [MainController::class, 'optimizeApp'])->name('admin.optimize.app');
 
         Route::get('/setLang/{locale}', function (string $locale) {
             app()->setLocale($locale);

@@ -51,8 +51,7 @@ class CommentItem extends Component
     public function startEditingComment($id, $comment): void
     {
        $this->editCommentValue = $comment['body'];
-        $this->editCommentId = (int)$id;
-
+       $this->editCommentId = (int)$id;
     }
 
     /**

@@ -73,6 +73,8 @@ class UpdateController extends BaseController
             $updateLog[] = 'Migrate ' . Update::migrate();
         }
 
+        Update::deleteDeprecatedFiles();
+
         Artisan::call('config:clear');
         Artisan::call('config:cache');
         Artisan::call('route:clear');

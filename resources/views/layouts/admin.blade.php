@@ -306,6 +306,12 @@
                                     {{ __('admin.update_app') }}
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('admin.optimize.app') }}">
+                                    <span data-feather="bar-chart-2"></span>
+                                    {{ __('admin.Optimize app') }}
+                                </a>
+                            </li>
                             @if(isset($languages))
                             <li class="nav-item">
                                 <div class="d-flex flex-row bd-highlight">
