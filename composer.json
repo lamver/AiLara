@@ -20,6 +20,7 @@
         "livewire/livewire": "^3.4",
         "ovac/idoc": "^1.6",
         "phattarachai/laravel-mobile-detect": "^1.0",
+        "spatie/laravel-backup": "^8.6",
         "spatie/laravel-feed": "^4.4",
         "spatie/laravel-settings": "^3.3",
         "spatie/laravel-sitemap": "^7.2",

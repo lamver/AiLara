@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('page_title')
-    Posts
+    {{ __('admin.Posts') }}
 @endsection
 @section('page_options')
     <div class="btn-toolbar mb-2 mb-md-0">
@@ -15,7 +15,7 @@
             <thead>
             <tr>
                 @foreach($columns as $column)
-                    <th scope="col">{{ $column->Field }}</th>
+                    <th scope="col">{{ __strTrans($column->Field, 'admin') }}</th>
                 @endforeach
             </tr>
             </thead>
@@ -25,12 +25,12 @@
                     @foreach($columns as $column)
                         @if($column->Key == 'PRI')
                             <td>{{ $postData->{$column->Field} }}
-                                <a href="{{ route('admin.blog.post.edit', ['post' => $postData->{$column->Field}]) }}">Edit</a>
-                                <a href="{{ route('admin.blog.post.show', ['post' => $postData->{$column->Field}]) }}">View</a>
+                                <a href="{{ route('admin.blog.post.edit', ['post' => $postData->{$column->Field}]) }}">{{ __('admin.Edit') }}</a>
+                                <a href="{{ route('admin.blog.post.show', ['post' => $postData->{$column->Field}]) }}">{{ __('admin.View') }}</a>
                                 <form action="{{ route('admin.blog.post.destroy', $postData) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-link" type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+                                    <button class="btn btn-link" type="submit" onclick="return confirm('Are you sure?')">{{ __('admin.Delete') }}</button>
                                 </form>
                                 <div class="row">
                                       <div class="col">

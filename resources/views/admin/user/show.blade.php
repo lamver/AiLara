@@ -2,10 +2,10 @@
 @section('content')
     <div class="card mb-5">
         <ul class="list-group list-group-flush">
-            <li class="list-group-item"><b>{{__('user_name')}}:</b> {{$user->name}}</li>
-            <li class="list-group-item"><b>{{__('email')}}:</b> {{$user->email}}</li>
+            <li class="list-group-item"><b>{{__('admin.User name')}}:</b> {{$user->name}}</li>
+            <li class="list-group-item"><b>{{__('admin.Email')}}:</b> {{$user->email}}</li>
             <li class="list-group-item">
-                <b>{{__('status')}}:</b>
+                <b>{{__('admin.Status')}}:</b>
                 @if($user->status)
                     <svg style="fill: #198754" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                          fill="currentColor" class="bi bi-lightbulb-fill" viewBox="0 0 16 16">
@@ -24,10 +24,10 @@
                 <b>{{__('admin.Sys user')}}:</b>
                 @if($user->sys_user) {{__('admin.Yes')}} @else {{__('admin.No')}} @endif
             </li>
-            <li class="list-group-item"><b>{{__('created_at')}}:</b> {{$user->created_at}}</li>
+            <li class="list-group-item"><b>{{__('admin.Created at')}}:</b> {{$user->created_at}}</li>
         </ul>
     </div>
     <a href="{{route('admin.user.index')}}" class="btn btn-danger col-md-1">
-        {{ __('back') }}
+        {{ __('admin.Back') }}
     </a>
 @endsection

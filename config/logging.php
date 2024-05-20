@@ -138,6 +138,11 @@ return [
             'path' => storage_path('logs/import.log'),
             'level' => 'debug',
         ],
+        'backup' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/backup.log'),
+            'level' => 'error',
+        ],
     ],
 
 ];
