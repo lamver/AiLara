@@ -37,8 +37,6 @@ Route::prefix(Translation::checkRoutePrefix())->group(function () {
     require __DIR__.'/auth.php';
 });
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
 Route::get('/client_offline', function () {
     return view('client_offline');
 });
