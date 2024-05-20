@@ -12,6 +12,8 @@ class BlogPostsObserver
 {
     private const NEW_LINE = "\n";
 
+    private const TELEGRAM_LENGTH_TEXT =  1020;
+
     /**
      * Handle the Posts "created" event.
      */
@@ -148,20 +150,40 @@ class BlogPostsObserver
         ];
     }
 
+    /**
+     * Append additional text and link to the given text based on the post settings.
+     *
+     * @param Posts $post
+     * @param string $text
+     * @return string
+     */
     private function appendAdditionalText(Posts $post, string $text): string
     {
 
-        if ($post->telegram_length_text > 0) {
-            $text = Str::limit(strip_tags($text), $post->telegram_length_text);
-        }
+        $lengthText = (int)$post->telegram_length_text > 0 ? $post->telegram_length_text : self::TELEGRAM_LENGTH_TEXT;
+
+        $addText = "";
+        $link = "";
 
         if ($post->telegram_add_text) {
-            $text .= self::NEW_LINE . $post->telegram_add_text;
+            $addText = self::NEW_LINE . $post->telegram_add_text;
+            $lengthText = $lengthText - mb_strlen($addText);
         }
 
         if (!!$post->telegram_post_url) {
-            $url = trim(Config::get('app.url'),'/') .'/'. trim(str_replace("//", "/", $post->currentPostUrl()), '/');
-            $text .= self::NEW_LINE . "<a href='" . $url . "'> $post->title </a>";
+            $url = trim(Config::get('app.url'), '/') . '/' . trim(str_replace("//", "/", $post->currentPostUrl()), '/');
+            $link = self::NEW_LINE . "<a href='" . $url . "'> $post->title </a>";
+            $lengthText = $lengthText - mb_strlen($link);
+        }
+
+        $text = Str::limit(strip_tags($text), $lengthText);
+
+        if ($addText !== "") {
+            $text .= $addText;
+        }
+
+        if ($link !== "") {
+            $text .= $link;
         }
 
         return $text;
