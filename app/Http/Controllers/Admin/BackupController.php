@@ -13,7 +13,7 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\Log;
-use Config;
+use Illuminate\Support\Facades\Config;
 use Spatie\Backup\Tasks\Backup\BackupJobFactory;
 
 class BackupController extends BaseController
