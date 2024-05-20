@@ -80,6 +80,15 @@
             </select>
             @continue
         @endif
+        @if($param->Field == 'cron_frequency')
+            <label for="label_{{ $param->Field }}" class="form-label">{{ $param->Field }}</label>
+            <select name="cron_frequency" class="form form-control">
+                @foreach(\App\Helpers\CronMaster::getAllFrequencies() as $keyCron => $cronTitle)
+                    <option @if(isset($import) && $import->{$param->Field} == $keyCron) selected @endif  value="{{ $keyCron }}">{{ $cronTitle }}</option>
+                @endforeach
+            </select>
+            @continue
+        @endif
         @if($param->Field == 'category_id')
             <label for="label_{{ $param->Field }}" class="form-label">{{ $param->Field }}</label>
             <select id="label_{{ $param->Field }}" name="{{ $param->Field }}" class="form form-control">
