@@ -36,6 +36,20 @@
         @if($param->Extra == 'auto_increment' || $param->Field == 'result_id_posts')
             @continue
         @endif
+
+        @if($param->Field == 'telegram_bot_id')
+            <div class="mb-3">
+                <label class="form-label" for="telegramBotId">{{ __('admin.Telegram bot') }}</label>
+                <select class="form-select" id="telegramBotId" name="{{$param->Field}}">
+                    <option value="">{{__('admin.Empty')}}</option>
+                    @foreach($telegramBots as $bot)
+                        <option @if( (int) isset($import) && $import->{$param->Field} === (int) $bot->id ) selected @endif value="{{$bot->id}}">{{$bot->name}}</option>
+                    @endforeach
+                </select>
+            </div>
+            @continue
+        @endif
+
         @if($param->Field == 'status')
             <label for="label_{{ $param->Field }}" class="form-label">{{ __strTrans($param->Field, 'admin') }}</label>
             <select id="label_{{ $param->Field }}" name="{{ $param->Field }}" class="form form-control">
@@ -129,6 +143,7 @@
             <label for="exampleInputEmail1" class="form-label">{{ __strTrans($param->Field, 'admin') }}</label>
             <textarea class="form form-control" id="label_{{ $param->Field }}" name="{{ $param->Field }}" placeholder="{{ $param->Comment}}">{{ $import->{$param->Field}  ?? '' }}</textarea>
             <small id="emailHelp" class="form-text text-muted">{{ $param->Comment}}</small>
+
     @endforeach
 <br>
     <button class="btn btn-primary" type="submit">{{ $btnName }}</button>

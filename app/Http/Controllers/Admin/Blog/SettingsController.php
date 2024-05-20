@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Blog;
 
 use App\Http\Controllers\Controller;
+use App\Models\TelegramBot;
 use App\Settings\SettingBlog;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -18,7 +19,10 @@ class SettingsController extends Controller
      */
     public function index(SettingBlog $settingBlog): View
     {
-        return view('admin.modules.blog.settings.index', ['apiSecretKeyRssExport' => $settingBlog->api_secret_key_rss_export]);
+        return view('admin.modules.blog.settings.index', [
+            'settings' => $settingBlog,
+            'telegramBots' => TelegramBot::all(),
+        ]);
     }
 
     /**

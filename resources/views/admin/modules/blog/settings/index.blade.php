@@ -10,10 +10,9 @@
         <div class="mb-3">
             <div>
                 <x-input-label for="name" :value="__('admin.Api secret key rss export')" />
-                <x-text-input id="randomStringInput"  name="api_secret_key_rss_export" value="{{$apiSecretKeyRssExport}}" type="text" class="form-control" required />
+                <x-text-input id="randomStringInput"  name="api_secret_key_rss_export" value="{{$settings->api_secret_key_rss_export}}" type="text" class="form-control" required />
                 <x-input-error class="mt-2" :messages="$errors->get('api_secret_key_rss_export')" />
             </div>
-
         </div>
 
         <div class="row mb-0">

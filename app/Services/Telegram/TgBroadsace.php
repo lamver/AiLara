@@ -96,46 +96,20 @@ class TgBroadsace
      * @param string $message
      * @return void
      */
-    public function html(string $message): void
-    {
-        $this->send('html', strip_tags($message, $this->allowedTags));
-    }
-
-    /**
-     * @param string $message
-     * @return void
-     */
-    public function text(string $message): void
-    {
-        $this->send('message', strip_tags($message));
-    }
-
-    /**
-     * @param string $message
-     * @return void
-     */
-    public function markdown(string $message): void
-    {
-        $this->send('markdown', $message);
-    }
-
-    /**
-     * @param string $type
-     * @param string $message
-     * @return void
-     */
-    public function send(string $type, string $message): void
+    public function send(string $message): void
     {
         if (!$this->chats) {
             return;
         }
 
+        $msg = strip_tags($message, $this->allowedTags);
+
         foreach ($this->chats as $chat) {
 
             if ($this->attachments) {
-                $result = json_decode($chat->photo($this->attachments)->html($message)->send()->getBody()->getContents(), true);
+                $result = json_decode($chat->photo($this->attachments)->html($msg)->send()->getBody()->getContents(), true);
             } else {
-                $result = json_decode($chat->html($message)->send()->getBody()->getContents(), true);
+                $result = json_decode($chat->html($msg)->send()->getBody()->getContents(), true);
             }
 
             if ($result['ok']) {
@@ -143,7 +117,7 @@ class TgBroadsace
                 continue;
             }
 
-            Log::error(json_decode($result));
+            Log::error(json_encode($result));
 
         }
 

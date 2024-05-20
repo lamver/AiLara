@@ -5,7 +5,6 @@ namespace App\Settings;
 class SettingBlog extends Data
 {
     public string $api_secret_key_rss_export;
-
     public static function group(): string
     {
         return 'blog';

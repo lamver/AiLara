@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Blog;
 use App\Http\Controllers\Controller;
 use App\Models\Modules\Blog\Category;
 use App\Models\Modules\Blog\Import;
+use App\Models\TelegramBot;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -37,7 +38,11 @@ class ImportController extends Controller
         $allCategories = Category::pluck('title','id')->all();
         $categoryTree = compact('categories','allCategories');
 
-        return view('admin.modules.blog.import.create', ['modelParams' => $modelParams, 'categoryTree' => $categoryTree]);
+        return view('admin.modules.blog.import.create', [
+            'modelParams' => $modelParams,
+            'categoryTree' => $categoryTree,
+            'telegramBots' => TelegramBot::all(),
+        ]);
     }
 
     /**
@@ -79,7 +84,12 @@ class ImportController extends Controller
         $allCategories = Category::pluck('title','id')->all();
         $categoryTree = compact('categories','allCategories');
 
-        return view('admin.modules.blog.import.create', ['modelParams' => $modelParams, 'import' => $import, 'categoryTree' => $categoryTree]);
+        return view('admin.modules.blog.import.create', [
+            'modelParams' => $modelParams,
+            'import' => $import,
+            'categoryTree' => $categoryTree,
+            'telegramBots' => TelegramBot::all(),
+        ]);
     }
 
     /**
