@@ -263,6 +263,7 @@ class Import extends Model
 
             $dataToPost = [
                 'post_category_id' => $import->category_id,
+                'telegram_bot_id' => $import->telegram_bot_id,
                 'author_id' => $import->author_id,
                 'title' => $result['title'], //$item->get_title(),
                 'seo_title' => $result['seo_title'], //$item->get_title(),
