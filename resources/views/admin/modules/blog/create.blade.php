@@ -171,6 +171,22 @@
                     @endforeach
                 </select>
             </div>
+
+            <div class="mb-12 mt-3">
+
+                <label for="label_status">{{__('admin.Telegram post url')}}</label>
+                <select id="label_status" name="telegram_post_url" class="form form-control">
+                    <option @if(isset($post) && $post->telegram_post_url ==  false) selected @endif value="0">{{ __('admin.No') }}</option>
+                    <option @if(isset($post) && $post->telegram_post_url ==  true) selected @endif value="1">{{ __('admin.Yes') }}</option>
+                </select>
+
+            </div>
+
+            <div class="mb-12 mt-3">
+                <label class="form-label" style="font-size: 18px">  {{ __('admin.Telegram length_text') }}</label>
+                <input class="form-control" name="telegram_length_text" value="{{$post->telegram_length_text}}" type="number"/>
+            </div>
+
         </div>
     </div>
     @method($method)
@@ -198,6 +214,8 @@
     'image',
     'unique_id_after_import',
     'telegram_bot_id',
+    'telegram_length_text',
+    'telegram_post_url',
     ]))
         @continue
     @endif

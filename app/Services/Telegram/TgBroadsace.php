@@ -12,51 +12,59 @@ class TgBroadsace
     protected $chats;
     protected string $message = '';
     protected int $botId;
-    protected int $modelId;
+    protected ?int $modelId;
     protected string $modelType;
+
+    protected ?string $attachments = null;
     protected string $allowedTags = '<b><i><a><s><u><code><pre><strong><ins><s><strike><del><span><tg-spoiler>';
 
-    /**
-     * @param int $botId
-     * @param string $modelType
-     * @param int $modelId
-     * @return $this
-     */
-    public function toAllByBotId(int $botId, string $modelType, int $modelId)
+    public function __construct(int $botId, string $modelType = '', ?int $modelId = null)
     {
         $this->botId = $botId;
         $this->modelId = $modelId;
         $this->modelType = $modelType;
 
         $this->chats = $this->getChats($this->botId);
-
-        return $this;
     }
 
     /**
-     * @param int $botId
      * @param array $messageIds
      * @param string $message
      * @return void
      */
-    public function edit(int $botId, array $messageIds, string $message): void
+    public function edit(array $messageIds, string $message): void
     {
-        foreach ($this->getChats($botId) as $chat) {
+        foreach ($this->getChats($this->botId) as $chat) {
             foreach ($messageIds as $messageId) {
-                $chat->edit($messageId)->message(strip_tags($message, $this->allowedTags))->send();
+
+                $msg = strip_tags($message, $this->allowedTags);
+
+                if ($this->attachments) {
+
+                    $chat->editMedia($messageId)->photo($this->attachments)->send()->getBody()->getContents();
+                    $result = json_decode($chat->editCaption($messageId)->message($msg)->send()->getBody()->getContents(), true);
+
+                    if (!$result['ok']) {
+                        json_decode($chat->edit($messageId)->html($msg)->send()->getBody()->getContents(), true);
+                    }
+
+                    continue;
+                }
+
+                $chat->edit($messageId)->html($msg)->send()->getBody()->getContents();
             }
+
         }
     }
 
     /**
-     * @param int $botId
      * @param array $messageIds
      * @return array
      */
-    public function deleteMessage(int $botId, array $messageIds): array
+    public function deleteMessage(array $messageIds): array
     {
         $deletedIds = [];
-        foreach ($this->getChats($botId) as $chat) {
+        foreach ($this->getChats($this->botId) as $chat) {
             foreach ($messageIds as $messageId) {
                 $result = json_decode($chat->deleteMessage($messageId)->send()->getBody()->getContents(), true);
                 if ($result['ok']) {
@@ -66,6 +74,17 @@ class TgBroadsace
         }
 
         return $deletedIds;
+    }
+
+    /**
+     * Sets the attachments for the current object.
+     *
+     * @param string $attachments
+     * @return void
+     */
+    public function setAttachments(string $attachments): void
+    {
+        $this->attachments = $attachments;
     }
 
     /**
@@ -119,25 +138,40 @@ class TgBroadsace
 
         foreach ($this->chats as $chat) {
 
-            $result = json_decode($chat->{$type}($message)->send()->getBody()->getContents(), true);
+            if ($this->attachments) {
+                $result = json_decode($chat->photo($this->attachments)->html($message)->send()->getBody()->getContents(), true);
+            } else {
+                $result = json_decode($chat->html($message)->send()->getBody()->getContents(), true);
+            }
 
             if ($result['ok']) {
-
-                $telegraphMessages = new telegramMessages();
-
-                $telegraphMessages->model_id = $this->modelId;
-                $telegraphMessages->model_type = $this->modelType;
-                $telegraphMessages->telegraph_bot_id = $this->botId;
-                $telegraphMessages->message_id = $result['result']['message_id'];
-
-                $telegraphMessages->save();
-
+                $this->saveToTable($result['result']['message_id']);
                 continue;
             }
 
             Log::error(json_decode($result));
 
         }
+
+    }
+
+    /**
+     * Save the message to the telegram_messages table.
+     *
+     * @param $messageId
+     *
+     * @return void
+     */
+    public function saveToTable($messageId): void
+    {
+        $telegraphMessages = new telegramMessages();
+
+        $telegraphMessages->model_id = $this->modelId;
+        $telegraphMessages->model_type = $this->modelType;
+        $telegraphMessages->telegraph_bot_id = $this->botId;
+        $telegraphMessages->message_id = $messageId;
+
+        $telegraphMessages->save();
 
     }
 

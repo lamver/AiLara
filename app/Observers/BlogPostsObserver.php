@@ -5,9 +5,13 @@ namespace App\Observers;
 use App\Models\Modules\Blog\Posts;
 use App\Models\telegramMessages;
 use App\Services\Telegram\TgBroadsace;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Str;
 
 class BlogPostsObserver
 {
+    private const NEW_LINE = "\n";
+
     /**
      * Handle the Posts "created" event.
      */
@@ -17,9 +21,15 @@ class BlogPostsObserver
             return false;
         }
 
-        $botId = $post->telegramBot->id;
-        $broadside = new TgBroadsace();
-        $broadside->toAllByBotId($botId, Posts::class, $post->id)->text($post->content);
+        $broadside = new TgBroadsace($post->telegramBot->id, Posts::class, $post->id);
+
+        if ($post->image) {
+            $broadside->setAttachments($post->image);
+        }
+
+        $postContent = $this->appendAdditionalText($post, $post->content);
+
+        $broadside->text($postContent);
 
         return true;
 
@@ -32,6 +42,10 @@ class BlogPostsObserver
     {
 
         $changes = $post->getChanges();
+
+        if (!isset($changes['content'])){
+            $changes['content'] = $post->content;
+        }
 
         if (isset($changes['status'])) {
             return $this->handleStatusChange($post, $changes);
@@ -55,10 +69,13 @@ class BlogPostsObserver
     public function deleted(Posts $post): bool
     {
         $telegram = $this->getTelegramInfoFromPost($post);
-        $deletedIds = (new TgBroadsace())->deleteMessage($telegram['botId'], $telegram['messageIds']);
 
-        foreach ($deletedIds as $id) {
-            TelegramMessages::where('message_id', $id)->delete();
+        if ($telegram['botId'] && count($telegram['messageIds'])) {
+            $deletedIds = (new TgBroadsace($telegram['botId']))->deleteMessage($telegram['messageIds']);
+
+            foreach ($deletedIds as $id) {
+                TelegramMessages::where('message_id', $id)->delete();
+            }
         }
 
         return true;
@@ -96,14 +113,24 @@ class BlogPostsObserver
      */
     private function handleContentChange(Posts $post, array $changes): bool
     {
-        if (isset($changes['content']) && $post->status === Posts::STATUS[0]) {
+        if ($post->status === Posts::STATUS[0]) {
             // If content is changed and the post status is the first status, update Telegram message
             $telegram = $this->getTelegramInfoFromPost($post);
-            (new TgBroadsace())->edit($telegram['botId'], $telegram['messageIds'], $changes['content']);
+
+            $broadside = new TgBroadsace($telegram['botId'], Posts::class, $post->id);
+
+            if ($post->image) {
+                $broadside->setAttachments($post->image);
+            }
+
+            $postContent = $this->appendAdditionalText($post, $changes['content']);
+
+            $broadside->edit($telegram['messageIds'], $postContent);
+
             return true;
         }
 
-        return false;
+        return true;
     }
 
     /**
@@ -119,6 +146,25 @@ class BlogPostsObserver
             'botId' => $telegramBotId,
             'messageIds' => $messageIds
         ];
+    }
+
+    private function appendAdditionalText(Posts $post, string $text): string
+    {
+
+        if ($post->telegram_length_text > 0) {
+            $text = Str::limit(strip_tags($text), $post->telegram_length_text);
+        }
+
+        if ($post->telegram_add_text) {
+            $text .= self::NEW_LINE . $post->telegram_add_text;
+        }
+
+        if (!!$post->telegram_post_url) {
+            $url = Config::get('app.url'). str_replace("//", "/", $post->currentPostUrl());
+            $text .= self::NEW_LINE . "<a href='" . $url . "'> $post->title </a>";
+        }
+
+        return $text;
     }
 
 }
