@@ -1,12 +1,13 @@
 <?php
 
+use App\Http\Controllers\Admin\AiQueryController;
+use App\Http\Controllers\Admin\CommentsController;
 use App\Http\Controllers\Admin\UserController;
 
 use App\Http\Controllers\Admin\Integration\AdminTelegramBotController;
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\MainController;
-use App\Http\Controllers\Admin\AiQueryController;
 use App\Http\Controllers\AiSearch\ControlPanel\SeoPages;
 use App\Services\Translation\Translation;
 use App\Settings\SettingGeneral;
@@ -26,6 +27,7 @@ use App\Http\Controllers\Admin\ModuleMainController;
 */
 
 Route::middleware(['auth', 'verified', 'rbac:admin'])->prefix(Translation::checkRoutePrefix())->group(function () {
+
     Route::prefix(SettingGeneral::value('admin_prefix'))->group(function () {
         Route::get('/', [MainController::class, 'index'])->name('admin.index');
         Route::get('/configuration', [MainController::class, 'configuration'])->name('admin.configuration');
@@ -42,6 +44,8 @@ Route::middleware(['auth', 'verified', 'rbac:admin'])->prefix(Translation::check
 
         Route::get('/update', [\App\Http\Controllers\Admin\UpdateController::class, 'index'])->name('admin.update');
         Route::get('/logs', [\App\Http\Controllers\Admin\LogsController::class, 'index'])->name('admin.logs');
+        Route::get('/optimize-app', [MainController::class, 'optimizeApp'])->name('admin.optimize.app');
+
         Route::get('/setLang/{locale}', function (string $locale) {
             app()->setLocale($locale);
             session()->put('locale', $locale);
@@ -61,12 +65,20 @@ Route::middleware(['auth', 'verified', 'rbac:admin'])->prefix(Translation::check
             ],
         ]);
 
-        Route::post('/log-as-user', [UserController::class, 'logInAsUser'])->name('admin.logInAsUser');
+        Route::resource("/telegram-bots", AdminTelegramBotController::class)->except('show');
 
+        Route::post('/log-as-user', [UserController::class, 'logInAsUser'])->name('admin.logInAsUser');
 
         /** Ai routes */
         Route::post('/create-ai-task', [AiQueryController::class, 'createTask'])->name('admin.createAiTask');
         Route::post('/get-ai-task', [AiQueryController::class, 'getTaskByTaskId'])->name('admin.getAiTask');
+
+        /** Comment routes */
+        Route::get('comments',[CommentsController::class,'index'])->name('admin.comment.index');
+        Route::get('comments/edit/{id}',[CommentsController::class,'edit'])->name('admin.comment.edit');
+        Route::put('comments/update',[CommentsController::class,'update'])->name('admin.comment.update');
+        Route::post('comments/set-status',[CommentsController::class,'setStatus'])->name('admin.comment.setStatus');
+        Route::delete('comments/destroy/{id}',[CommentsController::class,'destroy'])->name('admin.comment.destroy');
 
     });
 });

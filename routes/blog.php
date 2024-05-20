@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\Blog\SettingsController;
 use App\Models\Modules\Blog\Category;
 use App\Services\Translation\Translation;
 use App\Settings\SettingGeneral;
@@ -35,7 +36,7 @@ Route::middleware(['auth', 'verified'])->prefix(Translation::checkRoutePrefix())
             ],
         ]);
 
-        Route::resource('category', \App\Http\Controllers\Admin\Blog\CategoryController::class, [
+        Route::resource('category', CategoryController::class, [
             'names' => [
                 'index' => 'admin.blog.category.index',
                 'create' => 'admin.blog.category.create',
@@ -47,17 +48,21 @@ Route::middleware(['auth', 'verified'])->prefix(Translation::checkRoutePrefix())
             ],
         ]);
 
-        Route::resource('import', \App\Http\Controllers\Admin\Blog\ImportController::class, [
-            'names' => [
-                'index' => 'admin.blog.import.index',
-                'create' => 'admin.blog.import.create',
-                'store' => 'admin.blog.import.store',
-                'edit' => 'admin.blog.import.edit',
-                'update' => 'admin.blog.import.update',
-                'show' => 'admin.blog.import.show',
-                'destroy' => 'admin.blog.import.destroy',
-            ],
-        ]);
+    Route::resource('import', ImportController::class, [
+        'names' => [
+            'index' => 'admin.blog.import.index',
+            'create' => 'admin.blog.import.create',
+            'store' => 'admin.blog.import.store',
+            'edit' => 'admin.blog.import.edit',
+            'update' => 'admin.blog.import.update',
+            'show' => 'admin.blog.import.show',
+            'destroy' => 'admin.blog.import.destroy',
+        ],
+    ]);
+
+    Route::get('/settings', [SettingsController::class, 'index'])->name( 'admin.blog.settings.index');
+    Route::put('/settings', [SettingsController::class, 'update'])->name( 'admin.blog.settings.update');
+
     });
 });
 

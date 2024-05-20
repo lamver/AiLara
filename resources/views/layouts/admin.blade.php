@@ -165,7 +165,7 @@
                 <div class="nav-item text-nowrap">
                     <form method="post" action="{{route('logout')}}">
                         @csrf
-                        <button type="submit" class="nav-link px-3">{{ __('admin.sign_out') }}</button>
+                        <button type="submit" class="nav-link px-3">{{ __('admin.Sign out') }}</button>
                     </form>
                 </div>
             </div>
@@ -179,7 +179,7 @@
                             <li class="nav-item">
                                 <a class="nav-link" aria-current="page" href="{{route('admin.index')}}" {{\Illuminate\Support\Facades\Route::is('admin.index') ? 'disable' : ''}}>
                                     <span data-feather="home"></span>
-                                    {{ __('admin.dashboard') }}
+                                    {{ __('admin.Dashboard') }}
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -191,7 +191,7 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('admin.configuration') }} ">
                                     <span data-feather="shopping-cart"></span>
-                                    {{ __('admin.configuration') }}
+                                    {{ __('admin.Configuration') }}
                                 </a>
                                 <ul>
                                     <li class="nav-item">
@@ -205,7 +205,7 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="#">
                                     <span data-feather="users"></span>
-                                    {{ __('admin.modules') }}
+                                    {{ __('admin.Modules') }}
                                 </a>
                                 <ul>
                                     <li class="nav-item">
@@ -231,25 +231,37 @@
                                     <li class="nav-item">
                                         <a class="nav-link" href="#">
                                             <span data-feather="users"></span>
-                                            {{ __('admin.blog') }}
+                                            {{ __('admin.Blog') }}
                                         </a>
                                         <ul>
                                             <li>
                                                 <a class="nav-link" href="{{ route('admin.blog.post.index') }}">
                                                     <span data-feather="bar-chart-2"></span>
-                                                    {{ __('admin.posts') }}
+                                                    {{ __('admin.Posts') }}
                                                 </a>
                                             </li>
                                             <li>
                                                 <a class="nav-link" href="{{ route('admin.blog.category.index') }}">
                                                     <span data-feather="bar-chart-2"></span>
-                                                    {{ __('admin.category') }}
+                                                    {{ __('admin.Category') }}
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="{{ route('admin.comment.index') }}">
+                                                    <span data-feather="bar-chart-2"></span>
+                                                    {{ __('admin.Comments') }}
                                                 </a>
                                             </li>
                                             <li>
                                                 <a class="nav-link" href="{{ route('admin.blog.import.index') }}">
                                                     <span data-feather="bar-chart-2"></span>
-                                                    {{ __('admin.import') }}
+                                                    {{ __('admin.Import') }}
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="nav-link" href="{{ route('admin.blog.settings.index') }}">
+                                                    <span data-feather="bar-chart-2"></span>
+                                                    {{ __('admin.Settings') }}
                                                 </a>
                                             </li>
                                         </ul>
@@ -260,13 +272,13 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('telegram-bots.index') }}">
                                     <span data-feather="bar-chart-2"></span>
-                                    {{ __('admin.telegram_bots') }}
+                                    {{ __('admin.Telegram bots') }}
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('admin.ais.pages') }}">
                                     <span data-feather="bar-chart-2"></span>
-                                    {{ __('admin.pages') }}
+                                    {{ __('admin.Pages') }}
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -291,7 +303,13 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('admin.update') }}">
                                     <span data-feather="bar-chart-2"></span>
-                                    {{ __('admin.update_app') }}
+                                    {{ __('admin.Update app') }}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('admin.optimize.app') }}">
+                                    <span data-feather="bar-chart-2"></span>
+                                    {{ __('admin.Optimize app') }}
                                 </a>
                             </li>
                             @if(isset($languages))
@@ -364,6 +382,10 @@
                             <label class="form-label">{{__('admin.text')}}</label>
                             <textarea class="form form-control" name="aiForm" placeholder="{{ __('ask_ai') }}"></textarea>
                         </div>
+
+                        <div class="alert alert-danger" style="display: none">
+                        </div>
+
                         <div class="mb-3" id="innerBox" style="display: none">
                             <div class="mb-2">{{__('admin.result')}}</div>
                             <div id="innerResult" class="shadow-lg p-3 mb-5 bg-body rounded" style="text-align: center"></div>
@@ -453,24 +475,42 @@
                 basicCheckValue: false,
                 attemptCount: 0,
                 tries: 25,
+                inProcess: false,
 
                 init: function () {
 
                     this.modalEl.addEventListener('show.bs.modal', (event) => {
                         this.modalEl.dataset.typeId = event.relatedTarget.dataset.typeId
                         let modelTitle = this.modalEl.querySelector('.modal-header .modal-title span');
-                        modelTitle.innerText = document.querySelector(`[for='${event.relatedTarget.dataset.typeId}']`).innerText
+                        modelTitle.innerText = document.querySelector(`[for='${event.relatedTarget.dataset.typeId}']`)?.innerText ?? ""
 
                     });
 
-                    this.modalEl.addEventListener('hide.bs.modal', () => {
-                        this.reset();
-                    });
-
+                    this.modalEl.addEventListener('hide.bs.modal', this.modalClose.bind(this));
                     this.createAiBtn.addEventListener('click', this.createAiFunc.bind(this));
                     this.insertBtn.addEventListener('click', this.insertFunc.bind(this));
                     this.selectTypeTask.addEventListener('change', this.selectTypeTaskEvent.bind(this));
 
+                    window.addEventListener('beforeunload', this.beforeunload.bind(this));
+
+                },
+                modalClose: function (event) {
+                    if(this.inProcess && !confirm('{{__('admin.Close')}} ?')) {
+                        event.preventDefault();
+                        event.stopImmediatePropagation();
+                        return false
+                    }
+
+                    this.reset();
+                },
+                beforeunload: function (event) {
+                    if (this.inProcess) {
+                        // Показываем диалоговое окно подтверждения
+                        let confirmationMessage = '{{__('admin.Are you sure')}} ?';
+                        event.returnValue = confirmationMessage; // Необходимо для старых версий браузеров
+                        // Если пользователь согласился, возвращаем null (иначе диалоговое окно отменится)
+                        return confirmationMessage;
+                    }
                 },
                 selectTypeTaskEvent: function (even) {
                     let basicCheck = this.modalEl.querySelector('#basicCheck');
@@ -487,11 +527,13 @@
 
                     let text = this.modalEl.querySelector(".modal-body [name='aiForm']").value
                     let type = this.modalEl.querySelector(".modal-body #typeTask").value;
+                    this.inProcess = true;
+                    this.errorHandler(false);
 
                     if (text.length < 3) return;
 
                     this.createAiBtnAction(true);
-                    let data = {text: text, type: type};
+                    let data = {prompt: text, type: type};
 
                     if(this.basicCheckValue) {
                         data.basic = 1;
@@ -516,10 +558,16 @@
                             }
                             this.aiResult.answer = this.aiResult.answer.replace(/<\/?[^>]+(>|$)/g, "");
                             this.innerBox.querySelector('#innerResult').innerText = this.aiResult.answer;
+                            this.inProcess = false;
 
 
                         }, 3000);
+
+                        return;
                     }
+
+                    this.errorHandler(true, result.message);
+                    this.reset();
 
                 },
                 fetchAi: async function (url, data) {
@@ -591,15 +639,28 @@
                     this.createAiBtn.querySelector('svg').style.display = "none";
 
                 },
+                errorHandler: function (show, msg = "") {
+                    let dangerBox = this.modalEl.querySelector('.alert-danger');
+
+                    if(show) {
+                        dangerBox.innerText = msg;
+                        dangerBox.style.display = 'block';
+                        return;
+                    }
+
+                    dangerBox.innerText = "";
+                    dangerBox.style.display = 'none';
+
+                },
                 reset: function () {
                     this.innerBox.querySelector('#innerResult').innerText = "";
                     this.innerBox.style.display = 'none';
                     this.insertBtn.disabled = true;
                     this.modalEl.dataset.typeId = ""
-                    this.modalEl.dataset.type = "";
                     this.modalEl.querySelector(".modal-body [name='aiForm']").value = "";
                     this.aiResult = {};
                     this.createAiBtnAction(false);
+                    this.inProcess = false;
                 }
 
             };

@@ -41,6 +41,18 @@
         @endif
         @endauth
     </div>
+
+    <div class="container">
+        @if(!$post->denied_comments)
+        <div class="mb-3">
+            <livewire:Comments.comment-form :post="$post"/>
+        </div>
+        @endif
+        @if(!$post->hide_existed_comments)
+        <livewire:Comments.comment-list :post="$post"/>
+        @endif
+    </div>
+
 @endsection
 @push('bottom-scripts')
     <script>

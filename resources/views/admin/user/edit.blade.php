@@ -8,7 +8,7 @@
 
         <div class="row mb-3">
             <div class="form-group">
-                <label for="name" class="form-label">{{ __('Name') }}</label>
+                <label for="name" class="form-label">{{ __('admin.Name') }}</label>
                 <input id="name" type="text" class="form-control @error('name') is-invalid @enderror"
                        name="name"
                        value="{{ old('name', $user->name) }}" required autocomplete="name" autofocus>
@@ -23,7 +23,7 @@
 
         <div class="row mb-3">
             <div class="form-group">
-                <label for="email" class="form-label">{{ __('Email Address') }}</label>
+                <label for="email" class="form-label">{{ __('admin.Email address') }}</label>
                 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
                        name="email"
                        value="{{ old('email', $user->email) }}" required autocomplete="email">
@@ -38,7 +38,7 @@
 
         <div class="row mb-3">
             <div class="form-group">
-                <label for="new-password" class="form-label">{{ __('new password') }}</label>
+                <label for="new-password" class="form-label">{{ __('admin.New password') }}</label>
                 <input id="new-password" type="password"
                        class="form-control @error('new_password') is-invalid @enderror"
                        name="new_password" autocomplete="new-password">
@@ -53,7 +53,7 @@
 
         <div class="row mb-3">
             <div class="form-group">
-                <label for="owner-select" class="form-label">{{ __('user_role') }}</label>
+                <label for="owner-select" class="form-label">{{ __('admin.User role') }}</label>
                 <select id="owner-select" class="form-select @error('owner') is-invalid @enderror" name="owner">
                     @foreach($owners as $owner)
                         <option value="{{$owner->original_id}}"
@@ -74,7 +74,7 @@
             <div class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" name="status"
                        @if($user->status) checked @endif id="userStatus">
-                <label class="form-check-label" for="userStatus">{{__('user_status')}}</label>
+                <label class="form-check-label" for="userStatus">{{__('admin.User status')}}</label>
             </div>
         </div>
 
@@ -103,10 +103,10 @@
         <div class="row mb-0">
             <div class="col-md-6">
                 <button type="submit" class="btn btn-primary">
-                    {{ __('save') }}
+                    {{ __('admin.Save') }}
                 </button>
                 <a href="{{route('admin.user.index')}}" class="btn btn-danger">
-                    {{ __('cancel') }}
+                    {{ __('admin.Cancel') }}
                 </a>
             </div>
         </div>

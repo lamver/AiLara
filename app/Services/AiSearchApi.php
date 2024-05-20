@@ -64,7 +64,9 @@ class AiSearchApi
         }
 
         if (curl_errno($curl)) {
-             Log::error(__METHOD__ .'----'.curl_error($curl));;
+            $error = curl_error($curl);
+             Log::error(__METHOD__ .'----'.$error);
+            $response['message'] = $error;
         }
 
         curl_close($curl);

@@ -9,9 +9,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="theme-color" content="#6777ef"/>
-    <link rel="apple-touch-icon" href="{{ asset('logo.PNG') }}">
+    <link rel="apple-touch-icon" href="{{ app(\App\Settings\SettingGeneral::class)->favicon }}">
     <link rel="manifest" href="{{ asset('/manifest.json') }}">
-    <link rel="shortcut icon" href="{{ app(\App\Settings\SettingGeneral::class)->favicon }}" type="image/png">
+    <link rel="shortcut icon" href="{{ \App\Helpers\ImageMaster::resizeImgFromCdn(app(\App\Settings\SettingGeneral::class)->favicon, 140, 140) }}" type="image/png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     @yield('stylesheet')
     @stack('meta_noindex')

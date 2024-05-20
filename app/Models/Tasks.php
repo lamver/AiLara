@@ -93,4 +93,11 @@ class Tasks extends Model
         return Str::slug(implode("_", $userParams)) . "/" . $params['id'];
     }
 
+    public static function getResult(int $id = null)
+    {
+        if (is_null($id)) {
+            return false;
+        }
+    }
+
 }

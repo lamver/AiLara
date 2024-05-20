@@ -12,7 +12,7 @@
             <div class="col-md-10">
                 <h1>{{ $taskUserParams['prompt'] }}</h1>
                 <div class="px-2 py-3" id="response">
-                    @if($task['status'] === \App\Models\Tasks::STATUS_DONE_SUCCESSFULLY)
+                    @if((int)$task['status'] === \App\Models\Tasks::STATUS_DONE_SUCCESSFULLY)
                         <div class="card">
                             <div class="card-body">
                                 <h1 class="card-title">
@@ -34,19 +34,19 @@
         </div>
     </div>
 @endsection
-
 @push('bottom-scripts')
-
 <script>
-    @if($task['status'] === \App\Models\Tasks::STATUS_CREATED)
+    console.log('start status {{ $task['status'] }}');
+    @if((int) $task['status'] == (int) \App\Models\Tasks::STATUS_CREATED)
+    console.log('start {{ \App\Models\Tasks::STATUS_CREATED }}')
     let id = {{$id}};
     let responseHtml = document.querySelector('#response');
     let counter = 1;
-    let interval = 10000; // 10 секунд
+    let interval = 10000; // 5 секунд
     let intervalEnd = 120000 // 2 минуты.
-
+console.log('before fetchTast')
     let fetchTast = () => {
-
+console.log('after fetchTast')
         // Stop the recursion
         if ((interval * counter) >= intervalEnd) {
             responseHtml.innerHTML = '<div class="alert alert-secondary">In process...</div>';
@@ -55,33 +55,26 @@
         fetch(`{{ route('ajax.ai-form.getTask', ['id' => $id]) }}`)
             .then(response => response.json())
             .then(json => {
+                console.log(json);
 
-                if (json.result !== true) {
-                    responseHtml.innerHTML = '<div class="alert alert-danger"> Something went wrong. <br> please refresh page </div>';
-                }
-
-                if (json.answer.status !== 1) {
+                if (json.data.status !== {{ \App\Models\Tasks::STATUS_DONE_SUCCESSFULLY }}) {
                     setTimeout(() => fetchTast(), interval);
                     counter++;
                     return false
                 }
 
-                console.log(json);
+                if (json.data.status === {{ \App\Models\Tasks::STATUS_DONE_ERROR }}) {
+                    responseHtml.innerHTML = `<div class="card"> <div class="card-body"><p class="card-text">{{ __('Something went wrong') }}.</p>`;
+                }
 
-                responseHtml.innerHTML = `<div class="card"> <div class="card-body"><p class="card-text">${json.answer.answer} </p>`;
+                if (json.data.status === {{ \App\Models\Tasks::STATUS_DONE_SUCCESSFULLY }}) {
+                    responseHtml.innerHTML = `<div class="card"> <div class="card-body"><p class="card-text">${json.data.result}</p>`;
+                }
 
             }).catch(error => console.log(error));
     };
 
-
-   let task = {!! json_encode($task) !!};
-
-   if (task.result === false || task?.answer?.status !== 1) {
-        fetchTast();
-    }
-
-   @endif
-
+    fetchTast();
+    @endif
 </script>
-
 @endpush
