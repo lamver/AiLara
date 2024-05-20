@@ -311,7 +311,15 @@
                                     <span data-feather="bar-chart-2"></span>
                                     {{ __('admin.Optimize app') }}
                                 </a>
-                            </li>
+                             </li>
+
+                            <li class="nav-item">
+                               <a class="nav-link" href="{{ route('admin.backup.index') }}">
+                                    <span data-feather="bar-chart-2"></span>
+                                    {{__('backup')}}
+                                </a>
+                             </li>
+
                             @if(isset($languages))
                             <li class="nav-item">
                                 <div class="d-flex flex-row bd-highlight">

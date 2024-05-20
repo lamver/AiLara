@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Log;
 class SettingGeneral extends Data
 {
 
+    const TYPE_ARRAY = 'array';
+
     /** @var string */
     public string $site_name;
 
@@ -46,6 +48,29 @@ class SettingGeneral extends Data
     public string $seo_title;
     public string $seo_description;
 
+    public array $backup_frequency;
+
+    /**  @var array */
+    const BACKUP_FREQUENCY = [
+        'hourly' => false,
+        'daily' => false,
+        'weekly' => false,
+        'monthly' => false,
+        'yearly' => false,
+    ];
+
+    /** @var bool */
+    public bool $backup_status;
+
+    /** @var bool */
+    public bool $backup_musqldump;
+
+    /**  @var string */
+    public string $backup_musqldump_path;
+
+
+    // public bool $api_key;
+
     /**
      * Get the group name.
      *
@@ -65,7 +90,7 @@ class SettingGeneral extends Data
     public function prepareAndSave(array $dataSettings, SettingGeneral $settings): SettingGeneral
     {
         $settings->site_name = $dataSettings['site_name'] ?? "";
-        $settings->site_active = (bool)$dataSettings['site_active'];
+        $settings->site_active = key_exists('site_active', $dataSettings) ?  (bool) $dataSettings['site_active'] : false;
         $settings->app_name = $dataSettings['app_name'] ?? "";
         $settings->logo_path = $dataSettings['logo_path'] ?? "";
         $settings->logo_title = $dataSettings['logo_title'] ?? "";
@@ -79,6 +104,16 @@ class SettingGeneral extends Data
         $settings->favicon = $dataSettings['favicon'] ?? "";
         $settings->custom_css = $dataSettings['custom_css'] ?? "";
         $settings->seo_description = $dataSettings['seo_description'] ?? "";
+        $settings->backup_musqldump_path = $dataSettings['backup_musqldump_path'] ?? "";
+        $settings->backup_musqldump = key_exists('backup_musqldump', $dataSettings) ?  (bool) $dataSettings['backup_musqldump'] : false;
+        $settings->backup_status = key_exists('backup_status', $dataSettings) ?  (bool) $dataSettings['backup_status'] : false;
+
+        $backupFrequency = SettingGeneral::BACKUP_FREQUENCY;
+
+        if (key_exists($dataSettings['backup_frequency'], $backupFrequency)){
+            $backupFrequency[$dataSettings['backup_frequency']] = true;
+            $settings->backup_frequency = $backupFrequency;
+        }
 
         return $settings->save();
     }
