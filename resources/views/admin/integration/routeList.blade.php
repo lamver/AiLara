@@ -5,10 +5,10 @@
         <thead>
             <tr>
                 <th>
-                    uri
+                    {{ __('admin.Uri') }}
                 </th>
                 <th>
-                    meta_title
+                    {{ __('admin.Meta title') }}
                 </th>
                 <th>
 
@@ -24,7 +24,7 @@
                 {{ $pageData->meta_title }}
             </td>
             <td>
-                <a href="{{ route('admin.ais.page.edit', ['id' => $pageData->id]) }}">редактировать</a>
+                <a href="{{ route('admin.ais.page.edit', ['id' => $pageData->id]) }}">{{ __('admin.Edit') }}</a>
             </td>
         </tr>
         @endforeach

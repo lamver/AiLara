@@ -1,11 +1,11 @@
 @extends('layouts.admin')
 @section('page_title')
-    Blog / Category / create
+    {{ __('admin.Blog / Category / Create') }}
 @endsection
 @section('page_options')
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group me-2">
-            <a href="{{ route('admin.blog.category.index') }}" type="button" class="btn btn-sm btn-outline-success">All category</a>
+            <a href="{{ route('admin.blog.category.index') }}" type="button" class="btn btn-sm btn-outline-success">{{ __('admin.All category') }}</a>
 {{--            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>--}}
         </div>
 {{--        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">

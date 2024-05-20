@@ -1,11 +1,11 @@
 @extends('layouts.admin')
 @section('page_title')
-    Blog / Category
+    {{ __('admin.Blog / Category') }}
 @endsection
 @section('page_options')
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group me-2">
-            <a href="{{ route('admin.blog.category.create') }}" type="button" class="btn btn-sm btn-outline-success">Add</a>
+            <a href="{{ route('admin.blog.category.create') }}" type="button" class="btn btn-sm btn-outline-success">{{ __('admin.Add') }}</a>
         </div>
     </div>
 @endsection
@@ -57,11 +57,11 @@
         <ul id="myUL">
             @foreach($categories as $category)
                 <li><span style="white-space: nowrap"  class="caret"><b>#{{ $category->id }}</b> {{ $category->title }}
-                        <a href="{{ route('admin.blog.category.edit', ['category' => $category->id]) }}" class="btn btn-default">Edit</a>
+                        <a href="{{ route('admin.blog.category.edit', ['category' => $category->id]) }}" class="btn btn-default">{{ __('admin.Edit') }}</a>
                         <form action="{{ route('admin.blog.category.destroy', $category) }}" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button class="btn btn-default" type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+                            <button class="btn btn-default" type="submit" onclick="return confirm('Are you sure?')">{{ __('admin.Delete') }}</button>
                         </form>
                     </span>
 {{--                    <div class="btn-group">
