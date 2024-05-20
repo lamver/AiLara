@@ -7,7 +7,7 @@
             <span style="width: 26px;" id="previousUrl"></span>
         @endif
         <a class="navbar-brand" href="<?php echo Route::currentRouteName() == 'index' ? '#home' : route('index')?>">
-            <img title="{{ $settings->site_name  }}" alt="Нейросеть для разбора сноведений" width="{{ $settings->logo_width_px }}" height="{{ $settings->logo_height_px }}" src="{{ $settings->logo_path }}"/>
+            <img title="{{ $settings->logo_title  }}" alt="Нейросеть для разбора сноведений" width="{{ $settings->logo_width_px }}" height="{{ $settings->logo_height_px }}" src="{{ $settings->logo_path }}"/>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainAppNavbar" aria-controls="mainAppNavbar" aria-expanded="false" aria-label="Toggle navigation">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">

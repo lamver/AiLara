@@ -91,6 +91,7 @@ class SettingGeneral extends Data
     {
         $settings->site_name = $dataSettings['site_name'] ?? "";
         $settings->site_active = key_exists('site_active', $dataSettings) ?  (bool) $dataSettings['site_active'] : false;
+        $settings->seo_title = $dataSettings['seo_title'] ?? "";
         $settings->app_name = $dataSettings['app_name'] ?? "";
         $settings->logo_path = $dataSettings['logo_path'] ?? "";
         $settings->logo_title = $dataSettings['logo_title'] ?? "";
