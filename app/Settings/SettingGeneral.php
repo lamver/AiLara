@@ -65,6 +65,7 @@ class SettingGeneral extends Data
     public function prepareAndSave(array $dataSettings, SettingGeneral $settings): SettingGeneral
     {
         $settings->site_name = $dataSettings['site_name'] ?? "";
+        $settings->seo_title = $dataSettings['seo_title'] ?? "";
         $settings->site_active = (bool)$dataSettings['site_active'];
         $settings->app_name = $dataSettings['app_name'] ?? "";
         $settings->logo_path = $dataSettings['logo_path'] ?? "";
