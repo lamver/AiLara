@@ -7,6 +7,7 @@ use App\Models\Modules\Blog\Import;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Log;
+use App\Services\Backup\Backup;
 
 class Kernel extends ConsoleKernel
 {
@@ -15,6 +16,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
+        $schedule->command('app:blog-import')->everyFourHours();
         // $schedule->command('inspire')->hourly();
         $importTasks = false;
 
@@ -36,6 +38,9 @@ class Kernel extends ConsoleKernel
         }
 
         $schedule->command('sitemap:generate')->everySixHours();
+
+        Backup::backupSchedule($schedule);
+
     }
 
     /**

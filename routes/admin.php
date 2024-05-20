@@ -4,11 +4,12 @@ use App\Http\Controllers\Admin\AiQueryController;
 use App\Http\Controllers\Admin\CommentsController;
 use App\Http\Controllers\Admin\Integration\AdminTelegramBotController;
 use App\Http\Controllers\Admin\MainController;
+use App\Http\Controllers\Admin\BackupController;
 use App\Http\Controllers\Admin\UserController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AiSearch\ControlPanel\SeoPages;
 use App\Services\Translation\Translation;
 use App\Settings\SettingGeneral;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ModuleMainController;
 
 
@@ -60,9 +61,15 @@ Route::middleware(['auth', 'verified', 'rbac:admin'])->prefix(Translation::check
             ],
         ]);
 
+        Route::post('/log-as-user', [UserController::class, 'logInAsUser'])->name('admin.logInAsUser');
+
         Route::resource("/telegram-bots", AdminTelegramBotController::class)->except('show');
 
-        Route::post('/log-as-user', [UserController::class, 'logInAsUser'])->name('admin.logInAsUser');
+        //backup route
+        Route::get('/backup', [BackupController::class, 'index'])->name('admin.backup.index');
+        Route::post('/backup', [BackupController::class, 'destroy'])->name('admin.backup.destroy');
+        Route::post('/make-backup', [BackupController::class, 'makeBackup'])->name('admin.backup.makeBackup');
+
 
         /** Ai routes */
         Route::post('/create-ai-task', [AiQueryController::class, 'createTask'])->name('admin.createAiTask');
