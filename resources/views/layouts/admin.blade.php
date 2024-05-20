@@ -165,7 +165,7 @@
                 <div class="nav-item text-nowrap">
                     <form method="post" action="{{route('logout')}}">
                         @csrf
-                        <button type="submit" class="nav-link px-3">{{ __('admin.sign_out') }}</button>
+                        <button type="submit" class="nav-link px-3">{{ __('admin.Sign out') }}</button>
                     </form>
                 </div>
             </div>
@@ -179,7 +179,7 @@
                             <li class="nav-item">
                                 <a class="nav-link" aria-current="page" href="{{route('admin.index')}}" {{\Illuminate\Support\Facades\Route::is('admin.index') ? 'disable' : ''}}>
                                     <span data-feather="home"></span>
-                                    {{ __('admin.dashboard') }}
+                                    {{ __('admin.Dashboard') }}
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -191,7 +191,7 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('admin.configuration') }} ">
                                     <span data-feather="shopping-cart"></span>
-                                    {{ __('admin.configuration') }}
+                                    {{ __('admin.Configuration') }}
                                 </a>
                                 <ul>
                                     <li class="nav-item">
@@ -205,7 +205,7 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="#">
                                     <span data-feather="users"></span>
-                                    {{ __('admin.modules') }}
+                                    {{ __('admin.Modules') }}
                                 </a>
                                 <ul>
                                     <li class="nav-item">
@@ -231,19 +231,19 @@
                                     <li class="nav-item">
                                         <a class="nav-link" href="#">
                                             <span data-feather="users"></span>
-                                            {{ __('admin.blog') }}
+                                            {{ __('admin.Blog') }}
                                         </a>
                                         <ul>
                                             <li>
                                                 <a class="nav-link" href="{{ route('admin.blog.post.index') }}">
                                                     <span data-feather="bar-chart-2"></span>
-                                                    {{ __('admin.posts') }}
+                                                    {{ __('admin.Posts') }}
                                                 </a>
                                             </li>
                                             <li>
                                                 <a class="nav-link" href="{{ route('admin.blog.category.index') }}">
                                                     <span data-feather="bar-chart-2"></span>
-                                                    {{ __('admin.category') }}
+                                                    {{ __('admin.Category') }}
                                                 </a>
                                             </li>
                                             <li class="nav-item">
@@ -255,7 +255,7 @@
                                             <li>
                                                 <a class="nav-link" href="{{ route('admin.blog.import.index') }}">
                                                     <span data-feather="bar-chart-2"></span>
-                                                    {{ __('admin.import') }}
+                                                    {{ __('admin.Import') }}
                                                 </a>
                                             </li>
                                             <li>
@@ -272,13 +272,13 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('telegram-bots.index') }}">
                                     <span data-feather="bar-chart-2"></span>
-                                    {{ __('admin.telegram_bots') }}
+                                    {{ __('admin.Telegram bots') }}
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('admin.ais.pages') }}">
                                     <span data-feather="bar-chart-2"></span>
-                                    {{ __('admin.pages') }}
+                                    {{ __('admin.Pages') }}
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -303,7 +303,7 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('admin.update') }}">
                                     <span data-feather="bar-chart-2"></span>
-                                    {{ __('admin.update_app') }}
+                                    {{ __('admin.Update app') }}
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -311,7 +311,15 @@
                                     <span data-feather="bar-chart-2"></span>
                                     {{ __('admin.Optimize app') }}
                                 </a>
-                            </li>
+                             </li>
+
+                            <li class="nav-item">
+                               <a class="nav-link" href="{{ route('admin.backup.index') }}">
+                                    <span data-feather="bar-chart-2"></span>
+                                    {{__('backup')}}
+                                </a>
+                             </li>
+
                             @if(isset($languages))
                             <li class="nav-item">
                                 <div class="d-flex flex-row bd-highlight">

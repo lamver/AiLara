@@ -3,22 +3,22 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/10.0.1/jsoneditor.css" integrity="sha512-iOFdnlwX6UGb55bU5DL0tjWkS/+9jxRxw2KiRzyHMZARASUSwm0nEXBcdqsYni+t3UKJSK7vrwvlL8792/UMjQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 @endpush
 @section('content')
-    <h2>New form</h2>
+    <h2>{{ __('admin.New form') }}</h2>
 <!--    <a class="btn-link" href="">New form</a>-->
 <hr>
     <form method="post" action="{{ route('admin.ais.aiForms.newFormCreate') }}">
         @csrf
         <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">{{ __('Name form') }}</label>
+            <label for="exampleInputEmail1" class="form-label">{{ __('admin.Name form') }}</label>
             <input name="name" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-            <div id="emailHelp" class="form-text">{{ __('Name form ') }}</div>
+            <div id="emailHelp" class="form-text">{{ __('admin.Name form ') }}</div>
         </div>
         <div id="jsoneditor" style="width: 100%; height: 800px;"></div>
         <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">{{ __('Config form') }}</label>
+            <label for="exampleInputPassword1" class="form-label">{{ __('admin.Config form') }}</label>
             <textarea id="form_config" style="display: none" name="form_config" class="form-control" id="exampleInputPassword1" rows="10">{{ $prototypeForm }}</textarea>
         </div>
-        <button type="submit" class="btn btn-primary">{{ __('Save')}}</button>
+        <button type="submit" class="btn btn-primary">{{ __('admin.Save')}}</button>
     </form>
 @endsection
 

@@ -2,18 +2,18 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            AiSearch API
+            {{ __('admin.AiSearch API') }}
         </div>
         <div class="card-body">
             @if($aisUserData['result'] && isset($aisUserData['data']))
-                <div>Nane: {{ $aisUserData['data']['username'] }}</div>
-                <div>Email: {{ $aisUserData['data']['email'] }}</div>
-                <div>Balance: {{ number_format(($aisUserData['data']['balance'] / 100)) }} р.</div>
+                <div>{{ __('admin.Name') }}: {{ $aisUserData['data']['username'] }}</div>
+                <div>{{ __('admin.Email') }}: {{ $aisUserData['data']['email'] }}</div>
+                <div>{{ __('admin.Balance') }}: {{ number_format(($aisUserData['data']['balance'] / 100)) }} {{ __('admin.Rub') }}.</div>
             @else
 
                 {{ $aisUserData['message'] }}
 
-                <a href="{{ route('admin.configuration') }}">{{ __('Set up') }}</a>
+                <a href="{{ route('admin.configuration') }}">{{ __('admin.Set up') }}</a>
             @endif
         </div>
     </div>

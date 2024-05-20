@@ -43,8 +43,8 @@ class PostsController extends Controller
         $settings = new SettingGeneral();
 
         $param = [
-            'title'         => $settings->app_name,
-            'description'   => $settings->app_name,
+            'title'         => $settings->seo_title,
+            'description'   => $settings->seo_description,
             'canonicalUrl'  => '/',
             'type'          => 'articles',
         ];

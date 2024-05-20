@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('page_title')
-    Ai Forms
+    {{ __('admin.Ai forms') }}
 @endsection
 @section('page_options')
     <div class="btn-toolbar mb-2 mb-md-0">
@@ -30,7 +30,7 @@
                 </a>
             </td>
             <td>
-                {{ $aiFormConfig->use_default == true ?? 'YES' }}
+                {{ $aiFormConfig->use_default == true ?? __('admin.Yes') }}
                 @if(!$aiFormConfig->use_default)
                 <form action="{{ route('admin.module.ai-form.update', $aiFormConfig) }}" method="POST">
                     @csrf
@@ -45,7 +45,7 @@
                 <form action="{{ route('admin.module.ai-form.destroy', $aiFormConfig) }}" method="POST">
                     @csrf
                     @method('DELETE')
-                    <button class="btn btn-link" type="submit" onclick="return confirm('Are you sure?')">{{ __('admin.Delete') }}</button>
+                    <button class="btn btn-link" type="submit" onclick="return confirm('{{ __('admin.Are you sure') }} ?')">{{ __('admin.Delete') }}</button>
                 </form>
             </td>
         </tr>
