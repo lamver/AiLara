@@ -76,12 +76,6 @@ class TgBroadsace
         return $deletedIds;
     }
 
-    /**
-     * Sets the attachments for the current object.
-     *
-     * @param string $attachments
-     * @return void
-     */
     public function setAttachments(string $attachments): void
     {
         $this->attachments = $attachments;
@@ -155,13 +149,6 @@ class TgBroadsace
 
     }
 
-    /**
-     * Save the message to the telegram_messages table.
-     *
-     * @param $messageId
-     *
-     * @return void
-     */
     public function saveToTable($messageId): void
     {
         $telegraphMessages = new telegramMessages();

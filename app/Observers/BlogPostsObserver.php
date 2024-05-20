@@ -43,7 +43,7 @@ class BlogPostsObserver
 
         $changes = $post->getChanges();
 
-        if (!isset($changes['content'])){
+        if (!isset($changes['content'])) {
             $changes['content'] = $post->content;
         }
 
