@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\Blog\SettingsController;
 use App\Models\Modules\Blog\Category;
 use App\Settings\SettingGeneral;
 use Illuminate\Support\Facades\Route;
@@ -56,6 +57,10 @@ Route::middleware(['auth', 'verified'])->prefix(SettingGeneral::value('admin_pre
             'destroy' => 'admin.blog.import.destroy',
         ],
     ]);
+
+    Route::get('/settings', [SettingsController::class, 'index'])->name( 'admin.blog.settings.index');
+    Route::put('/settings', [SettingsController::class, 'update'])->name( 'admin.blog.settings.update');
+
 });
 
 if (Module::isFrontModule(Module::MODULE_BLOG)) {

@@ -3,19 +3,28 @@
 namespace App\Models\Modules\Blog;
 
 use App\Helpers\StrMaster;
+use App\Models\TelegramBot;
+use App\Models\telegramMessages;
 use App\Models\User;
+use App\Observers\BlogPostsObserver;
+use App\Traits\Commentable;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Spatie\Feed\Feedable;
 use Spatie\Feed\FeedItem;
 
+#[ObservedBy([BlogPostsObserver::class])]
 class Posts extends Model implements Feedable
 {
     use HasFactory;
+    use Commentable;
 
     const STATUS = [
         'Published',
@@ -66,7 +75,7 @@ class Posts extends Model implements Feedable
         $model = new self();
 
         foreach ($modelParams as $params) {
-            if (isset($data[$params->Field])) {
+            if (array_key_exists($params->Field, $data)) {
                 $model->{$params->Field} = $data[$params->Field];
             }
         }
@@ -91,7 +100,7 @@ class Posts extends Model implements Feedable
         $model = Posts::find($id);
 
         foreach ($modelParams as $params) {
-            if (isset($data[$params->Field])) {
+            if (array_key_exists($params->Field, $data)) {
                 $model->{$params->Field} = $data[$params->Field];
             }
         }
@@ -190,16 +199,36 @@ class Posts extends Model implements Feedable
         return $prepared;
     }
 
-    static public function getPostsByCategoryId($categoryId)
+    /**
+     * @param int|array $categoryId
+     * @return mixed
+     */
+    static public function getPostsByCategoryId(int|array $categoryId, $perPage = 30): mixed
     {
-        return self::createUrlToPosts(Posts::query()->where(['post_category_id' => $categoryId])->where(['status' => 'Published'])->orderBy('id', 'DESC')->paginate(30));
+        if (is_array($categoryId) && !empty($categoryId)) {
+            return self::createUrlToPosts(
+                Posts::query()
+                    ->whereRaw('post_category_id IN ('.implode(',', $categoryId).')')
+                    ->where(['status' => 'Published'])
+                    ->orderBy('id', 'DESC')
+                    ->paginate($perPage)
+            );
+        }
+
+        return self::createUrlToPosts(
+            Posts::query()
+                ->where(['post_category_id' => $categoryId])
+                ->where(['status' => 'Published'])
+                ->orderBy('id', 'DESC')
+                ->paginate($perPage)
+        );
     }
 
     /**
      * @param $posts
      * @return mixed
      */
-    static public function createUrlToPosts($posts)
+    static public function createUrlToPosts($posts): mixed
     {
         foreach ($posts as $post) {
             $post->urlToPost = self::createUrlFromPost($post);
@@ -211,6 +240,14 @@ class Posts extends Model implements Feedable
     static public function createUrlFromPost(Posts $post)
     {
         return Category::getCategoryUrlById($post->post_category_id) . '/' . Str::slug(Str::limit(strip_tags($post->title))) . '_' .$post->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function currentPostUrl(): string
+    {
+        return '/'.Category::getCategoryUrlById($this->post_category_id) . '/' . Str::slug(Str::limit(strip_tags($this->title))) . '_' .$this->id;
     }
 
     static public function getUrlPostById($id)
@@ -228,14 +265,16 @@ class Posts extends Model implements Feedable
     public function toFeedItem(): FeedItem
     {
         $user = $this->user()->first();
-        $description = strip_tags(str::limit($this->description ?? "", self::RSS_CONTENT_LN));
+
         return FeedItem::create()
             ->id($this->id)
             ->title($this->title ?? "")
-            ->summary($description)
+            ->summary($this->description ?? "")
             ->updated($this->updated_at)
             ->link(self::createUrlFromPost($this))
-            ->authorName($user->name)
+            ->image($this->image ?? "")
+            ->category($this->category->title)
+            ->authorName($user->name ?? "")
             ->authorEmail('');
     }
 
@@ -255,6 +294,22 @@ class Posts extends Model implements Feedable
     public function category()
     {
         return $this->belongsTo(Category::class, 'post_category_id', 'id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function telegramBot(): BelongsTo
+    {
+        return $this->belongsTo(TelegramBot::class, 'telegram_bot_id', 'id');
+    }
+
+    /**
+     * @return MorphMany
+     */
+    public function telegramMessages(): MorphMany
+    {
+        return $this->morphMany(telegramMessages::class, 'model');
     }
 
     static public function getUniqIdsFromCollections(Collection $collections)

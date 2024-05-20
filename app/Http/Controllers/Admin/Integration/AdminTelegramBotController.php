@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin\Integration;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTelegramBotRequest;
-use App\Models\AiForm;
+use App\Models\Modules\AiForm\AiForm;
 use App\Models\TelegramBot;
 use Illuminate\Contracts\Foundation\Application as ContractsApplication;
 use Illuminate\Foundation\Application;

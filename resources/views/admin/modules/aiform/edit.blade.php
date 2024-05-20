@@ -3,7 +3,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/10.0.1/jsoneditor.css" integrity="sha512-iOFdnlwX6UGb55bU5DL0tjWkS/+9jxRxw2KiRzyHMZARASUSwm0nEXBcdqsYni+t3UKJSK7vrwvlL8792/UMjQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 @endpush
 @section('page_title')
-    Ai Form / {{ __('admin.Edit') }}
+    {{ __('admin.Ai forms') }} / {{ __('admin.edit') }}
 @endsection
 @section('page_options')
     <div class="btn-toolbar mb-2 mb-md-0">
@@ -43,14 +43,14 @@
             <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="form-config-tab">
                 <div id="jsoneditor" style="width: 100%; height: 800px;"></div>
                 <div class="mb-3">
-                    <label for="form_config" class="form-label">{{ __('Config form') }}</label>
+                    <label for="form_config" class="form-label">{{ __('admin.Config form') }}</label>
                     <textarea name="form_config" id="form_config" style="display: none" class="form-control" id="form_config" rows="10">{{ $aiForm->form_config ?? '' }}</textarea>
                 </div>
             </div>
             <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="form-content-tab">
 
                 <div class="mb-3">
-                    <label for="content_on_page" class="form-label">{{ __('Content on page') }}</label>
+                    <label for="content_on_page" class="form-label">{{ __('admin.Content on page') }}</label>
                     <textarea name="content_on_page" class="form-control" id="content_on_page" rows="15">{{ $aiForm->content_on_page ?? '' }}</textarea>
                 </div>
 
@@ -58,27 +58,27 @@
                 <input name="seo_title" value="{{ $aiForm->seo_title ?? '' }}" type="text" class="form-control" id="formSeoTitle" aria-describedby="emailHelp">
 
                 <div class="mb-3">
-                    <label for="seo_description" class="form-label">{{ __('Seo description') }}</label>
+                    <label for="seo_description" class="form-label">{{ __('admin.Seo description') }}</label>
                     <textarea name="seo_description" class="form-control" id="seo_description" rows="7">{{ $aiForm->seo_description ?? '' }}</textarea>
                 </div>
 
                 <label for="image" class="form-label">{{ __('admin.Image') }}</label>
                 <input name="image" value="{{ $aiForm->image ?? '' }}" type="text" class="form-control" id="image" aria-describedby="emailHelp">
-                <div id="emailHelp" class="form-text">{{ __('Name form ') }}</div>
+                <div id="emailHelp" class="form-text">{{ __('admin.Name form ') }}</div>
 
                 <div class="mb-3">
                     <label for="description_on_page" class="form-label">{{ __('admin.Description') }}</label>
                     <textarea name="description_on_page" class="form-control" id="description_on_page" rows="7">{{ $aiForm->description_on_page ?? '' }}</textarea>
                 </div>
 
-                <label for="title_h1" class="form-label">{{ __('admin.title_h1') }}</label>
+                <label for="title_h1" class="form-label">{{ __('admin.Title h1') }}</label>
                 <input name="title_h1" value="{{ $aiForm->title_h1 ?? '' }}" type="text" class="form-control" id="title_h1" aria-describedby="emailHelp">
 
-                <label for="title_h2" class="form-label">{{ __('admin.title_h2') }}</label>
+                <label for="title_h2" class="form-label">{{ __('admin.Title h2') }}</label>
                 <input name="title_h2" value="{{ $aiForm->title_h2 ?? '' }}" type="text" class="form-control" id="title_h2" aria-describedby="emailHelp">
 
                 <div class="mb-3">
-                    <label for="posts_ids" class="form-label">{{ __('admin.posts_ids') }}</label>
+                    <label for="posts_ids" class="form-label">{{ __('admin.Posts ids') }}</label>
                     <textarea name="posts_ids" class="form-control" id="posts_ids" rows="3">{{ $aiForm->posts_ids ?? '' }}</textarea>
                 </div>
 

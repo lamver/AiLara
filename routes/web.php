@@ -40,4 +40,38 @@ Route::get('/client_offline', function () {
     return view('client_offline');
 });
 
+Route::get('/manifest.json', function () {
+
+    $settings = \App\Helpers\Settings::load();
+
+    $shortName = $settings->app_name;
+
+    if (strlen($shortName) > 3) {
+        mb_substr($settings->app_name, 0, 2);
+    }
+
+    $manifest = [
+        "name" => $settings->app_name,
+        "short_name" => $shortName,
+        "start_url" => "/",
+        "background_color" => "#6777ef",
+        "description" => $settings->seo_description,
+        "display" => "fullscreen",
+        "theme_color" => "#6777ef",
+        "icons"  =>  [
+            "src" => \App\Helpers\ImageMaster::resizeImgFromCdn($settings->logo_path),
+            "sizes" => "512x512",
+            "type" => "image/png",
+            "purpose" => "any maskable",
+        ]
+    ];
+
+    return response()->json($manifest)->withHeaders([
+        'Content-Type' => 'application/json;',
+        'Accept-Ranges' => 'bytes',
+        'Connection' => 'keep-alive',
+        'Content-Length' => strlen(json_encode($manifest)),
+    ]);
+});
+
 

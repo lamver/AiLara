@@ -306,4 +306,26 @@ class Update
         }
     }
 
+    /**
+     * @return void
+     */
+    static public function deleteDeprecatedFiles(): void
+    {
+        $basePath = app()->basePath();
+
+        $files = [
+            $basePath.'/public/manifest.json'
+        ];
+
+        foreach ($files as $filePath) {
+            if (file_exists($filePath)) {
+                try {
+                    unlink($filePath);
+                } catch (\Exception $e) {
+                    Log($e->getMessage());
+                }
+            }
+        }
+    }
+
 }

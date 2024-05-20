@@ -2,8 +2,11 @@
 
 namespace App\Console;
 
+use App\Helpers\CronMaster;
+use App\Models\Modules\Blog\Import;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Log;
 use App\Services\Backup\Backup;
 
 class Kernel extends ConsoleKernel
@@ -14,6 +17,26 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->command('app:blog-import')->everyFourHours();
+        // $schedule->command('inspire')->hourly();
+        $importTasks = false;
+
+        try {
+            $importTasks = Import::query()->select(['cron_frequency'])->where(['cron' => 1])->get();
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+        }
+
+        if ($importTasks) {
+           foreach ($importTasks as $task) {
+               if (
+                   !empty($task->cron_frequency)
+                   && CronMaster::isValidFrequency($task->cron_frequency)
+               ) {
+                   $schedule->command('app:blog-import')->{$task->cron_frequency}();
+               }
+           }
+        }
+
         $schedule->command('sitemap:generate')->everySixHours();
 
         Backup::backupSchedule($schedule);
