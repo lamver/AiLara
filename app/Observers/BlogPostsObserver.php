@@ -29,7 +29,7 @@ class BlogPostsObserver
 
         $postContent = $this->appendAdditionalText($post, $post->content);
 
-        $broadside->text($postContent);
+        $broadside->send($postContent);
 
         return true;
 
@@ -160,7 +160,7 @@ class BlogPostsObserver
         }
 
         if (!!$post->telegram_post_url) {
-            $url = Config::get('app.url'). str_replace("//", "/", $post->currentPostUrl());
+            $url = trim(Config::get('app.url'),'/') .'/'. trim(str_replace("//", "/", $post->currentPostUrl()), '/');
             $text .= self::NEW_LINE . "<a href='" . $url . "'> $post->title </a>";
         }
 

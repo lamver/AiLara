@@ -184,7 +184,7 @@
 
             <div class="mb-12 mt-3">
                 <label class="form-label" style="font-size: 18px">  {{ __('admin.Telegram length_text') }}</label>
-                <input class="form-control" name="telegram_length_text" value="{{$post->telegram_length_text}}" type="number"/>
+                <input class="form-control" name="telegram_length_text" value="@if(isset($post)) {{$post->telegram_length_text}} @endif" type="number"/>
             </div>
 
         </div>
