@@ -201,53 +201,76 @@
                 <input class="form-control" name="telegram_length_text" value="@if(isset($post)) {{$post->telegram_length_text}} @endif" type="number"/>
             </div>
 
+            </div>
         </div>
-    </div>
-    @method($method)
-    @csrf
-    @foreach($modelParams as $param)
-        {{ $param->Type }} <br>
-        @if($param->Extra == 'auto_increment')
-            @continue
-        @endif
-        @if($param->Field == 'status')
-            <label for="label_{{ $param->Field }}">{{ __strTrans($param->Field, 'admin') }}</label>
-            <select id="label_{{ $param->Field }}" name="{{ $param->Field }}" class="form form-control">
-                @foreach(\App\Models\Modules\Blog\Posts::STATUS as $postStatus)
-                    <option @if(isset($post) && $post->{$param->Field} ==  $postStatus) selected @endif value="{{ $postStatus }}">{{ $postStatus }}</option>
-                @endforeach
-            </select>
-            @continue
-        @endif
-        @if($param->Field == 'post_category_id')
-            <label for="label_{{ $param->Field }}">{{ __strTrans($param->Field, 'admin') }}</label>
-            <select id="label_{{ $param->Field }}" name="{{ $param->Field }}" class="form form-control">
-                <option value=""> - no parent cat -</option>
-                @foreach($categoryTree['categories'] as $category)
-                    <option @if(isset($post) && $post->{$param->Field} ==  $category->id) selected @endif value="{{$category->id}}">{{$category->id}} {{$category->title}}</option>
-                    @if(count($category->childs)) {{--{{ print_r($category->childs[0]->title) }}--}}
-                    @include('admin.modules.blog.category.select-categories', ['childs' => $category->childs, 'model' => isset($post) ? $post : null])
-                    @endif
-                @endforeach
-            </select>
-            @continue
-        @endif
-        @if(in_array($param->Type, ['bigint unsigned', 'int unsigned']))
-            <label for="label_{{ $param->Field }}">{{ __strTrans($param->Field, 'admin') }}</label>
-            <input type="text" class="form-control" id="label_{{ $param->Field }}" name="{{ $param->Field }}" value="{{ $post->{$param->Field} ?? '' }}" aria-describedby="emailHelp" placeholder="{{ $param->Comment}}">
-            <small id="emailHelp" class="form-text text-muted">{{ $param->Comment}}</small>
-            @continue
-        @endif
-        @if(in_array($param->Type, ['varchar(255)']))
-            <label for="label_{{ $param->Field }}">{{ __strTrans($param->Field, 'admin') }}</label>
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" id="label_{{ $param->Field }}" name="{{ $param->Field }}"
-                       value="{{ $post->{$param->Field} ?? ''  }}" aria-describedby="emailHelp"
-                       placeholder="{{ $param->Comment}}">
-                <span data-type-id="label_{{ $param->Field }}" data-type="{{ $param->Field }}"
-                      class="input-group-text"
-                      data-bs-toggle="modal"
-                      data-bs-target="#aiModal">
+        @method($method)
+        @csrf
+        @foreach($modelParams as $param)
+            {{--{{ $param->Type }} <br>--}}
+            @if($param->Extra == 'auto_increment')
+                @continue
+            @endif
+
+            @if(in_array($param->Field, [
+            'status',
+            'post_category_id',
+            'author_id',
+            'denied_comments',
+            'hide_existed_comments',
+            'title',
+            'content',
+            'updated_at',
+            'created_at',
+            'seo_description',
+            'seo_title',
+            'description',
+            'source_url',
+            'image',
+            'unique_id_after_import',
+            'telegram_bot_id',
+            'telegram_length_text',
+            'telegram_post_url',
+            ]))
+                @continue
+            @endif
+            {{--        @if($param->Field == 'status')
+                        <label for="label_{{ $param->Field }}">{{ $param->Field }}</label>
+                        <select id="label_{{ $param->Field }}" name="{{ $param->Field }}" class="form form-control">
+                            @foreach(\App\Models\Modules\Blog\Posts::STATUS as $postStatus)
+                                <option @if(isset($post) && $post->{$param->Field} ==  $postStatus) selected @endif value="{{ $postStatus }}">{{ $postStatus }}</option>
+                            @endforeach
+                        </select>
+                        @continue
+                    @endif--}}
+            {{--        @if($param->Field == 'post_category_id')
+                        <label for="label_{{ $param->Field }}">{{ $param->Field }}</label>
+                        <select id="label_{{ $param->Field }}" name="{{ $param->Field }}" class="form form-control">
+                            <option value=""> - no parent cat -</option>
+                            @foreach($categoryTree['categories'] as $category)
+                                <option @if(isset($post) && $post->{$param->Field} ==  $category->id) selected @endif value="{{$category->id}}">{{$category->id}} {{$category->title}}</option>
+                                @if(count($category->childs)) --}}{{--{{ print_r($category->childs[0]->title) }}--}}{{--
+                                @include('admin.modules.blog.category.select-categories', ['childs' => $category->childs, 'model' => isset($post) ? $post : null])
+                                @endif
+                            @endforeach
+                        </select>
+                        @continue
+                    @endif--}}
+            @if(in_array($param->Type, ['bigint unsigned', 'int unsigned']))
+                <label for="label_{{ $param->Field }}">{{ $param->Field }}</label>
+                <input type="text" class="form-control" id="label_{{ $param->Field }}" name="{{ $param->Field }}" value="{{ $post->{$param->Field} ?? '' }}" aria-describedby="emailHelp" placeholder="{{ $param->Comment}}">
+                <small id="emailHelp" class="form-text text-muted">{{ $param->Comment}}</small>
+                @continue
+            @endif
+            @if(in_array($param->Type, ['varchar(255)']))
+                <label for="label_{{ $param->Field }}">{{ $param->Field }}</label>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="label_{{ $param->Field }}" name="{{ $param->Field }}"
+                           value="{{ $post->{$param->Field} ?? ''  }}" aria-describedby="emailHelp"
+                           placeholder="{{ $param->Comment}}">
+                    <span data-type-id="label_{{ $param->Field }}" data-type="{{ $param->Field }}"
+                          class="input-group-text"
+                          data-bs-toggle="modal"
+                          data-bs-target="#aiModal">
                     &nbsp;<i class="fa fa-child"></i>&nbsp; ai
                 </span>
             </div>
