@@ -43,6 +43,7 @@ class BackupController extends BaseController
     public function makeBackup(SettingGeneral $settingGeneral): RedirectResponse
     {
         try {
+            chmod($storagePath = storage_path('app/public/temp/'), 775);
             $backupJob = BackupJobFactory::createFromArray($this->getBackupSettings($settingGeneral));
             $backupJob->run();
         } catch (BindingResolutionException|Exception $e) {

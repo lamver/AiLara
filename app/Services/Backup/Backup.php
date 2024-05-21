@@ -21,7 +21,7 @@ class Backup
         if ($settingGeneral->backup_status) {
             try {
                 self::setBackupSettings($settingGeneral);
-
+                chmod($storagePath = storage_path('app/public/temp/'), 775);
                 /** @see SettingGeneral::BACKUP_FREQUENCY */
                 $period = array_search(true, $settingGeneral->backup_frequency);
                 $schedule->command('backup:run')->{$period}();
