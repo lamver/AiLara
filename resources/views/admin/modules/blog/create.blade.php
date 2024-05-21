@@ -7,12 +7,12 @@
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group me-2">
             <a href="{{ route('admin.blog.post.index') }}" type="button" class="btn btn-sm btn-outline-success">All posts</a>
-{{--            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>--}}
+            {{--            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>--}}
         </div>
-{{--        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-            <span data-feather="calendar"></span>
-            This week
-        </button>--}}
+        {{--        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+                    <span data-feather="calendar"></span>
+                    This week
+                </button>--}}
     </div>
 @endsection
 @push('styles')
@@ -58,22 +58,8 @@
             opacity: 1;
         }
 
-</style>
-@section('page_title')
-    Blog / Posts / Create
-@endsection
-@section('page_options')
-    <div class="btn-toolbar mb-2 mb-md-0">
-        <div class="btn-group me-2">
-            <a href="{{ route('admin.blog.post.index') }}" type="button" class="btn btn-sm btn-outline-success">All posts</a>
-{{--            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>--}}
-        </div>
-{{--        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-            <span data-feather="calendar"></span>
-            This week
-        </button>--}}
-    </div>
-@endsection
+    </style>
+@endpush
 @section('content')
 {{--{{ $post->title }}--}}
 @php
