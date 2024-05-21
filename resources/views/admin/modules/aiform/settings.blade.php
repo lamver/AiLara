@@ -37,9 +37,15 @@
                     </div>
             @endif
             @if (gettype($settingValue) === \App\Settings\Data::TYPE_STRING)
-                <div class="mb-12">
-                    <label class="form-label" style="font-size: 18px">  {{ __($settingName) }}</label>
-                    <input class="form-control" name="{{ $settingName }}" value="{{ $settingValue }}"/>
+                <label for="input_{{$settingName}}" class="form-label mb-12" style="font-size: 18px">  {{ __($settingName) }}</label>
+                <div class="input-group mt-0">
+                    <input class="form-control" id="input_{{$settingName}}" name="{{ $settingName }}" value="{{ $settingValue }}"/>
+                        <span data-type-id="input_{{ $settingName }}"
+                              class="input-group-text"
+                              data-bs-toggle="modal"
+                              data-bs-target="#aiModal">
+                            &nbsp;<i class="fa fa-child"></i>&nbsp; ai
+                        </span>
                 </div>
             @endif
         @endforeach
