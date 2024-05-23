@@ -120,7 +120,7 @@ class CommentList extends Component
     {
         $theComment = Comment::find($commentId);
 
-        if (Auth::check() && $theComment && Auth::id() === $theComment->creator_id) {
+        if (Auth::check() && $theComment && (int) Auth::id() === (int) $theComment->creator_id) {
             $theComment->delete();
         }
     }
