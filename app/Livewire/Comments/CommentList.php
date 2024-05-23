@@ -59,7 +59,7 @@ class CommentList extends Component
         $tree = [];
 
         foreach ($comments as $comment) {
-            if ($comment->parent_id === $parentId) {
+            if ((int)$comment->parent_id === (int)$parentId) {
                 $children = $this->buildTree($comments, $comment->id);
                 if ($children) {
                     $comment->children = $children;
