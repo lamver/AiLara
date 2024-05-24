@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\Integration\AdminTelegramBotController;
 use App\Http\Controllers\Admin\MainController;
 use App\Http\Controllers\Admin\BackupController;
 use App\Http\Controllers\Admin\UserController;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AiSearch\ControlPanel\SeoPages;
 use App\Services\Translation\Translation;
@@ -47,6 +48,7 @@ Route::middleware(['auth', 'verified', 'rbac:admin'])->prefix(Translation::check
         Route::get('/setLang/{locale}', function (string $locale) {
             app()->setLocale($locale);
             session()->put('locale', $locale);
+            Artisan::call('route:clear');
         })->name('setLang');
 
         Route::resource('user', UserController::class, [
