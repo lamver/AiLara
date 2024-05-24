@@ -19,12 +19,6 @@ class UserController extends Controller
 {
     private int $numberPaginate = 15;
 
-    public function __construct()
-    {
-       // dd(Gate::forUser(\Illuminate\Support\Facades\Auth::user())->allows('admin.*'));
-       // $this->authorizeResource(User::class);
-    }
-
     /**
      * Display a listing of the resource.
      */
