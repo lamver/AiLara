@@ -19,6 +19,12 @@ class UserController extends Controller
 {
     private int $numberPaginate = 15;
 
+    public function __construct()
+    {
+       // dd(Gate::forUser(\Illuminate\Support\Facades\Auth::user())->allows('admin.*'));
+       // $this->authorizeResource(User::class);
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -67,16 +73,20 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show(int $id)
     {
+        $user = User::find($id);
+
         return view('admin.user.show', ['user' => $user]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(User $user)
+    public function edit(int $id)
     {
+        $user = User::find($id);
+
         return view('admin.user.edit', [
             'user' => $user,
             'owners' => $this->getCurrentOwners(),
@@ -86,8 +96,10 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserRequest $request, User $user)
+    public function update(UpdateUserRequest $request, int $id)
     {
+        $user = User::find($id);
+
         $user->fill([
             'email' => $request->email,
             'name' => $request->name,
@@ -118,8 +130,10 @@ class UserController extends Controller
      * @param User $user
      * @return RedirectResponse
      */
-    public function destroy(User $user)
+    public function destroy(int $id)
     {
+        $user = User::find($id);
+
         $user->delete();
 
         return redirect()->route('admin.user.index');
