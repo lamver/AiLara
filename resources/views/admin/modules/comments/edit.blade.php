@@ -48,10 +48,10 @@
         <div class="row mb-0">
             <div class="col-md-6">
                 <button type="submit" class="btn btn-primary">
-                    {{ __('save') }}
+                    {{ __('admin.Save') }}
                 </button>
                 <a href="{{route('admin.comment.index')}}" class="btn btn-danger">
-                    {{ __('cancel') }}
+                    {{ __('admin.Cancel') }}
                 </a>
             </div>
         </div>

@@ -3,7 +3,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/10.0.1/jsoneditor.css" integrity="sha512-iOFdnlwX6UGb55bU5DL0tjWkS/+9jxRxw2KiRzyHMZARASUSwm0nEXBcdqsYni+t3UKJSK7vrwvlL8792/UMjQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 @endpush
 @section('page_title')
-    {{ __('admin.Ai forms') }} / {{ __('admin.edit') }}
+    {{ __('admin.Ai forms') }} / {{ __('admin.Edit') }}
 @endsection
 @section('page_options')
     <div class="btn-toolbar mb-2 mb-md-0">

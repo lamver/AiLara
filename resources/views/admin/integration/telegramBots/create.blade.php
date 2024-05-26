@@ -23,7 +23,7 @@
         </div>
 
         <div class="mb-3">
-            <label class="form-check-label" for="formId">{{ __('Select form') }}</label>
+            <label class="form-check-label" for="formId">{{ __('admin.Select form') }}</label>
             <select class="form-select" id="formId" name="form_id" >
                 <option value="">{{__('admin.Empty')}}</option>
                 @foreach($forms as $form)

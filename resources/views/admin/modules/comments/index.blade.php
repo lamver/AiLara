@@ -8,8 +8,8 @@
             <th scope="col">{{__('admin.Body')}}</th>
             <th scope="col">{{__('admin.User')}}</th>
             <th scope="col">{{__('admin.Comment on page')}}</th>
-            <th scope="col">{{__('admin.Created_at')}}</th>
-            <th scope="col">{{__('admin.Updated_at')}}</th>
+            <th scope="col">{{__('admin.Created at')}}</th>
+            <th scope="col">{{__('admin.Updated at')}}</th>
             <th scope="col">{{__('admin.Status')}}</th>
             <th scope="col">{{__('admin.Actions')}}</th>
         </tr>

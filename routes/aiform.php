@@ -1,5 +1,6 @@
 <?php
 
+use App\Services\Translation\Translation;
 use Illuminate\Support\Facades\Route;
 use App\Settings\SettingGeneral;
 use App\Services\Modules\Module;
@@ -16,7 +17,9 @@ use App\Services\Modules\Module;
 */
 
 /** Admin routes */
-Route::middleware(['auth', 'verified'])->prefix(SettingGeneral::value('admin_prefix') . '/module/ai-forms')->group(function () {
+Route::middleware(['auth', 'verified', 'rbac:admin'])->prefix(Translation::checkRoutePrefix())->group(function () {
+
+Route::prefix(SettingGeneral::value('admin_prefix') . '/module/ai-forms')->group(function () {
     Route::resource('ai-form', \App\Http\Controllers\Admin\AiForms\AiFormController::class, [
         'names' => [
             'index' => 'admin.module.ai-form.index',
@@ -31,6 +34,8 @@ Route::middleware(['auth', 'verified'])->prefix(SettingGeneral::value('admin_pre
 
     Route::get('/', [\App\Http\Controllers\Admin\AiForms\AiFormController::class, 'settings'])->name('admin.module.ai-form.settings');
     Route::post('/', [\App\Http\Controllers\Admin\AiForms\AiFormController::class, 'settingsUpdate'])->name('admin.module.ai-form.settings.update');
+});
+
 });
 
 if (Module::isFrontModule(Module::MODULE_AI_FORM)) {
