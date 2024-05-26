@@ -21,7 +21,9 @@ class SetLocale
         $routeLocale = Translation::checkRoutePrefix();
 
         $langs = Translation::getLanguages();
-        View::share(['languages' => $langs]);
+
+        View::share(['languages' => $langs ?? []]);
+
         $this->setLocale($routeLocale ?? config('app.locale'));
         if (!!$routeLocale && $this->getLocale() !== $routeLocale) {
             $this->setLocale($routeLocale);

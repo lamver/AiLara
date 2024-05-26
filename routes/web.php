@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\Integration\AdminTelegramBotController;
 use App\Http\Controllers\Ajax\UserStateController;
 use App\Http\Controllers\Modules\ModuleController;
 use App\Http\Controllers\ProfileController;

@@ -2,14 +2,18 @@
 
 use App\Http\Controllers\Admin\AiQueryController;
 use App\Http\Controllers\Admin\CommentsController;
+use App\Http\Controllers\Admin\UserController;
+
 use App\Http\Controllers\Admin\Integration\AdminTelegramBotController;
+
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\MainController;
 use App\Http\Controllers\Admin\BackupController;
-use App\Http\Controllers\Admin\UserController;
-use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\AiSearch\ControlPanel\SeoPages;
 use App\Services\Translation\Translation;
 use App\Settings\SettingGeneral;
+
 use App\Http\Controllers\Admin\ModuleMainController;
 
 
@@ -48,6 +52,8 @@ Route::middleware(['auth', 'verified', 'rbac:admin'])->prefix(Translation::check
             app()->setLocale($locale);
             session()->put('locale', $locale);
         })->name('setLang');
+
+        Route::resource("/telegram-bots", AdminTelegramBotController::class)->except('show');
 
         Route::resource('user', UserController::class, [
             'names' => [

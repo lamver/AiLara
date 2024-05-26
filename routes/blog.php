@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\Blog\SettingsController;
 use App\Models\Modules\Blog\Category;
+use App\Services\Translation\Translation;
 use App\Settings\SettingGeneral;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\Blog\PostsController;
@@ -20,31 +21,32 @@ use App\Services\Modules\Module;
 |
 */
 /** Admin routes */
-Route::middleware(['auth', 'verified'])->prefix(SettingGeneral::value('admin_prefix') .'/module/blog')->group(function () {
-    Route::resource('posts', PostsController::class, [
-/*        'except' => ['show', 'destroy'],*/
-        'names' => [
-            'index' => 'admin.blog.post.index',
-            'create' => 'admin.blog.post.create',
-            'store' => 'admin.blog.post.store',
-            'edit' => 'admin.blog.post.edit',
-            'update' => 'admin.blog.post.update',
-            'show' => 'admin.blog.post.show',
-            'destroy' => 'admin.blog.post.destroy',
-        ],
-    ]);
+Route::middleware(['auth', 'verified'])->prefix(Translation::checkRoutePrefix())->group(function () {
+    Route::prefix(SettingGeneral::value('admin_prefix') .'/module/blog')->group(function () {
+        Route::resource('posts', \App\Http\Controllers\Admin\Blog\PostsController::class, [
+    /*        'except' => ['show', 'destroy'],*/
+            'names' => [
+                'index' => 'admin.blog.post.index',
+                'create' => 'admin.blog.post.create',
+                'store' => 'admin.blog.post.store',
+                'edit' => 'admin.blog.post.edit',
+                'update' => 'admin.blog.post.update',
+                'show' => 'admin.blog.post.show',
+                'destroy' => 'admin.blog.post.destroy',
+            ],
+        ]);
 
-    Route::resource('category', CategoryController::class, [
-        'names' => [
-            'index' => 'admin.blog.category.index',
-            'create' => 'admin.blog.category.create',
-            'store' => 'admin.blog.category.store',
-            'edit' => 'admin.blog.category.edit',
-            'update' => 'admin.blog.category.update',
-            'show' => 'admin.blog.category.show',
-            'destroy' => 'admin.blog.category.destroy',
-        ],
-    ]);
+        Route::resource('category', CategoryController::class, [
+            'names' => [
+                'index' => 'admin.blog.category.index',
+                'create' => 'admin.blog.category.create',
+                'store' => 'admin.blog.category.store',
+                'edit' => 'admin.blog.category.edit',
+                'update' => 'admin.blog.category.update',
+                'show' => 'admin.blog.category.show',
+                'destroy' => 'admin.blog.category.destroy',
+            ],
+        ]);
 
     Route::resource('import', ImportController::class, [
         'names' => [
@@ -61,6 +63,7 @@ Route::middleware(['auth', 'verified'])->prefix(SettingGeneral::value('admin_pre
     Route::get('/settings', [SettingsController::class, 'index'])->name( 'admin.blog.settings.index');
     Route::put('/settings', [SettingsController::class, 'update'])->name( 'admin.blog.settings.update');
 
+    });
 });
 
 if (Module::isFrontModule(Module::MODULE_BLOG)) {
