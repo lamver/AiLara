@@ -6,6 +6,7 @@
             'logo_path',
             'seo_description',
             'site_name',
+            'seo_title',
         ];
     @endphp
     <form method="post" class="row g-3">
@@ -59,7 +60,7 @@
                 </div>
             @endif
             @if ($theType === App\Settings\SettingGeneral::TYPE_ARRAY)
-                <label class="form-check-label" for="{{$configName}}">{{ __strTrans($configName, 'admin') }}</label>
+                <label class="form-check-label" for="{{$configName}}">{{$configName}}</label>
                 <select class="form-select" name="{{$configName}}">
                     @foreach($data as $key => $item)
                         <option value="{{$key}}" @if($item) selected @endif>{{$key}}</option>
@@ -69,7 +70,7 @@
         @endforeach
         <p></p>
         <div class="mb-3">
-            <button type="submit" class="btn btn-secondary">{{ __('admin.Apply') }}</button>
+            <button type="submit" class="btn btn-secondary">{{ __('Apply') }}</button>
         </div>
     </form>
 

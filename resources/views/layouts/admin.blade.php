@@ -541,7 +541,7 @@
                     if (text.length < 3) return;
 
                     this.createAiBtnAction(true);
-                    let data = {prompt: text, type: type};
+                    let data = {prompt: text, type_task: type};
 
                     if(this.basicCheckValue) {
                         data.basic = 1;
