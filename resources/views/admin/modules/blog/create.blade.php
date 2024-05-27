@@ -77,36 +77,46 @@
 <form method="post" action="{{ $route }}">
     <div class="row">
         <div class="col-md-10">
-            <div class="form-floating mb-3">
-                <input id="title" type="text" class="form-control " name="title" value="@if(isset($post)) {{ $post->title }} @endif" required="true" placeholder="">
-                <label for="floatingInput">title</label>
+            <label for="floatingInput">{{ __('admin.Title') }}</label>
+            <div class="input-group mb-3">
+                <input id="label_title" type="text" class="form-control " name="title" value="@if(isset($post)) {{ $post->title }} @endif" required="true" placeholder="">
+                <span data-type-id="label_title" class="input-group-text" data-bs-toggle="modal"
+                      data-bs-target="#aiModal">&nbsp;<i class="fa fa-child"></i>&nbsp;ai</span>
             </div>
-            <textarea style="display: none" name="content" id="content" class="form-control" rows="30">@if(isset($post)) {{ $post->content }} @endif</textarea>
+            <label for="content">{{ __('admin.Content') }}</label>
+            <textarea style="display: none" name="content" id="content" class="form-control" rows="30">@if(isset($post)){{ $post->content }}@endif</textarea>
             <div id="editor_content" style="font-size: 16px; height: 600px;">
-                @if(isset($post)) {!! \App\Helpers\StrMaster::applyHtml($post->content) !!} @endif
+                @if(isset($post)){!! \App\Helpers\StrMaster::applyHtml($post->content) !!}@endif
             </div>
             <p></p>
-            <div class="form-floating mb-3">
-                <input id="title" type="text" class="form-control " name="description" value="@if(isset($post)) {{ $post->description }} @endif" placeholder="">
-                <label for="floatingInput">description</label>
+            <label for="floatingInput">{{ __('admin.Description') }}</label>
+            <div class="input-group mb-3">
+                <input id="label_description" type="text" class="form-control " name="description" value="@if(isset($post)) {{ $post->description }} @endif" placeholder="">
+                <span data-type-id="label_description" class="input-group-text" data-bs-toggle="modal"
+                      data-bs-target="#aiModal">&nbsp;<i class="fa fa-child"></i>&nbsp;ai</span>
             </div>
-            <div class="form-floating mb-3">
-                <input id="title" type="text" class="form-control " name="seo_title" value="@if(isset($post)) {{ $post->seo_title }} @endif" placeholder="">
-                <label for="floatingInput">seo_title</label>
+                <label for="floatingInput">{{ __('admin.Seo title') }}</label>
+            <div class="input-group mb-3">
+                <input id="label_seo_title" type="text" class="form-control " name="seo_title" value="@if(isset($post)) {{ $post->seo_title }} @endif" placeholder="">
+                <span data-type-id="label_seo_title" class="input-group-text" data-bs-toggle="modal"
+                      data-bs-target="#aiModal">&nbsp;<i class="fa fa-child"></i>&nbsp;ai</span>
             </div>
-            <div class="form-floating mb-3">
-                <input id="title" type="text" class="form-control " name="seo_description" value="@if(isset($post)) {{ $post->seo_description }} @endif" placeholder="">
-                <label for="floatingInput">seo_description</label>
+                <label for="floatingInput">{{ __('admin.Seo description') }}</label>
+            <div class="input-group mb-3">
+                <input id="label_seo_description" type="text" class="form-control " name="seo_description" value="@if(isset($post)) {{ $post->seo_description }} @endif" placeholder="">
+                <span data-type-id="label_seo_description" class="input-group-text" data-bs-toggle="modal"
+                          data-bs-target="#aiModal">&nbsp;<i class="fa fa-child"></i>&nbsp;ai</span>
             </div>
             <div class="form-floating mb-3">
                 <input id="title" type="text" class="form-control " name="source_url" value="@if(isset($post)) {{ $post->source_url }} @endif" placeholder="">
-                <label for="floatingInput">source_url</label>
-                @if(isset($post))
+                <label for="floatingInput">{{ __('admin.Source url') }}</label>
+                @if(isset($post) && isset($post->source_url))
                     <a class="btn-link btn" target="_blank" href="{{ $post->source_url }}">{{ __('admin.Go to source') }}</a>
                 @endif
             </div>
 
-            <div class="form-floating mb-3">
+            <label for="floatingInput">{{ __('admin.Image') }}</label>
+            <div class="input-group mb-3">
                 <input id="title" type="text" class="form-control " name="image" value="@if(isset($post)) {{ $post->image }} @endif" placeholder="">
                 <span data-type-id="label_image" data-type="image"
                       class="input-group-text"
@@ -114,25 +124,24 @@
                       data-bs-target="#aiModal">
                     &nbsp;<i class="fa fa-child"></i>&nbsp; ai
                 </span>
-                <label for="floatingInput">image</label>
-                @if(isset($post))
+                </div>
+                @if( isset($post) && isset($post->image) )
                     <p></p>
-                <img width="100" height="100" src="{{ $post->image }}"/>
+                <img class="mb-3" width="100" height="100" src="{{ $post->image }}"/>
                 @endif
-            </div>
-            <div class="form-floating mb-3">
+                <div class="form-floating mb-3">
                 <input id="title" type="text" class="form-control " name="unique_id_after_import" value="@if(isset($post)) {{ $post->unique_id_after_import }} @endif" placeholder="">
-                <label for="floatingInput">unique_id_after_import</label>
+                <label for="floatingInput">{{ __('admin.Unique id after import') }}</label>
             </div>
         </div>
         <div class="col-md-2">
-            <label for="label_status">status</label>
+            <label for="label_status">{{ __('admin.Status') }}</label>
             <select id="label_status" name="status" class="form form-control">
                 @foreach(\App\Models\Modules\Blog\Posts::STATUS as $postStatus)
                     <option @if(isset($post) && $post->status ==  $postStatus) selected @endif value="{{ $postStatus }}">{{ $postStatus }}</option>
                 @endforeach
             </select>
-            <label for="label_post_category_id">post_category_id</label>
+            <label for="label_post_category_id">{{ __('admin.Post category id') }}</label>
             <select required id="label_post_category_id" name="post_category_id" class="form form-control">
                 <option value="">{{ __('admin.Select category') }}</option>
                 @foreach($categoryTree['categories'] as $category)
@@ -142,25 +151,25 @@
                     @endif
                 @endforeach
             </select>
-            <label for="label_status">author_id</label>
+            <label for="label_status">{{ __('admin.Author id') }}</label>
             <select id="label_status" name="author_id" class="form form-control">
                 @foreach(\App\Models\User::all() as $users)
                     <option @if(isset($post) && $post->author_id ==  $users->id) selected @endif value="{{ $users->id }}">{{ $users->id }} | {{ $users->name }}</option>
                 @endforeach
             </select>
-            <label for="label_status">denied_comments</label>
+            <label for="label_status">{{ __('admin.Denied comments') }}</label>
             <select id="label_status" name="denied_comments" class="form form-control">
                 <option @if(isset($post) && $post->denied_comments ==  false) selected @endif value="0">{{ __('admin.No') }}</option>
                 <option @if(isset($post) && $post->denied_comments ==  true) selected @endif value="1">{{ __('admin.Yes') }}</option>
             </select>
-            <label for="label_status">hide_existed_comments</label>
+            <label for="label_status">{{ __('admin.Hide existed comments') }}</label>
             <select id="label_status" name="hide_existed_comments" class="form form-control">
                 <option @if(isset($post) && $post->hide_existed_comments ==  false) selected @endif value="0">{{ __('admin.No') }}</option>
                 <option @if(isset($post) && $post->hide_existed_comments ==  true) selected @endif value="1">{{ __('admin.Yes') }}</option>
             </select>
-            <label for="label_created_at">created_at</label>
+            <label for="label_created_at">{{ __('admin.Created at') }}</label>
             <input type="date" class="form-control" id="label_created_at" name="created_at" value="{{ $post->created_at ?? ''  }}" placeholder="date time">
-            <label for="label_created_at">updated_at</label>
+            <label for="label_created_at">{{ __('admin.Updated at') }}</label>
             <input type="date" class="form-control" id="label_created_at" name="created_at" value="{{ $post->updated_at ?? ''  }}" placeholder="date time">
             <div class="mb-3">
                 <label class="form-check-label" for="telegramBotId">{{ __('admin.Telegram bot') }}</label>
@@ -220,7 +229,7 @@
                 @continue
             @endif
             {{--        @if($param->Field == 'status')
-                        <label for="label_{{ $param->Field }}">{{ $param->Field }}</label>
+                        <label for="label_{{ $param->Field }}">{{ __strTrans($param->Field, 'admin') }}</label>
                         <select id="label_{{ $param->Field }}" name="{{ $param->Field }}" class="form form-control">
                             @foreach(\App\Models\Modules\Blog\Posts::STATUS as $postStatus)
                                 <option @if(isset($post) && $post->{$param->Field} ==  $postStatus) selected @endif value="{{ $postStatus }}">{{ $postStatus }}</option>
@@ -229,7 +238,7 @@
                         @continue
                     @endif--}}
             {{--        @if($param->Field == 'post_category_id')
-                        <label for="label_{{ $param->Field }}">{{ $param->Field }}</label>
+                        <label for="label_{{ $param->Field }}">{{ __strTrans($param->Field, 'admin') }}</label>
                         <select id="label_{{ $param->Field }}" name="{{ $param->Field }}" class="form form-control">
                             <option value=""> - no parent cat -</option>
                             @foreach($categoryTree['categories'] as $category)
@@ -242,13 +251,13 @@
                         @continue
                     @endif--}}
             @if(in_array($param->Type, ['bigint unsigned', 'int unsigned']))
-                <label for="label_{{ $param->Field }}">{{ $param->Field }}</label>
+                <label for="label_{{ $param->Field }}">{{ __strTrans($param->Field, 'admin') }}</label>
                 <input type="text" class="form-control" id="label_{{ $param->Field }}" name="{{ $param->Field }}" value="{{ $post->{$param->Field} ?? '' }}" aria-describedby="emailHelp" placeholder="{{ $param->Comment}}">
                 <small id="emailHelp" class="form-text text-muted">{{ $param->Comment}}</small>
                 @continue
             @endif
             @if(in_array($param->Type, ['varchar(255)']))
-                <label for="label_{{ $param->Field }}">{{ $param->Field }}</label>
+                <label for="label_{{ $param->Field }}">{{ __strTrans($param->Field, 'admin') }}</label>
                 <div class="input-group mb-3">
                     <input type="text" class="form-control" id="label_{{ $param->Field }}" name="{{ $param->Field }}"
                            value="{{ $post->{$param->Field} ?? ''  }}" aria-describedby="emailHelp"
