@@ -3,7 +3,7 @@
     <form method="post" action="{{route('admin.backup.makeBackup')}}" id="makeBackup">
         @csrf
         <button type="submit" class="btn btn-primary mb-5">
-            <span>{{ __('make_new_backup') }}</span>
+            <span>{{ __('admin.Make new backup') }}</span>
             <svg style="fill: rgb(255, 255, 255); display: none" width="24" height="24" viewBox="0 0 24 24"
                  xmlns="http://www.w3.org/2000/svg">
                 <circle cx="4" cy="12" r="3">
@@ -34,8 +34,8 @@
         <thead>
         <tr>
             <th scope="col">#</th>
-            <th scope="col">{{__('file')}}</th>
-            <th scope="col">{{__('actions')}}</th>
+            <th scope="col">{{__('admin.File')}}</th>
+            <th scope="col">{{__('admin.Actions')}}</th>
         </tr>
         </thead>
         <tbody>

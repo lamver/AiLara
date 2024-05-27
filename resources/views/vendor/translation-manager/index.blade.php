@@ -184,7 +184,7 @@
             </div>
             <div class="col-sm-2">
                 <button type="submit" class="btn btn-success btn-block" data-disable-with="Loading..">
-                    Import groups
+                    {{__('admin.Import groups')}}
                 </button>
             </div>
         </form>

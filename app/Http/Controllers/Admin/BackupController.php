@@ -13,7 +13,7 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\Log;
-use Config;
+use Illuminate\Support\Facades\Config;
 use Spatie\Backup\Tasks\Backup\BackupJobFactory;
 
 class BackupController extends BaseController
@@ -43,6 +43,7 @@ class BackupController extends BaseController
     public function makeBackup(SettingGeneral $settingGeneral): RedirectResponse
     {
         try {
+            chmod($storagePath = storage_path('app/public/temp/'), 775);
             $backupJob = BackupJobFactory::createFromArray($this->getBackupSettings($settingGeneral));
             $backupJob->run();
         } catch (BindingResolutionException|Exception $e) {

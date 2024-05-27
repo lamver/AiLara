@@ -6,6 +6,7 @@
             'logo_path',
             'seo_description',
             'site_name',
+            'seo_title',
         ];
     @endphp
     <form method="post" class="row g-3">
@@ -30,11 +31,7 @@
                     </div>
             @endif
             @if ($theType === App\Settings\SettingGeneral::TYPE_STRING)
-                <div class="mb-12">
-                    <label class="form-label" style="font-size: 18px">{{ __strTrans($configName, 'admin') }}</label>
-                    <input class="form-control" name="{{ $configName }}" value="{{ $data }}"/>
-                </div>
-                    <label for="input_{{$configName}}" class="form-label mb-12" style="font-size: 18px">  {{ __($configName) }}</label>
+                    <label for="input_{{$configName}}" class="form-label mb-12" style="font-size: 18px">{{ __strTrans($configName, 'admin') }}</label>
                     <div class="input-group mt-0">
                             <input class="form-control" id="input_{{$configName}}" name="{{ $configName }}" value="{{ $data }}"/>
                         @if(in_array($configName,$addAiTo))

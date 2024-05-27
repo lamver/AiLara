@@ -59,7 +59,7 @@ class CommentList extends Component
         $tree = [];
 
         foreach ($comments as $comment) {
-            if ($comment->parent_id === $parentId) {
+            if ((int)$comment->parent_id === (int)$parentId) {
                 $children = $this->buildTree($comments, $comment->id);
                 if ($children) {
                     $comment->children = $children;
@@ -120,7 +120,7 @@ class CommentList extends Component
     {
         $theComment = Comment::find($commentId);
 
-        if (Auth::check() && $theComment && Auth::id() === $theComment->creator_id) {
+        if (Auth::check() && $theComment && (int) Auth::id() === (int) $theComment->creator_id) {
             $theComment->delete();
         }
     }
