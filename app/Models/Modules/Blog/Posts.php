@@ -247,7 +247,7 @@ class Posts extends Model implements Feedable
      */
     public function currentPostUrl(): string
     {
-        return '/'.Category::getCategoryUrlById($this->post_category_id) . '/' . Str::slug(Str::limit(strip_tags($this->title))) . '_' .$this->id;
+        return Category::getCategoryUrlById($this->post_category_id) . '/' . Str::slug(Str::limit(strip_tags($this->title))) . '_' .$this->id;
     }
 
     static public function getUrlPostById($id)

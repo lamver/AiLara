@@ -43,13 +43,21 @@
     </div>
 
     <div class="container">
-        @if(!$post->denied_comments)
-        <div class="mb-3">
-            <livewire:Comments.comment-form :post="$post"/>
-        </div>
+        @if (Auth::check())
+            @if(!$post->denied_comments)
+                <div class="mb-3">
+                    <livewire:Comments.comment-form :post="$post"/>
+                </div>
+            @endif
+        @else
+            <div class="mb-3">
+                {{__('To leave a comment you need to')}}
+                <a href="{{ route('login') }}">{{ __('Login') }}</a> /
+                <a href="{{ route('register') }}">{{ __('Create account') }}</a>
+            </div>
         @endif
         @if(!$post->hide_existed_comments)
-        <livewire:Comments.comment-list :post="$post"/>
+            <livewire:Comments.comment-list :post="$post"/>
         @endif
     </div>
 

@@ -19,6 +19,11 @@
             @php
                 $user = $comment->creator()->first();
                 $post =  $comment->commentable()->first();
+
+                  if (!$post) {
+                    continue;
+                }
+
             @endphp
             <tr>
                 <th scope="row">{{$comment->id}} <i class="bi bi-airplane-fill"></i></th>
