@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('page_title')
-    {{ __('admin.Blog / Category / Create') }}
+   {{__('admin.Blog')}} / {{__('admin.Category')}} / {{__('admin.Create')}}
 @endsection
 @section('page_options')
     <div class="btn-toolbar mb-2 mb-md-0">

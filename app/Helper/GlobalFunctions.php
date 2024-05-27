@@ -10,7 +10,7 @@ if(!function_exists('__strTrans')) {
      */
     function __strTrans(string $msg, string $prefix = "", string $replace = "_"): string
     {
-        return  $prefix.".".str_replace($replace, ' ', ucfirst($msg)) ;
+        return  __($prefix.".".str_replace($replace, ' ', ucfirst($msg)));
     }
 
 }

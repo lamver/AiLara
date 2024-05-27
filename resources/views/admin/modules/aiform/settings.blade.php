@@ -3,7 +3,7 @@
 
 @endpush
 @section('page_title')
-    Ai Form / {{ __('admin.Settings') }}
+    {{ __('admin.Ai Form') }} / {{ __('admin.Settings') }}
 @endsection
 @section('content')
     <form method="post" action="{{ route('admin.module.ai-form.settings.update') }}">
@@ -23,7 +23,7 @@
             @endif
             @if (gettype($settingValue) === \App\Settings\Data::TYPE_INT)
                 <div class="mb-12">
-                    <label class="form-label" style="font-size: 18px">  {{ __($settingName) }}</label>
+                    <label class="form-label" style="font-size: 18px">{{__strTrans($settingName, 'admin')}}</label>
                     <input class="form-control" name="{{ $settingName }}" value="{{ $settingValue }}"/>
                 </div>
             @endif
@@ -32,7 +32,7 @@
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" name="{{$settingName}}" id="{{$settingName}}"
                                    @if($settingValue === true) checked @endif>
-                            <label class="form-check-label" for="{{$settingName}}">{{$settingName}}</label>
+                            <label class="form-check-label" for="{{$settingName}}">{{__strTrans($settingName, 'admin')}}</label>
                         </div>
                     </div>
             @endif
