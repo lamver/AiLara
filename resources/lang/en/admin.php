@@ -108,7 +108,6 @@ return array (
     'Update app' => 'Update app',
     'Task write text' => 'Task write text',
     'Task write rewrite' => 'Task write rewrite',
-    'Blog / Category / Create' => 'Blog / Category / Create',
     'Create form' => 'Create form',
     'Admin prefix' => 'Admin prefix',
     'Api host' => 'Api host',
@@ -154,7 +153,7 @@ return array (
     'content' => 'Content',
     'sign_out' => 'Sign out',
 
-    'ai_type' => 'Ai type',
+    'Ai_type' => 'Ai type',
     'task_text' => 'Text',
     'task_image' => 'Image',
     'task_write_text' => 'Write text',
@@ -210,4 +209,13 @@ return array (
     'Home page seo description' => 'Home page seo description',
     'Home page page image' => 'Home page page image',
     'User' => 'User',
+
+    'Select category' => 'Select category',
+    'Empty' => 'Empty',
+    'Go to source' => 'Go to source',
+    'Something went wrong' => 'Something went wrong',
+    'Telegram length_text' => 'Telegram length_text',
+    'Basic' => 'Basic',
+    'Ask Ai' => 'Ask Ai',
+    'Blog Settings' => 'Blog Settings',
 );

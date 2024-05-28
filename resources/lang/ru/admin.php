@@ -136,7 +136,6 @@ return array (
     'Update app' => 'Обновить приложение',
     'Task write text' => 'Задание написать текст',
     'Task write rewrite' => 'Задание написать переписать',
-    'Blog / Category / Create' => 'Blog / Category / Create',
     'Create form' => 'Создать форму',
     'Admin prefix' => 'Префикс',
     'Api host' => 'Api host',
@@ -182,7 +181,7 @@ return array (
     'content' => 'Содержание',
     'sign_out' => 'Выход',
 
-    'ai_type' => 'Ai type',
+    'Ai_type' => 'Ai тип',
     'task_text' => 'Текст',
     'task_image' => 'Изображение',
     'task_write_text' => 'Написать текст',
@@ -214,4 +213,13 @@ return array (
 
     'Make new backup' => 'Создайте новую резервную копию',
     'File' => 'Файл',
+
+    'Select category' => 'Выберите категорию',
+    'Empty' => 'Пусто',
+    'Go to source' => 'Пусто',
+    'Something went wrong' => 'Что-то пошло не так',
+    'Telegram length_text' => 'Длина телеграммы текста',
+    'Basic' => 'Основной',
+    'Ask Ai' => 'Спроси у Ии',
+    'Blog Settings' => 'Настройки блога',
 );

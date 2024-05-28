@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('page_title')
-    {{__('admin.blog.settings')}}
+    {{__('admin.Blog Settings')}}
 @endsection
 @section('content')
     <form method="post" action="{{ route('admin.blog.settings.update') }}">
