@@ -16,17 +16,21 @@
 @endif
         <description>{!! \Spatie\Feed\Helpers\Cdata::out($meta['description'] ) !!}</description>
         <language>{{ $meta['language'] }}</language>
-        <pubDate>{{ $meta['updated'] }}</pubDate>
+        <pubDate>{{ date('r', strtotime( $meta['updated'])) }}</pubDate>
 
         @foreach($items as $item)
             <item>
                 <title>{!! \Spatie\Feed\Helpers\Cdata::out($item->title) !!}</title>
                 <link>{{ url($item->link) }}</link>
                 <description>{!! \Spatie\Feed\Helpers\Cdata::out($item->summary) !!}</description>
-                <author>{!! \Spatie\Feed\Helpers\Cdata::out($item->authorName.(empty($item->authorEmail)?'':' <'.$item->authorEmail.'>')) !!}</author>
+                @if(!empty($item->authorEmail))
+                    <author>{!! \Spatie\Feed\Helpers\Cdata::out($item->authorName.(empty($item->authorEmail)?'':' <'.$item->authorEmail.'>')) !!}</author>
+                @endif
                 <guid>{{ url($item->id) }}</guid>
-                <image>{{ $item->image }}</image>
-                <pubDate>{{ $item->timestamp() }}</pubDate>
+                @if($item->image)
+                <img>{{ $item->image }}</img>
+                @endif
+                <pubDate>{{ date('r', strtotime($item->timestamp())) }}</pubDate>
                 @foreach($item->category as $category)
                     <category>{{ $category }}</category>
                 @endforeach
