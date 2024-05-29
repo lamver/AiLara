@@ -482,7 +482,7 @@
                 aiResult: {},
                 basicCheckValue: false,
                 attemptCount: 0,
-                tries: 25,
+                tries: 45,
                 inProcess: false,
 
                 init: function () {
@@ -538,7 +538,10 @@
                     this.inProcess = true;
                     this.errorHandler(false);
 
-                    if (text.length < 3) return;
+                    if (text.length <= 2) {
+                        this.errorHandler(true, '{{__('admin.Text must be longer than 2 letters')}}}')
+                        return;
+                    }
 
                     this.createAiBtnAction(true);
                     let data = {prompt: text, type_task: type};
@@ -600,9 +603,16 @@
                     let response = await this.fetchAi(this.aiGetTaskRoute, {id: id});
                     let {result, answer} = await response;
 
-                    if (result && answer.status === 1 || ++this.attemptCount >= this.tries) {
+                    if (result && answer.status === 1) {
                         clearInterval(intervalId);
                         return answer;
+                    }
+
+                    if(++this.attemptCount >= this.tries) {
+                        this.reset()
+                        this.errorHandler(true, '{{__('admin.Time of waiting is over')}}');
+                        clearInterval(intervalId);
+                        return;
                     }
 
                     return answer;
@@ -669,6 +679,7 @@
                     this.aiResult = {};
                     this.createAiBtnAction(false);
                     this.inProcess = false;
+                    this.attemptCount = 0;
                 }
 
             };
