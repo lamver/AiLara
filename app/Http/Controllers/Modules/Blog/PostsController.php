@@ -225,11 +225,11 @@ class PostsController extends Controller
         $rss = new Feed(
             $items->title ?? "",
             $items->Posts,
-            '',
+        $items->slug.'/feed',
             'feed::rss',
             $items->description ?? "",
-            '',
-                $items->image ?? "",
+            'ru',
+            $items->image ?? "",
         );
 
         return $rss->toResponse($request);
