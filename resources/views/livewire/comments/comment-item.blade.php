@@ -70,7 +70,7 @@
 
             <div class="row mt-3">
                 <div class="col-md-4">
-                    <img style="width: 100px" src="{{$comment->creator()->first()->avatar ?? asset('images/avatar/no_avatar.png') }}" class="rounded float-start" alt="...">
+                    <img style="width: 110px; height: 120px; object-fit: cover; object-position: center;" src="{{!empty($comment->creator()->first()->avatar) ? $comment->creator()->first()->avatar : asset('images/avatar/no_avatar.png') }}" class="rounded float-start" alt="...">
                 </div>
                 <div class="col-md-12 mt-1">
                     {{$comment->formatCreatedAt()}}
