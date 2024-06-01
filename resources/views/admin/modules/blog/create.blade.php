@@ -30,7 +30,7 @@
         }
 
         #innerResult img {
-            width: -webkit-fill-available;
+            width: 100%;
             max-width: 260px;
             cursor: pointer;
         }
@@ -77,7 +77,7 @@
 <form method="post" action="{{ $route }}">
     <div class="row">
         <div class="col-md-10">
-            <label for="floatingInput">{{ __('admin.Title') }}</label>
+            <label for="label_title">{{ __('admin.Title') }}</label>
             <div class="input-group mb-3">
                 <input id="label_title" type="text" class="form-control " name="title" value="@if(isset($post)) {{ $post->title }} @endif" required="true" placeholder="">
                 <span data-type-id="label_title" class="input-group-text" data-bs-toggle="modal"
@@ -89,19 +89,19 @@
                 @if(isset($post)){!! \App\Helpers\StrMaster::applyHtml($post->content) !!}@endif
             </div>
             <p></p>
-            <label for="floatingInput">{{ __('admin.Description') }}</label>
+            <label for="label_description">{{ __('admin.Description') }}</label>
             <div class="input-group mb-3">
                 <input id="label_description" type="text" class="form-control " name="description" value="@if(isset($post)) {{ $post->description }} @endif" placeholder="">
                 <span data-type-id="label_description" class="input-group-text" data-bs-toggle="modal"
                       data-bs-target="#aiModal">&nbsp;<i class="fa fa-child"></i>&nbsp;ai</span>
             </div>
-                <label for="floatingInput">{{ __('admin.Seo title') }}</label>
+                <label for="label_seo_title">{{ __('admin.Seo title') }}</label>
             <div class="input-group mb-3">
                 <input id="label_seo_title" type="text" class="form-control " name="seo_title" value="@if(isset($post)) {{ $post->seo_title }} @endif" placeholder="">
                 <span data-type-id="label_seo_title" class="input-group-text" data-bs-toggle="modal"
                       data-bs-target="#aiModal">&nbsp;<i class="fa fa-child"></i>&nbsp;ai</span>
             </div>
-                <label for="floatingInput">{{ __('admin.Seo description') }}</label>
+                <label for="label_seo_description">{{ __('admin.Seo description') }}</label>
             <div class="input-group mb-3">
                 <input id="label_seo_description" type="text" class="form-control " name="seo_description" value="@if(isset($post)) {{ $post->seo_description }} @endif" placeholder="">
                 <span data-type-id="label_seo_description" class="input-group-text" data-bs-toggle="modal"
@@ -115,9 +115,9 @@
                 @endif
             </div>
 
-            <label for="floatingInput">{{ __('admin.Image') }}</label>
+            <label for="label_image">{{ __('admin.Image') }}</label>
             <div class="input-group mb-3">
-                <input id="title" type="text" class="form-control " name="image" value="@if(isset($post)) {{ $post->image }} @endif" placeholder="">
+                <input id="label_image" type="text" class="form-control " name="image" value="@if(isset($post)) {{ $post->image }} @endif" placeholder="">
                 <span data-type-id="label_image" data-type="image"
                       class="input-group-text"
                       data-bs-toggle="modal"
