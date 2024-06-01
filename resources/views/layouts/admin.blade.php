@@ -562,14 +562,15 @@
                             this.innerBox.style.display = 'block';
                             this.insertBtn.disabled = false;
                             this.attemptCount = 0;
+                            this.inProcess = false;
 
                             if (this.aiResult?.url_files?.length > 0) {
                                 this.responseImg();
                                 return false;
                             }
+
                             this.aiResult.answer = this.aiResult.answer.replace(/<\/?[^>]+(>|$)/g, "");
                             this.innerBox.querySelector('#innerResult').innerText = this.aiResult.answer;
-                            this.inProcess = false;
 
 
                         }, 3000);
@@ -634,6 +635,12 @@
                         el.addEventListener('change', () => {
                             this.aiResult = {'answer': el.value}
                         });
+                    }
+
+                    let firstCheckbox = document.querySelector('#innerResult input[type="radio"]');
+
+                    if (firstCheckbox) {
+                        firstCheckbox.click();
                     }
 
                 },
