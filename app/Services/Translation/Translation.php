@@ -30,6 +30,19 @@ class Translation
     }
 
     /**
+     * Retrieve an array of languages for the route
+     *
+     * @return array
+     */
+    public static function getLanguagesForRoute(): array
+    {
+        return array_map(function($value) {
+            // Make default lang is empty
+            return $value === config('app.locale') ? "" : $value;
+        }, static::getLanguages());
+    }
+
+    /**
      * Check if the current route has a language prefix.
      *
      * @return string|null The language prefix if present, null otherwise.
