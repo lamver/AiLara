@@ -68,6 +68,8 @@ class SettingGeneral extends Data
     /**  @var string */
     public string $backup_musqldump_path;
 
+    public string $site_language;
+
 
     // public bool $api_key;
 
@@ -109,6 +111,7 @@ class SettingGeneral extends Data
         $settings->backup_musqldump = key_exists('backup_musqldump', $dataSettings) ?  (bool) $dataSettings['backup_musqldump'] : false;
         $settings->backup_status = key_exists('backup_status', $dataSettings) ?  (bool) $dataSettings['backup_status'] : false;
 
+        $settings->site_language = $dataSettings['site_language'] ?? "";
         $backupFrequency = SettingGeneral::BACKUP_FREQUENCY;
 
         if (key_exists($dataSettings['backup_frequency'], $backupFrequency)){

@@ -2,6 +2,7 @@
 
 namespace App\Services\Translation;
 
+use App\Settings\SettingGeneral;
 use Illuminate\Support\Facades\App;
 use Barryvdh\TranslationManager\Manager;
 
@@ -56,5 +57,11 @@ class Translation
 
         return null;
 
+    }
+
+    public static function getCurrentLocale(): string
+    {
+        $settingGeneral = new SettingGeneral();
+        return $settingGeneral->site_language;
     }
 }
