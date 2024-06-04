@@ -50,6 +50,8 @@ Route::prefix(Translation::checkRoutePrefix())->group(function () {
             ],
         ]);
 
+        Route::post('category/sort', [CategoryController::class, 'sort'])->name('admin.blog.category.sort');
+
         Route::resource('import', ImportController::class, [
             'names' => [
                 'index' => 'admin.blog.import.index',

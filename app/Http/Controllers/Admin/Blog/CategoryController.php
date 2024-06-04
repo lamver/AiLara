@@ -9,6 +9,7 @@ use App\Models\Modules\Blog\Posts;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -20,10 +21,36 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        $categories = Category::where('parent_id', '=', null)->orWhere('parent_id', '=', 0)->get();
-        $allCategories = Category::pluck('title','id')->all();
+        $categoriesAll = Category::all()->sortBy('sort_order');
+        $categories = $this->categoryTree($categoriesAll);
 
-        return view('admin.modules.blog.category.index', compact('categories','allCategories'));
+        return view('admin.modules.blog.category.index', compact('categories'));
+    }
+
+    /**
+     * Generate a nested category tree from the provided categories' collection.
+     *
+     * @param Collection $categories
+     * @param int|null $parentId
+     * @return array
+     */
+    public function categoryTree(Collection $categories, int $parentId = null): array
+    {
+        $tree = [];
+
+        foreach ($categories as $category) {
+
+            if ((int) $category->parent_id === (int)$parentId) {
+                $children = $this->categoryTree($categories, $category->id);
+                if ($children) {
+                    $category->children = $children;
+                }
+                $tree[] = $category;
+            }
+
+        }
+
+        return $tree;
     }
 
     /**
@@ -99,5 +126,24 @@ class CategoryController extends Controller
         }
 
         return redirect(route('admin.blog.category.index'));
+    }
+
+    public function sort(Request $request)
+    {
+        //$category = Category::find((int)$request->get('moveId'))->get();
+        $category = Category::query()->where(['id' => (int)$request->get('moveId')])->first();
+
+        if ($category) {
+            $category->parent_id = (int) $request->get('parentId');
+           // $category->sort_order = (int) $request->get('sortOrder');
+            $category->save();
+        }
+
+        foreach ($request->get('sortOrder') as $sortOrder ) {
+            Category::where('id', $sortOrder['id'])->update(['sort_order' => $sortOrder['sortOrder']]);
+        }
+
+        dd( $request->get('sortOrder'), $category );
+
     }
 }
