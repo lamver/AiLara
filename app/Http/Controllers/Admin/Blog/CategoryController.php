@@ -28,24 +28,24 @@ class CategoryController extends Controller
     }
 
     /**
-     * Generate a nested category tree from the provided comments array.
+     * Generate a nested category tree from the provided categories' collection.
      *
-     * @param Collection $comments
+     * @param Collection $categories
      * @param int|null $parentId
      * @return array
      */
-    public function categoryTree(Collection $comments, int $parentId = null): array
+    public function categoryTree(Collection $categories, int $parentId = null): array
     {
         $tree = [];
 
-        foreach ($comments as $comment) {
+        foreach ($categories as $category) {
 
-            if ((int) $comment['parent_id'] === (int)$parentId) {
-                $children = $this->categoryTree($comments, $comment['id']);
+            if ((int) $category->parent_id === (int)$parentId) {
+                $children = $this->categoryTree($categories, $category->id);
                 if ($children) {
-                    $comment['children'] = $children;
+                    $category->children = $children;
                 }
-                $tree[] = $comment;
+                $tree[] = $category;
             }
 
         }
