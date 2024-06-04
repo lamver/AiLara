@@ -17,7 +17,7 @@ use App\Services\Translation\Translation;
 */
 
 /** Admin routes */
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'rbac:admin'])->group(function () {
 
     foreach (Translation::getLanguagesForRoute() as $lang) {
         Route::prefix($lang)->group(function () use ($lang) {

@@ -8,7 +8,7 @@
                 {{ $editCommentId }} {{ Auth::check() }}
                 @if(!$editCommentId && Auth::check())
                     <div class="btn-group col-2">
-                        @if(Auth::user()->id === $comment->creator_id)
+                        @if((int)Auth::user()->id === (int)$comment->creator_id)
                             <button type="button" class="btn btn-primary btn-sm"
                                     wire:click.prevent="startEditingComment( {{ $comment->id }}, {{$comment}} )">
                                 {{__('Edit')}}
@@ -35,7 +35,7 @@
                 </div>
             </div>
 
-            @if($editCommentId === $comment->id)
+            @if((int)$editCommentId === (int)$comment->id)
 
                 <div class="flex-1 mb-3">
                     <textarea
@@ -53,7 +53,7 @@
                 </div>
             @endif
 
-            @if($replyCommentId === $comment->id)
+            @if((int)$replyCommentId === (int)$comment->id)
                 <div class="flex-1 mb-3 ml-3 mt-3">
                   <textarea
                       class="form-control mb-3"
@@ -70,7 +70,7 @@
 
             <div class="row mt-3">
                 <div class="col-md-4">
-                    <img style="width: 100px" src="{{$comment->creator()->first()->avatar ?? asset('images/avatar/no_avatar.png') }}" class="rounded float-start" alt="...">
+                    <img style="width: 110px; height: 120px; object-fit: cover; object-position: center;" src="{{!empty($comment->creator()->first()->avatar) ? $comment->creator()->first()->avatar : asset('images/avatar/no_avatar.png') }}" class="rounded float-start" alt="...">
                 </div>
                 <div class="col-md-12 mt-1">
                     {{$comment->formatCreatedAt()}}

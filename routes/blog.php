@@ -51,6 +51,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
                     ],
                 ]);
 
+                Route::post('category/sort', [CategoryController::class, 'sort'])->name('admin.' . $lang . 'blog.category.sort');
+
                 Route::resource('import', ImportController::class, [
                     'names' => [
                         'index' => 'admin.' . $lang . 'blog.import.index',

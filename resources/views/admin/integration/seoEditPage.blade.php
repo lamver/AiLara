@@ -6,7 +6,7 @@
 @section('content')
 
     <h1>{{ $existingPage->uri }}</h1>
-    <form method="post" class="form-control" action="{{ route('admin.Ais page save', ['id' => $existingPage->id]) }}">
+    <form method="post" class="form-control" action="{{ route('admin.ais.page.save', ['id' => $existingPage->id]) }}">
         @csrf
         <label for="exampleInputEmail1" class="form-label">{{ __('admin.Meta title') }}</label>
         <div class="input-group">

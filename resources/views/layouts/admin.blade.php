@@ -483,7 +483,7 @@
                 aiResult: {},
                 basicCheckValue: false,
                 attemptCount: 0,
-                tries: 25,
+                tries: 45,
                 inProcess: false,
 
                 init: function () {
@@ -539,10 +539,13 @@
                     this.inProcess = true;
                     this.errorHandler(false);
 
-                    if (text.length < 3) return;
+                    if (text.length <= 2) {
+                        this.errorHandler(true, '{{__('admin.Text must be longer than 2 letters')}}}')
+                        return;
+                    }
 
                     this.createAiBtnAction(true);
-                    let data = {prompt: text, type: type};
+                    let data = {prompt: text, type_task: type};
 
                     if(this.basicCheckValue) {
                         data.basic = 1;
@@ -560,14 +563,15 @@
                             this.innerBox.style.display = 'block';
                             this.insertBtn.disabled = false;
                             this.attemptCount = 0;
+                            this.inProcess = false;
 
                             if (this.aiResult?.url_files?.length > 0) {
                                 this.responseImg();
                                 return false;
                             }
+
                             this.aiResult.answer = this.aiResult.answer.replace(/<\/?[^>]+(>|$)/g, "");
                             this.innerBox.querySelector('#innerResult').innerText = this.aiResult.answer;
-                            this.inProcess = false;
 
 
                         }, 3000);
@@ -601,9 +605,16 @@
                     let response = await this.fetchAi(this.aiGetTaskRoute, {id: id});
                     let {result, answer} = await response;
 
-                    if (result && answer.status === 1 || ++this.attemptCount >= this.tries) {
+                    if (result && answer.status === 1) {
                         clearInterval(intervalId);
                         return answer;
+                    }
+
+                    if(++this.attemptCount >= this.tries) {
+                        this.reset()
+                        this.errorHandler(true, '{{__('admin.Time of waiting is over')}}');
+                        clearInterval(intervalId);
+                        return;
                     }
 
                     return answer;
@@ -625,6 +636,12 @@
                         el.addEventListener('change', () => {
                             this.aiResult = {'answer': el.value}
                         });
+                    }
+
+                    let firstCheckbox = document.querySelector('#innerResult input[type="radio"]');
+
+                    if (firstCheckbox) {
+                        firstCheckbox.click();
                     }
 
                 },
@@ -670,6 +687,7 @@
                     this.aiResult = {};
                     this.createAiBtnAction(false);
                     this.inProcess = false;
+                    this.attemptCount = 0;
                 }
 
             };

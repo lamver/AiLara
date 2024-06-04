@@ -17,4 +17,10 @@
             {{ __('Dashboard') }}
         </a>
     </li>
+    <li class="nav-item text-nowrap">
+        <form method="post" action="{{route('logout')}}">
+            @csrf
+            <button type="submit" class="nav-link px-3">{{ __('admin.Sign out') }}</button>
+        </form>
+    </li>
 @endguest
