@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Services\Translation\Translation;
+use App\Settings\SettingGeneral;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
@@ -18,14 +19,20 @@ class SetLocale
     public function handle(Request $request, Closure $next)
     {
 
-        $routeLocale = Translation::checkRoutePrefix();
+        $siteLanguage = $this->getLocale();
 
         $langs = Translation::getLanguages();
         View::share(['languages' => $langs]);
-        $this->setLocale($routeLocale ?? config('app.locale'));
-        if (!!$routeLocale && $this->getLocale() !== $routeLocale) {
-            $this->setLocale($routeLocale);
-            return redirect($this->localizedUrl($request->path()));
+
+        if (config('app.locale') === $siteLanguage) {
+            $siteLanguage = "";
+        }
+
+        if (!str_starts_with($request->path(), $siteLanguage)) {
+            $pathRedirectTo = $this->localizedUrl($request->path(), $siteLanguage);
+            $this->setLocale($routeLocale ?? config('app.locale'));
+
+            return redirect($pathRedirectTo);
         }
 
         return $next($request);
@@ -35,19 +42,12 @@ class SetLocale
      * Generates a localized URL for the given path.
      *
      * @param string $path
+     * @param $prefix
      * @return string
      */
-    private function localizedUrl(string $path): string
+    private function localizedUrl(string $path, $prefix): string
     {
-        $locale = $this->getLocale();
-        $newPath = $path;
-
-        if (request()->segment(1) !== $locale && $locale !== config('app.locale')) {
-            $newPath = $locale . '/' . $path;
-        }
-
-        return url(trim($newPath, '/'));
-
+        return url(trim($prefix . '/' . $path, '/'));
     }
 
     /**
@@ -57,15 +57,8 @@ class SetLocale
      */
     private function getLocale(): string
     {
-        if (request()->session()->has('locale')) {
-            $locale = request()->session()->get('locale');
-        } else {
-            $locale = config('app.locale');
-        }
-
-        $this->setLocale($locale);
-        return $locale;
-
+        $settingGeneral = new SettingGeneral();
+        return $settingGeneral->site_language;
     }
 
     /**

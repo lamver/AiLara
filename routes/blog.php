@@ -21,71 +21,77 @@ use App\Services\Modules\Module;
 |
 */
 /** Admin routes */
+Route::middleware(['auth', 'verified'])->group(function () {
 
-Route::prefix(Translation::checkRoutePrefix())->group(function () {
+    foreach (Translation::getLanguagesForRoute() as $lang) {
+        Route::prefix($lang)->group(function () use ($lang) {
+            Route::prefix(SettingGeneral::value('admin_prefix') . '/module/blog')->group(function () use ($lang) {
+                Route::resource('posts', PostsController::class, [
+                    /*        'except' => ['show', 'destroy'],*/
+                    'names' => [
+                        'index' => 'admin.' . $lang . 'blog.post.index',
+                        'create' => 'admin.' . $lang . 'blog.post.create',
+                        'store' => 'admin.' . $lang . 'blog.post.store',
+                        'edit' => 'admin.' . $lang . 'blog.post.edit',
+                        'update' => 'admin.' . $lang . 'blog.post.update',
+                        'show' => 'admin.' . $lang . 'blog.post.show',
+                        'destroy' => 'admin.' . $lang . 'blog.post.destroy',
+                    ],
+                ]);
 
-    Route::middleware(['auth', 'verified'])->prefix(SettingGeneral::value('admin_prefix') .'/module/blog')->group(function () {
-        Route::resource('posts', PostsController::class, [
-            /*        'except' => ['show', 'destroy'],*/
-            'names' => [
-                'index' => 'admin.blog.post.index',
-                'create' => 'admin.blog.post.create',
-                'store' => 'admin.blog.post.store',
-                'edit' => 'admin.blog.post.edit',
-                'update' => 'admin.blog.post.update',
-                'show' => 'admin.blog.post.show',
-                'destroy' => 'admin.blog.post.destroy',
-            ],
-        ]);
+                Route::resource('category', CategoryController::class, [
+                    'names' => [
+                        'index' => 'admin.' . $lang . 'blog.category.index',
+                        'create' => 'admin.' . $lang . 'blog.category.create',
+                        'store' => 'admin.' . $lang . 'blog.category.store',
+                        'edit' => 'admin.' . $lang . 'blog.category.edit',
+                        'update' => 'admin.' . $lang . 'blog.category.update',
+                        'show' => 'admin.' . $lang . 'blog.category.show',
+                        'destroy' => 'admin.' . $lang . 'blog.category.destroy',
+                    ],
+                ]);
 
-        Route::resource('category', CategoryController::class, [
-            'names' => [
-                'index' => 'admin.blog.category.index',
-                'create' => 'admin.blog.category.create',
-                'store' => 'admin.blog.category.store',
-                'edit' => 'admin.blog.category.edit',
-                'update' => 'admin.blog.category.update',
-                'show' => 'admin.blog.category.show',
-                'destroy' => 'admin.blog.category.destroy',
-            ],
-        ]);
+                Route::post('category/sort', [CategoryController::class, 'sort'])->name('admin.' . $lang . 'blog.category.sort');
 
-        Route::post('category/sort', [CategoryController::class, 'sort'])->name('admin.blog.category.sort');
+                Route::resource('import', ImportController::class, [
+                    'names' => [
+                        'index' => 'admin.' . $lang . 'blog.import.index',
+                        'create' => 'admin.' . $lang . 'blog.import.create',
+                        'store' => 'admin.' . $lang . 'blog.import.store',
+                        'edit' => 'admin.' . $lang . 'blog.import.edit',
+                        'update' => 'admin.' . $lang . 'blog.import.update',
+                        'show' => 'admin.' . $lang . 'blog.import.show',
+                        'destroy' => 'admin.' . $lang . 'blog.import.destroy',
+                    ],
+                ]);
 
-        Route::resource('import', ImportController::class, [
-            'names' => [
-                'index' => 'admin.blog.import.index',
-                'create' => 'admin.blog.import.create',
-                'store' => 'admin.blog.import.store',
-                'edit' => 'admin.blog.import.edit',
-                'update' => 'admin.blog.import.update',
-                'show' => 'admin.blog.import.show',
-                'destroy' => 'admin.blog.import.destroy',
-            ],
-        ]);
-
-        Route::get('/settings', [SettingsController::class, 'index'])->name( 'admin.blog.settings.index');
-        Route::put('/settings', [SettingsController::class, 'update'])->name( 'admin.blog.settings.update');
-
-    });
+                Route::get('/settings', [SettingsController::class, 'index'])->name('admin.' . $lang . 'blog.settings.index');
+                Route::put('/settings', [SettingsController::class, 'update'])->name('admin.' . $lang . 'blog.settings.update');
+            });
+        });
+    }
 
 });
 
 if (Module::isFrontModule(Module::MODULE_BLOG)) {
     /** web routes */
-    Route::prefix(Module::getWebRoutePrefix(Module::MODULE_BLOG))->group(function () {
+    foreach (Translation::getLanguagesForRoute() as $lang) {
+        Route::prefix($lang)->group(function () use ($lang) {
+            Route::prefix(Module::getWebRoutePrefix(Module::MODULE_BLOG))->group(function () use ($lang) {
 
-        if (Module::getWebRoutePrefix(Module::MODULE_BLOG) != '') {
-            Route::get('/', [\App\Http\Controllers\Modules\Blog\PostsController::class, 'index'])->name('blog.post.index');
-        }
+                if (Module::getWebRoutePrefix(Module::MODULE_BLOG) != '') {
+                    Route::get('/', [\App\Http\Controllers\Modules\Blog\PostsController::class, 'index'])->name('blog.'.$lang.'post.index');
+                }
 
-        $categorySlugsRoute = Category::getFullUrlsToAllCategory();
+                $categorySlugsRoute = Category::getFullUrlsToAllCategory();
 
-        foreach ($categorySlugsRoute as $slug) {
-            Route::get('/'.$slug, [\App\Http\Controllers\Modules\Blog\PostsController::class, 'category'])->name('blog.post.cat' . '.' . str_replace("/", ".", $slug));
-            Route::get('/'.$slug . 'feed', [\App\Http\Controllers\Modules\Blog\PostsController::class, 'rss'])->name('blog.post.cat' . '.' . str_replace("/", ".", trim($slug,'/')) . '.rss');
-            Route::get('/'.$slug . '{slug}_{id}', [\App\Http\Controllers\Modules\Blog\PostsController::class, 'view'])->name('blog.post.cat' . '.' . str_replace("/", ".", trim($slug,'/')) . '.view.post');
-        }
-    });
+                foreach ($categorySlugsRoute as $slug) {
+                    Route::get('/' . $slug, [\App\Http\Controllers\Modules\Blog\PostsController::class, 'category'])->name('blog.'.$lang.'post.cat' . '.' . str_replace("/", ".", $slug));
+                    Route::get('/' . $slug . 'feed', [\App\Http\Controllers\Modules\Blog\PostsController::class, 'rss'])->name('blog.'.$lang.'post.cat' . '.' . str_replace("/", ".", trim($slug, '/')) . '.rss');
+                    Route::get('/' . $slug . '{slug}_{id}', [\App\Http\Controllers\Modules\Blog\PostsController::class, 'view'])->name('blog.'.$lang.'post.cat' . '.' . str_replace("/", ".", trim($slug, '/')) . '.view.post');
+                }
+            });
+        });
+    }
 }
 

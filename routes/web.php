@@ -18,23 +18,26 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix(Translation::checkRoutePrefix())->group(function () {
+foreach (Translation::getLanguagesForRoute() as $lang) {
+    Route::prefix($lang)->group(function () use ($lang) {
 
-    Route::get('/auth/btn.html', [UserStateController::class, 'authBtn'])
-        ->name('ajax.auth-btn');
+        Route::get('/auth/btn.html', [UserStateController::class, 'authBtn'])
+            ->name('ajax'.$lang.'.auth-btn');
 
-    Route::middleware('auth')->group(function () {
-        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-        Route::get('/dashboard', function () {
-            return view('dashboard');
-        })->middleware(['auth', 'verified'])->name('dashboard');
+        Route::middleware('auth')->group(function () use ($lang) {
+            Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.'.$lang.'edit');
+            Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.'.$lang.'update');
+            Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.'.$lang.'destroy');
+            Route::get('/dashboard', function () {
+                return view('dashboard');
+            })->middleware(['auth', 'verified'])->name($lang.'dashboard');
+        });
+        Route::get('/', [ModuleController::class, 'index'])->name($lang.'index');
+
     });
-    Route::get('/', [ModuleController::class, 'index'])->name('index');
+}
 
-    require __DIR__.'/auth.php';
-});
+require __DIR__ . '/auth.php';
 
 Route::get('/client_offline', function () {
     return view('client_offline');

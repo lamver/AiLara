@@ -325,7 +325,7 @@
                                 <div class="d-flex flex-row bd-highlight">
                                     <select class="form-select" id="setLang" style="width: 100px; margin-left: auto; margin-top: 23px; margin-right: 25px;">
                                         @php foreach ($languages as $lang): @endphp
-                                        <option @if(trans()->getLocale() === $lang) selected @endif value="{{$lang}}">{{$lang}}</option>
+                                        <option @if(\App\Services\Translation\Translation::getCurrentLocale() === $lang) selected @endif value="{{$lang}}">{{$lang}}</option>
                                         @php endforeach; @endphp
                                     </select>
                                 </div>

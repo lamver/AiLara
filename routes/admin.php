@@ -51,6 +51,11 @@ Route::middleware(['auth', 'verified', 'rbac:admin'])->group(function () {
                 Route::get('/setLang/{locale}', function (string $locale) {
                     app()->setLocale($locale);
                     session()->put('locale', $locale);
+
+                    $settingGeneral = new SettingGeneral();
+                    $settingGeneral->site_language = $locale;
+                    $settingGeneral->save();
+
                     Artisan::call('route:clear');
                     Artisan::call('route:cache');
                 })->name('admin.'.$lang.'setLang');
