@@ -143,6 +143,45 @@
                 box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
             }
 
+            [data-bs-toggle="modal" ] {
+                cursor: pointer;
+            }
+            /**
+            Генератор каринок
+         */
+
+            #imgOnDesResult {
+                padding-top: 15px;
+            }
+
+            #innerResult img {
+                width: 100%;
+                max-width: 260px;
+                cursor: pointer;
+            }
+            #innerResult label {
+                position: relative;
+                display: inline-block;
+            }
+            #innerResult label:before {
+                content: '';
+                position: absolute;
+                border-radius: 50%;
+                border: 3px white solid;
+                top: 15px;
+                left:15px;
+                display:block;
+                width: 25px;
+                height: 25px;
+                background: #34495e;
+                cursor: pointer;
+                opacity: 0.5;
+            }
+            #innerResult input:checked + label:before {
+                background: #0d6efd;
+                border: 3px white solid;
+                opacity: 1;
+            }
 
         </style>
 
