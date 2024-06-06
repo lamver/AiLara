@@ -24,49 +24,49 @@ use App\Services\Modules\Module;
 Route::middleware(['auth', 'verified'])->group(function () {
 
     foreach (Translation::getLanguagesForRoute() as $lang) {
-        Route::prefix($lang)->group(function () use ($lang) {
-            Route::prefix(SettingGeneral::value('admin_prefix') . '/module/blog')->group(function () use ($lang) {
+        Route::prefix($lang)->name('admin.' . $lang)->group(function () {
+            Route::prefix(SettingGeneral::value('admin_prefix') . '/module/blog')->group(function () {
                 Route::resource('posts', PostsController::class, [
                     /*        'except' => ['show', 'destroy'],*/
                     'names' => [
-                        'index' => 'admin.' . $lang . 'blog.post.index',
-                        'create' => 'admin.' . $lang . 'blog.post.create',
-                        'store' => 'admin.' . $lang . 'blog.post.store',
-                        'edit' => 'admin.' . $lang . 'blog.post.edit',
-                        'update' => 'admin.' . $lang . 'blog.post.update',
-                        'show' => 'admin.' . $lang . 'blog.post.show',
-                        'destroy' => 'admin.' . $lang . 'blog.post.destroy',
+                        'index' => 'blog.post.index',
+                        'create' => 'blog.post.create',
+                        'store' => 'blog.post.store',
+                        'edit' => 'blog.post.edit',
+                        'update' => 'blog.post.update',
+                        'show' => 'blog.post.show',
+                        'destroy' => 'blog.post.destroy',
                     ],
                 ]);
 
                 Route::resource('category', CategoryController::class, [
                     'names' => [
-                        'index' => 'admin.' . $lang . 'blog.category.index',
-                        'create' => 'admin.' . $lang . 'blog.category.create',
-                        'store' => 'admin.' . $lang . 'blog.category.store',
-                        'edit' => 'admin.' . $lang . 'blog.category.edit',
-                        'update' => 'admin.' . $lang . 'blog.category.update',
-                        'show' => 'admin.' . $lang . 'blog.category.show',
-                        'destroy' => 'admin.' . $lang . 'blog.category.destroy',
+                        'index' => 'blog.category.index',
+                        'create' => 'blog.category.create',
+                        'store' => 'blog.category.store',
+                        'edit' => 'blog.category.edit',
+                        'update' => 'blog.category.update',
+                        'show' => 'blog.category.show',
+                        'destroy' => 'blog.category.destroy',
                     ],
                 ]);
 
-                Route::post('category/sort', [CategoryController::class, 'sort'])->name('admin.' . $lang . 'blog.category.sort');
+                Route::post('category/sort', [CategoryController::class, 'sort'])->name('blog.category.sort');
 
                 Route::resource('import', ImportController::class, [
                     'names' => [
-                        'index' => 'admin.' . $lang . 'blog.import.index',
-                        'create' => 'admin.' . $lang . 'blog.import.create',
-                        'store' => 'admin.' . $lang . 'blog.import.store',
-                        'edit' => 'admin.' . $lang . 'blog.import.edit',
-                        'update' => 'admin.' . $lang . 'blog.import.update',
-                        'show' => 'admin.' . $lang . 'blog.import.show',
-                        'destroy' => 'admin.' . $lang . 'blog.import.destroy',
+                        'index' => 'blog.import.index',
+                        'create' => 'blog.import.create',
+                        'store' => 'blog.import.store',
+                        'edit' => 'blog.import.edit',
+                        'update' => 'blog.import.update',
+                        'show' => 'blog.import.show',
+                        'destroy' => 'blog.import.destroy',
                     ],
                 ]);
 
-                Route::get('/settings', [SettingsController::class, 'index'])->name('admin.' . $lang . 'blog.settings.index');
-                Route::put('/settings', [SettingsController::class, 'update'])->name('admin.' . $lang . 'blog.settings.update');
+                Route::get('/settings', [SettingsController::class, 'index'])->name('blog.settings.index');
+                Route::put('/settings', [SettingsController::class, 'update'])->name('blog.settings.update');
             });
         });
     }
