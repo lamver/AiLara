@@ -24,13 +24,18 @@ class SetLocale
         $langs = Translation::getLanguages();
         View::share(['languages' => $langs]);
 
+        $firstSegment = request()->segment(1);
+
+        if (in_array($firstSegment, $langs)) {
+            $this->setLocale($firstSegment);
+        }
+
         if (config('app.locale') === $siteLanguage) {
             $siteLanguage = "";
         }
 
         if (!str_starts_with($request->path(), $siteLanguage)) {
             $pathRedirectTo = $this->localizedUrl($request->path(), $siteLanguage);
-            $this->setLocale($routeLocale ?? config('app.locale'));
 
             return redirect($pathRedirectTo);
         }

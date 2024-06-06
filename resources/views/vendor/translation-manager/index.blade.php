@@ -143,7 +143,7 @@
     </style>
 @endsection
 @section('page_title')
-    Перевод
+    {{__('admin.Translation')}}
 @endsection('page_title')
 @section('content')
     <div class="container-fluid">

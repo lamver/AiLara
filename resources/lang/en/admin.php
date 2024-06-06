@@ -210,4 +210,5 @@ return array (
     'Home page seo description' => 'Home page seo description',
     'Home page page image' => 'Home page page image',
     'User' => 'User',
+    'Translation' => 'Translation',
 );

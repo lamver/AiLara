@@ -110,6 +110,34 @@ Route::middleware(['auth', 'verified', 'rbac:admin'])->group(function () {
                 Route::post('comments/set-status',[CommentsController::class,'setStatus'])->name('comment.setStatus');
                 Route::delete('comments/destroy/{id}',[CommentsController::class,'destroy'])->name('comment.destroy');
 
+                /** Translations routes */
+                Route::get('translations/view/{groupKey?}', ['Barryvdh\TranslationManager\Controller', 'getView'])
+                    ->where('groupKey', '.*')
+                    ->name('view');
+                Route::get('translations/{groupKey?}', ['Barryvdh\TranslationManager\Controller', 'getIndex'])
+                    ->where('groupKey', '.*')
+                    ->name('groupKey');
+                Route::post('translations/add/{groupKey}', ['Barryvdh\TranslationManager\Controller', 'postAdd'])
+                    ->where('groupKey', '.*')
+                    ->name('add');
+                Route::post('translations/edit/{groupKey}', ['Barryvdh\TranslationManager\Controller', 'postEdit'])
+                    ->where('groupKey', '.*')
+                    ->name('edit');
+                Route::post('translations/groups/add', ['Barryvdh\TranslationManager\Controller', 'AddGroup']);
+                Route::post('translations/delete/{groupKey}/{translationKey}', ['Barryvdh\TranslationManager\Controller', 'postDelete'])
+                    ->where('groupKey', '.*')
+                    ->name('delete');
+                Route::post('translations/import', ['Barryvdh\TranslationManager\Controller', 'postImport'] )->name('import');
+                Route::post('translations/find', ['Barryvdh\TranslationManager\Controller', 'postFind'])->name('find');
+                Route::post('translations/locales/add', ['Barryvdh\TranslationManager\Controller', 'postAddLocale'] )->name('locales.add');
+                Route::post('translations/locales/remove', ['Barryvdh\TranslationManager\Controller', 'postRemoveLocale'])->name('locales.remove');
+                Route::post('translations/publish/{groupKey}', ['Barryvdh\TranslationManager\Controller', 'postPublish'])
+                    ->where('groupKey', '.*')
+                    ->name('publish');
+                Route::post('translations/translate-missing', ['Barryvdh\TranslationManager\Controller', 'postTranslateMissing'])
+                ->name('translate.missing');
+                Route::post('translate-missing', ['Barryvdh\TranslationManager\Controller', 'postAddGroup'])->name('postTranslateMissing');
+
             });
         });
 
