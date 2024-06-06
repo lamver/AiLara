@@ -12,6 +12,11 @@ use App\Http\Controllers\AiSearch\ControlPanel\SeoPages;
 use App\Services\Translation\Translation;
 use App\Settings\SettingGeneral;
 use App\Http\Controllers\Admin\ModuleMainController;
+use Wnikk\LaravelAccessUi\Http\Controllers\AccessUiController;
+use Wnikk\LaravelAccessUi\Http\Controllers\RulesController;
+use Wnikk\LaravelAccessUi\Http\Controllers\OwnersController;
+use Wnikk\LaravelAccessUi\Http\Controllers\InheritController;
+use Wnikk\LaravelAccessUi\Http\Controllers\PermissionController;
 
 
 /*
@@ -105,6 +110,30 @@ Route::middleware(['auth', 'verified', 'rbac:admin'])->group(function () {
                 Route::post('comments/set-status',[CommentsController::class,'setStatus'])->name('comment.setStatus');
                 Route::delete('comments/destroy/{id}',[CommentsController::class,'destroy'])->name('comment.destroy');
 
+            });
+        });
+
+        /** name without prefix "admin" **/
+        Route::prefix($lang)->name($lang)->group(function () {
+
+            Route::name('accessUi.')->prefix('access-ui')->group(static function () {
+                Route::get('/', [AccessUiController::class, 'main']);
+
+                Route::apiResource('/rules-data', RulesController::class)
+                    ->parameters(['rules-data' => 'id'])
+                    ->except(['show']);
+
+                Route::apiResource('/owners-data', OwnersController::class)
+                    ->parameters(['owners-data' => 'id'])
+                    ->except(['show']);
+
+                Route::apiResource('/owner.inherit-data', InheritController::class)
+                    ->parameters(['inherit-data' => 'id'])
+                    ->except(['show', 'update']);
+
+                Route::apiResource('/owner.permission-data', PermissionController::class)
+                    ->parameters(['permission-data' => 'id'])
+                    ->except(['show', 'store', 'destroy']);
             });
         });
 
