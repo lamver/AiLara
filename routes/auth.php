@@ -16,29 +16,30 @@ Route::middleware('guest')->group(function () {
 
     foreach (Translation::getLanguagesForRoute() as $lang) {
 
-        Route::prefix($lang)->group(function () use ($lang) {
+        Route::prefix($lang)->name($lang)->group(function () {
 
             Route::get('register', [RegisteredUserController::class, 'create'])
-                ->name($lang . 'register');
+                ->name('register');
 
             Route::post('register', [RegisteredUserController::class, 'store']);
 
             Route::get('login', [AuthenticatedSessionController::class, 'create'])
-                ->name($lang . 'login');
+                ->name('login');
 
-            Route::post('login', [AuthenticatedSessionController::class, 'store']);
+            Route::post('login', [AuthenticatedSessionController::class, 'store'])
+                ->name('login.store');
 
             Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
-                ->name($lang . 'password.request');
+                ->name('password.request');
 
             Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])
-                ->name($lang . 'password.email');
+                ->name('password.email');
 
             Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])
-                ->name($lang . 'password.reset');
+                ->name('password.reset');
 
             Route::post('reset-password', [NewPasswordController::class, 'store'])
-                ->name($lang . 'password.store');
+                ->name('password.store');
         });
 
     }

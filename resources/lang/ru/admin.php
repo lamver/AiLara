@@ -214,4 +214,6 @@ return array (
 
     'Make new backup' => 'Создайте новую резервную копию',
     'File' => 'Файл',
+
+    'Translation' => 'Перевод',
 );

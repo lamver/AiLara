@@ -7,7 +7,7 @@ return [
      * This manages if routes used for the admin panel should be registered.
      * Turn this value to false if you don't want to use admin panel
      */
-    'register' => true,
+    'register' => false,
 
     /**
      * Panel Domain
