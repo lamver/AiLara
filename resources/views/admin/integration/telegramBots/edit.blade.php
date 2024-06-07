@@ -6,7 +6,7 @@
 @endpush
 @section('content')
 
-    <form method="POST" id="editForm" action="{{ route('telegram-bots.update', $bot->id) }}">
+    <form method="POST" id="editForm" action="{{ route('admin.telegram-bots.update', $bot->id) }}">
         @method('PUT')
         @csrf
         <div class="mb-3">

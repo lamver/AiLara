@@ -17,28 +17,24 @@ use App\Services\Translation\Translation;
 */
 
 /** Admin routes */
-Route::middleware(['auth', 'verified', 'rbac:admin'])->group(function () {
+Route::middleware(['auth', 'verified', 'rbac:admin'])->name('admin.')->group(function () {
 
-    foreach (Translation::getLanguagesForRoute() as $lang) {
-        Route::prefix($lang)->name('admin.' . $lang)->group(function () {
-            Route::prefix(SettingGeneral::value('admin_prefix') . '/module/ai-forms')->group(function () {
-                Route::resource('ai-form', \App\Http\Controllers\Admin\AiForms\AiFormController::class, [
-                    'names' => [
-                        'index' => 'module.ai-form.index',
-                        'create' => 'module.ai-form.create',
-                        'store' => 'module.ai-form.store',
-                        'edit' => 'module.ai-form.edit',
-                        'update' => 'module.ai-form.update',
-                        'show' => 'module.ai-form.show',
-                        'destroy' => 'module.ai-form.destroy',
-                    ],
-                ]);
+    Route::prefix(SettingGeneral::value('admin_prefix') . '/module/ai-forms')->group(function () {
+        Route::resource('ai-form', \App\Http\Controllers\Admin\AiForms\AiFormController::class, [
+            'names' => [
+                'index' => 'module.ai-form.index',
+                'create' => 'module.ai-form.create',
+                'store' => 'module.ai-form.store',
+                'edit' => 'module.ai-form.edit',
+                'update' => 'module.ai-form.update',
+                'show' => 'module.ai-form.show',
+                'destroy' => 'module.ai-form.destroy',
+            ],
+        ]);
 
-                Route::get('/', [\App\Http\Controllers\Admin\AiForms\AiFormController::class, 'settings'])->name('module.ai-form.settings');
-                Route::post('/', [\App\Http\Controllers\Admin\AiForms\AiFormController::class, 'settingsUpdate'])->name('module.ai-form.settings.update');
-            });
-        });
-    }
+        Route::get('/', [\App\Http\Controllers\Admin\AiForms\AiFormController::class, 'settings'])->name('module.ai-form.settings');
+        Route::post('/', [\App\Http\Controllers\Admin\AiForms\AiFormController::class, 'settingsUpdate'])->name('module.ai-form.settings.update');
+    });
 
 });
 

@@ -2,9 +2,9 @@
 
 namespace App\Services\Translation;
 
-use App\Settings\SettingGeneral;
 use Illuminate\Support\Facades\App;
 use Barryvdh\TranslationManager\Manager;
+use Illuminate\Support\Facades\Session;
 
 /**
  * Class Translation
@@ -61,7 +61,7 @@ class Translation
 
     public static function getCurrentLocale(): string
     {
-        $settingGeneral = new SettingGeneral();
-        return $settingGeneral->site_language;
+        return Session::has('locale') ? Session::get('locale') : config('app.locale');
     }
+
 }

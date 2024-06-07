@@ -484,31 +484,13 @@
                 let selectedLang = this.value;
                 fetch(`/admin/setLang/${selectedLang}`)
                     .then(() => {
-                        updateLanguageInUrl(selectedLang);
+                        location.reload();
                     })
                     .catch(error => {
                         console.error('Error:', error);
                     });
 
             });
-
-            function updateLanguageInUrl(newLang) {
-                let href = location.href;
-                let languages = {!! json_encode($languages ?? []) !!};
-                languages = Object.values(languages);
-                let langRegex = new RegExp('/(' + Array.from(languages).join('|') + ')/');
-
-                if (langRegex.test(href)) {
-                    href = href.replace(langRegex, '/' + newLang + '/');
-                } else if (newLang !== 'en') {
-                    href = `${location.origin}/${newLang}${location.pathname}`;
-                }
-
-                // Remove any occurrence of 'en/' from the URL
-                href = href.replace(/en\//, '');
-
-                location.href = href;
-            }
 
             const AiManager = {
 
