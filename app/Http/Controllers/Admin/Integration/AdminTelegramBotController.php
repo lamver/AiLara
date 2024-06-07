@@ -55,7 +55,7 @@ class AdminTelegramBotController extends Controller
 
         $this->registerWebhook($bot);
 
-        return redirect()->route('telegram-bots.index');
+        return redirect()->route('admin.telegram-bots.index');
     }
 
     /**
@@ -87,7 +87,7 @@ class AdminTelegramBotController extends Controller
 
         $this->registerWebhook($bot);
 
-        return redirect()->route('telegram-bots.index');
+        return redirect()->route('admin.telegram-bots.index');
     }
 
     /**
@@ -100,7 +100,7 @@ class AdminTelegramBotController extends Controller
         $bot = TelegramBot::find((int)$id);
         $bot->delete();
 
-        return redirect()->route('telegram-bots.index');
+        return redirect()->route('admin.telegram-bots.index');
     }
 
     /**
