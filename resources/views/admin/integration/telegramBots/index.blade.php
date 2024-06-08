@@ -2,7 +2,7 @@
 @section('content')
     <nav class="navbar navbar-light bg-light">
         <form class="form-inline">
-            <a href="{{route('telegram-bots.create')}}" class="btn btn-outline-success" type="button">
+            <a href="{{route('admin.telegram-bots.create')}}" class="btn btn-outline-success" type="button">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                      class="bi bi-telegram" viewBox="0 0 16 16">
                     <path
@@ -29,7 +29,7 @@
                 <td>{{$bot->updated_at}}</td>
                 <td>
                     <div class="btn-group" role="group" aria-label="Basic example">
-                        <a href="{{route('telegram-bots.edit', $bot->id)}}">
+                        <a href="{{route('admin.telegram-bots.edit', $bot->id)}}">
                             <button type="button" class="btn btn-light">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                      class="bi bi-wrench" viewBox="0 0 16 16">
@@ -39,7 +39,7 @@
                             </button>
                         </a>
                         &nbsp;
-                        <form method="post" action="{{route('telegram-bots.destroy', $bot->id)}}" id="formDelete">
+                        <form method="post" action="{{route('admin.telegram-bots.destroy', $bot->id)}}" id="formDelete">
                             @method('DELETE')
                             @csrf
                             <button type="submit" class="btn btn-danger">

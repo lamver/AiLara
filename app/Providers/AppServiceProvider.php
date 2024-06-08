@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Services\Translation\Translation;
 use App\Settings\SettingGeneral;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -21,6 +23,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $langs = Translation::getLanguages();
+
+        View::share(['languages' => $langs]);
+
         $this->setEmail();
     }
 
@@ -41,8 +47,9 @@ class AppServiceProvider extends ServiceProvider
 
         Config::set('mail.from.address', $SettingGeneral->mail_from_address);
 
-        $nameFrom = !empty($SettingGeneral->mail_from_name) ? $SettingGeneral->mail_from_name : 'APP_NAME';
-        Config::set('mail.from.name', env($nameFrom));
+        $nameFrom = !empty($SettingGeneral->mail_from_name) ? $SettingGeneral->mail_from_name : Config::get('APP_NAME');
+        Config::set('mail.from.name', $nameFrom);
 
     }
+
 }
