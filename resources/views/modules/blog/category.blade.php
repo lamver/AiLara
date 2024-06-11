@@ -28,8 +28,9 @@
         <h1>{{ $category->title }}</h1>
         <div class="row">
             <div class="col-md-8">
-                @include('modules.blog.category_part', ['post' => $posts])
-                <div id="autoLoad"></div>
+                <div class="row" id="autoLoad">
+                    @include('modules.blog.category_part', ['post' => $posts])
+                </div>
             </div>
         </div>
         @if($settingBlog->pagination_type == \App\Settings\SettingBlog::PAGINATION_TYPE[0])
@@ -71,7 +72,8 @@
             let scrollTimeout;
 
             window.addEventListener('scroll', () => {
-                if (!scrollTimeout && posts.last_page >= steps) {
+                console.log(posts.last_page, steps)
+                if (!scrollTimeout && posts.last_page > steps) {
                     scrollTimeout = setTimeout(() => {
                         handleScroll();
                         scrollTimeout = null;
