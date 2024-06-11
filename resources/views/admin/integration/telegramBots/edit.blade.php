@@ -6,7 +6,7 @@
 @endpush
 @section('content')
 
-    <form method="POST" id="editForm" action="{{ route('telegram-bots.update', $bot->id) }}">
+    <form method="POST" id="editForm" action="{{ route('admin.telegram-bots.update', $bot->id) }}">
         @method('PUT')
         @csrf
         <div class="mb-3">
@@ -30,7 +30,7 @@
             <select class="form-select" name="form_id" aria-label="">
                 <option value="">{{__('admin.Empty')}}</option>
                 @foreach($forms as $form)
-                    <option @if($form->id === $bot->aiFrom->id) selected @endif value="{{$form->id}}">{{$form->name}}</option>
+                    <option @if(isset($bot->aiFrom) && $form->id === $bot->aiFrom->id) selected @endif value="{{$form->id}}">{{$form->name}}</option>
                 @endforeach
             </select>
         </div>

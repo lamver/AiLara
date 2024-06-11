@@ -68,6 +68,33 @@ class SettingGeneral extends Data
     /**  @var string */
     public string $backup_musqldump_path;
 
+    /**  @var string */
+    public string $site_language;
+
+    /**  @var string */
+    public string $mail_mailer;
+
+    /**  @var string */
+    public string $mail_host;
+
+    /**  @var string */
+    public string $mail_port;
+
+    /**  @var string */
+    public string $mail_username;
+
+    /**  @var string */
+    public string $mail_password;
+
+    /**  @var string */
+    public string $mail_encryption;
+
+    /**  @var string */
+    public string $mail_from_address;
+
+    /**  @var string */
+    public string $mail_from_name;
+
 
     // public bool $api_key;
 
@@ -109,12 +136,22 @@ class SettingGeneral extends Data
         $settings->backup_musqldump = key_exists('backup_musqldump', $dataSettings) ?  (bool) $dataSettings['backup_musqldump'] : false;
         $settings->backup_status = key_exists('backup_status', $dataSettings) ?  (bool) $dataSettings['backup_status'] : false;
 
+        $settings->site_language = $dataSettings['site_language'] ?? "";
         $backupFrequency = SettingGeneral::BACKUP_FREQUENCY;
 
         if (key_exists($dataSettings['backup_frequency'], $backupFrequency)){
             $backupFrequency[$dataSettings['backup_frequency']] = true;
             $settings->backup_frequency = $backupFrequency;
         }
+
+        $settings->mail_from_name = $dataSettings['mail_from_name'] ?? "";
+        $settings->mail_from_address = $dataSettings['mail_from_address'] ?? "";
+        $settings->mail_encryption = $dataSettings['mail_encryption'] ?? "";
+        $settings->mail_password = $dataSettings['mail_password'] ?? "";
+        $settings->mail_username = $dataSettings['mail_username'] ?? "";
+        $settings->mail_port = $dataSettings['mail_port'] ?? "";
+        $settings->mail_host = $dataSettings['mail_host'] ?? "";
+        $settings->mail_mailer = $dataSettings['mail_mailer'] ?? "";
 
         return $settings->save();
     }

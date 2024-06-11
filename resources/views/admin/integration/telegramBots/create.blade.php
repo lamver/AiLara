@@ -6,7 +6,7 @@
 @endpush
 @section('content')
 
-    <form method="post" action="{{ route('telegram-bots.store') }}">
+    <form method="post" action="{{ route('admin.telegram-bots.store') }}">
         @csrf
         <div class="mb-3">
             <x-input-label for="botName" :value="__('admin.Bot name')"/>

@@ -49,6 +49,8 @@ class ExportController extends ApiBaseController
             $post,
             '',
             'feed::rss',
+            '',
+            'ru',
         );
     }
 }

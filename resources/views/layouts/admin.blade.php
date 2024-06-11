@@ -143,6 +143,45 @@
                 box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
             }
 
+            [data-bs-toggle="modal" ] {
+                cursor: pointer;
+            }
+            /**
+            Генератор каринок
+         */
+
+            #imgOnDesResult {
+                padding-top: 15px;
+            }
+
+            #innerResult img {
+                width: 100%;
+                max-width: 260px;
+                cursor: pointer;
+            }
+            #innerResult label {
+                position: relative;
+                display: inline-block;
+            }
+            #innerResult label:before {
+                content: '';
+                position: absolute;
+                border-radius: 50%;
+                border: 3px white solid;
+                top: 15px;
+                left:15px;
+                display:block;
+                width: 25px;
+                height: 25px;
+                background: #34495e;
+                cursor: pointer;
+                opacity: 0.5;
+            }
+            #innerResult input:checked + label:before {
+                background: #0d6efd;
+                border: 3px white solid;
+                opacity: 1;
+            }
 
         </style>
 
@@ -270,7 +309,7 @@
                                 </ul>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('telegram-bots.index') }}">
+                                <a class="nav-link" href="{{ route('admin.telegram-bots.index') }}">
                                     <span data-feather="bar-chart-2"></span>
                                     {{ __('admin.Telegram bots') }}
                                 </a>
@@ -325,7 +364,7 @@
                                 <div class="d-flex flex-row bd-highlight">
                                     <select class="form-select" id="setLang" style="width: 100px; margin-left: auto; margin-top: 23px; margin-right: 25px;">
                                         @php foreach ($languages as $lang): @endphp
-                                        <option @if(trans()->getLocale() === $lang) selected @endif value="{{$lang}}">{{$lang}}</option>
+                                        <option @if(\App\Services\Translation\Translation::getCurrentLocale() === $lang) selected @endif value="{{$lang}}">{{$lang}}</option>
                                         @php endforeach; @endphp
                                     </select>
                                 </div>
@@ -445,30 +484,13 @@
                 let selectedLang = this.value;
                 fetch(`/admin/setLang/${selectedLang}`)
                     .then(() => {
-                        updateLanguageInUrl(selectedLang);
+                        location.reload();
                     })
                     .catch(error => {
                         console.error('Error:', error);
                     });
 
             });
-
-            function updateLanguageInUrl(newLang) {
-                let href = location.href;
-                let languages = {!! json_encode($languages ?? []) !!};
-                let langRegex = new RegExp('/(' + languages.join('|') + ')/');
-
-                if (langRegex.test(href)) {
-                    href = href.replace(langRegex, '/' + newLang + '/');
-                } else if (newLang !== 'en') {
-                    href = `${location.origin}/${newLang}${location.pathname}`;
-                }
-
-                // Remove any occurrence of 'en/' from the URL
-                href = href.replace(/en\//, '');
-
-                location.href = href;
-            }
 
             const AiManager = {
 
@@ -482,7 +504,7 @@
                 aiResult: {},
                 basicCheckValue: false,
                 attemptCount: 0,
-                tries: 25,
+                tries: 45,
                 inProcess: false,
 
                 init: function () {
@@ -538,7 +560,10 @@
                     this.inProcess = true;
                     this.errorHandler(false);
 
-                    if (text.length < 3) return;
+                    if (text.length <= 2) {
+                        this.errorHandler(true, '{{__('admin.Text must be longer than 2 letters')}}}')
+                        return;
+                    }
 
                     this.createAiBtnAction(true);
                     let data = {prompt: text, type_task: type};
@@ -559,14 +584,15 @@
                             this.innerBox.style.display = 'block';
                             this.insertBtn.disabled = false;
                             this.attemptCount = 0;
+                            this.inProcess = false;
 
                             if (this.aiResult?.url_files?.length > 0) {
                                 this.responseImg();
                                 return false;
                             }
+
                             this.aiResult.answer = this.aiResult.answer.replace(/<\/?[^>]+(>|$)/g, "");
                             this.innerBox.querySelector('#innerResult').innerText = this.aiResult.answer;
-                            this.inProcess = false;
 
 
                         }, 3000);
@@ -600,9 +626,16 @@
                     let response = await this.fetchAi(this.aiGetTaskRoute, {id: id});
                     let {result, answer} = await response;
 
-                    if (result && answer.status === 1 || ++this.attemptCount >= this.tries) {
+                    if (result && answer.status === 1) {
                         clearInterval(intervalId);
                         return answer;
+                    }
+
+                    if(++this.attemptCount >= this.tries) {
+                        this.reset()
+                        this.errorHandler(true, '{{__('admin.Time of waiting is over')}}');
+                        clearInterval(intervalId);
+                        return;
                     }
 
                     return answer;
@@ -624,6 +657,12 @@
                         el.addEventListener('change', () => {
                             this.aiResult = {'answer': el.value}
                         });
+                    }
+
+                    let firstCheckbox = document.querySelector('#innerResult input[type="radio"]');
+
+                    if (firstCheckbox) {
+                        firstCheckbox.click();
                     }
 
                 },
@@ -669,6 +708,7 @@
                     this.aiResult = {};
                     this.createAiBtnAction(false);
                     this.inProcess = false;
+                    this.attemptCount = 0;
                 }
 
             };

@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Services\Backup\Backup;
 use App\Services\Update\Update;
+use App\Settings\SettingGeneral;
+use Exception;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -11,6 +15,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log;
 
 class UpdateController extends BaseController
 {
@@ -20,10 +25,16 @@ class UpdateController extends BaseController
      * @param Request $request
      * @return Application|Factory|View|\Illuminate\Foundation\Application
      */
-    public function index(Request $request)
+    public function index(Request $request, SettingGeneral $settingGeneral)
     {
         $updateLog = [];
         $result = true;
+
+        try {
+            Backup::makeBackup($settingGeneral);
+        } catch (BindingResolutionException|Exception $e) {
+            Log::channel('backup')->error($e->getMessage());
+        }
 
         if (Update::downloadArchiveRepository()) {
             $updateLog[] = 'Archive was download';
