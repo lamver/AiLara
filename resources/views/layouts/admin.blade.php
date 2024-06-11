@@ -398,13 +398,13 @@
                 <div class="modal-content">
 
                     <div class="modal-header">
-                        <h5 class="modal-title">{{__('admin.field')}}: <span></span></h5>
+                        <h5 class="modal-title">{{__('admin.Field')}}: <span></span></h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label class="form-label">{{__('admin.ai_type')}}</label>
+                            <label class="form-label">{{__('admin.Ai_type')}}</label>
                             <select class="form-select" id="typeTask">
                                 <option value="1">{{__('admin.task_text')}}</option>
                                 <option value="2">{{__('admin.task_image')}}</option>
@@ -421,25 +421,25 @@
                         <div class="mb-3" id="basicCheck" style="display: none">
                             <div class="form-check form-switch">
                                 <input class="form-check-input" checked type="checkbox" name="basic" id="basic">
-                                <label class="form-check-label" for="basic">{{__('admin.basic')}}</label>
+                                <label class="form-check-label" for="basic">{{__('admin.Basic')}}</label>
                             </div>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">{{__('admin.text')}}</label>
-                            <textarea class="form form-control" name="aiForm" placeholder="{{ __('ask_ai') }}"></textarea>
+                            <label class="form-label">{{__('admin.Text')}}</label>
+                            <textarea class="form form-control" name="aiForm" placeholder="{{ __('admin.Ask Ai') }}"></textarea>
                         </div>
 
                         <div class="alert alert-danger" style="display: none">
                         </div>
 
                         <div class="mb-3" id="innerBox" style="display: none">
-                            <div class="mb-2">{{__('admin.result')}}</div>
+                            <div class="mb-2">{{__('admin.Result')}}</div>
                             <div id="innerResult" class="shadow-lg p-3 mb-5 bg-body rounded" style="text-align: center"></div>
                         </div>
 
                         <button id="createAi" type="button" class="btn btn-primary">
-                            <span>{{__('admin.create')}}</span>
+                            <span>{{__('admin.Create')}}</span>
                             <svg style="fill: rgb(255, 255, 255); display: none" width="24" height="24" viewBox="0 0 24 24"
                                  xmlns="http://www.w3.org/2000/svg">
                                 <circle cx="4" cy="12" r="3">
@@ -462,9 +462,9 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" id="insertBtn" class="btn btn-primary" disabled>
-                            {{__('admin.insert')}}
+                            {{__('admin.Insert')}}
                         </button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{__('admin.close')}}</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{__('admin.Close')}}</button>
                     </div>
                 </div>
             </div>

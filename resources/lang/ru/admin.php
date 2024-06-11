@@ -41,6 +41,7 @@ return array (
 
     'Text' => 'Текст',
     'Ask ai' => 'Ask ai',
+    'Ask Ai' => 'Ask ai',
     'Result' => 'Результат',
     'Create' => 'Создавать',
     'Insert' => 'Вставить',
@@ -182,7 +183,7 @@ return array (
     'content' => 'Содержание',
     'sign_out' => 'Выход',
 
-    'ai_type' => 'Ai type',
+    'Ai_type' => 'Ai тип',
     'task_text' => 'Текст',
     'task_image' => 'Изображение',
     'task_write_text' => 'Написать текст',
@@ -216,4 +217,22 @@ return array (
     'File' => 'Файл',
 
     'Translation' => 'Перевод',
+
+    'Go to source' => 'Перейти к источнику',
+    'Select category' => 'Выберите категорию',
+    'Empty' => 'Пусто',
+    'Something went wrong' => 'Что-то пошло не так',
+    'Telegram length_text' => 'Длина текста телеграммы',
+    'Text must be longer than 2 letters' => 'Текст должен быть длиннее двух букв.',
+    'Time of waiting is over' => 'Время ожидания закончилось',
+    'basic' => 'Базовый',
+    'Basic' => 'Базовый',
+    'blog.settings' => 'Настройки блога',
+    'Blog Settings' => 'Настройки блога',
+    'close' => 'Закрыть',
+    'create' => 'Cоздавать',
+    'field' => 'Поле',
+    'insert' => 'Вставлять',
+    'result' => 'Результат',
+    'text' => 'Текст',
 );
