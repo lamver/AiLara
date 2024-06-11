@@ -15,6 +15,15 @@
             </div>
         </div>
 
+        <div class="mb-12 mb-3">
+            <label class="form-label" style="font-size: 18px">{{ __('admin.Pagination type') }}</label>
+            <select class="form form-control" name="pagination_type">
+                @foreach(\App\Settings\SettingBlog::PAGINATION_TYPE as $paginationType)
+                    <option @if($paginationType == $settings->pagination_type) selected @endif value="{{ $paginationType }}">  {{ __strTrans($paginationType, 'admin') }} </option>
+                @endforeach
+            </select>
+        </div>
+
         <div class="row mb-0">
             <div class="col-md-6">
                 <button type="submit" class="btn btn-primary">
