@@ -7,6 +7,7 @@ use App\Helpers\SeoTools;
 use App\Http\Controllers\Controller;
 use App\Models\Modules\Blog\Category;
 use App\Models\Modules\Blog\Posts;
+use App\Settings\SettingBlog;
 use App\Settings\SettingGeneral;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -110,7 +111,7 @@ class PostsController extends Controller
         //
     }
 
-    public function category(Request $request)
+    public function category(Request $request, SettingBlog $settingBlog)
     {
         if (is_null($categoryId = Category::findCategoryIdByUrl($request->path()))) {
             return abort('404');
@@ -131,10 +132,15 @@ class PostsController extends Controller
 
         $posts = Posts::getPostsByCategoryId($categoryId);
 
+        if ($request->isJson()) {
+            return view('modules.blog.category_part', [ 'posts' => $posts,]);
+        }
+
         return view('modules.blog.category', [
             'posts' => $posts,
             'category' => $category,
-            'breadcrumbs' => $breadcrumbs
+            'breadcrumbs' => $breadcrumbs,
+            'settingBlog' => $settingBlog,
             /*, 'columns' => $columns*/
         ]);
     }

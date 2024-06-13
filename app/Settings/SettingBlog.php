@@ -5,6 +5,12 @@ namespace App\Settings;
 class SettingBlog extends Data
 {
     public string $api_secret_key_rss_export;
+
+    public const PAGINATION_TYPE = [
+        'pagination',
+        'load',
+    ];
+    public string $pagination_type;
     public static function group(): string
     {
         return 'blog';
@@ -19,6 +25,7 @@ class SettingBlog extends Data
     {
 
         $settings->api_secret_key_rss_export = $dataSettings['api_secret_key_rss_export'] ?? '';
+        $settings->pagination_type = $dataSettings['pagination_type'] ?? '';
 
         return $settings->save();
     }
