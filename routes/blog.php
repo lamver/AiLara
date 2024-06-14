@@ -84,6 +84,9 @@ if (Module::isFrontModule(Module::MODULE_BLOG)) {
                     Route::get('/' . $slug . 'feed', [\App\Http\Controllers\Modules\Blog\PostsController::class, 'rss'])->name('blog.' . $lang . 'post.cat' . '.' . str_replace("/", ".", trim($slug, '/')) . '.rss');
                     Route::get('/' . $slug . '{slug}_{id}', [\App\Http\Controllers\Modules\Blog\PostsController::class, 'view'])->name('blog.' . $lang . 'post.cat' . '.' . str_replace("/", ".", trim($slug, '/')) . '.view.post');
                 }
+
+                Route::get('/getPosts', [\App\Http\Controllers\Modules\Blog\PostsController::class, 'getPostAjax'])->name('blog.' . $lang . 'post.getPosts');
+
             });
         });
     }

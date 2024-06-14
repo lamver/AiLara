@@ -16,13 +16,37 @@
         </div>
 
         <div class="mb-12 mb-3">
-            <label class="form-label" style="font-size: 18px">{{ __('admin.Pagination type') }}</label>
+            <label class="form-label" style="font-size: 18px">{{ __('admin.Pagination type on category page') }}</label>
             <select class="form form-control" name="pagination_type">
                 @foreach(\App\Settings\SettingBlog::PAGINATION_TYPE as $paginationType)
                     <option @if($paginationType == $settings->pagination_type) selected @endif value="{{ $paginationType }}">  {{ __strTrans($paginationType, 'admin') }} </option>
                 @endforeach
             </select>
         </div>
+
+        <div class="mb-12 mb-3">
+            <div class="form-check form-switch">
+                <input id="loadPostsOnPostPage" class="form-check-input" type="checkbox" name="load_posts_on_post_page" @if($settings->load_posts_on_post_page === true) checked @endif>
+                <label class="form-check-label" for="loadPostsOnPostPage" >{{ __('admin.Load posts on post page') }}</label>
+            </div>
+        </div>
+
+
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
 
         <div class="row mb-0">
             <div class="col-md-6">

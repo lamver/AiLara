@@ -11,6 +11,7 @@ class SettingBlog extends Data
         'load',
     ];
     public string $pagination_type;
+    public bool $load_posts_on_post_page = false;
     public static function group(): string
     {
         return 'blog';
