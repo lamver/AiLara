@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use Spatie\Feed\Feed;
+use Throwable;
 
 class PostsController extends Controller
 {
@@ -151,7 +152,7 @@ class PostsController extends Controller
      * @param $id
      * @return \Illuminate\Foundation\Application|View|Factory|Application
      */
-    public function view(Request $request, $slug, $id): \Illuminate\Foundation\Application|View|Factory|Application|RedirectResponse
+    public function view(Request $request, SettingBlog $settingBlog, $slug, $id): \Illuminate\Foundation\Application|View|Factory|Application|RedirectResponse
     {
         if (is_null($post = Posts::query()->where(['status' => 'Published'])->find($id))) {
             return abort(404);
@@ -203,6 +204,7 @@ class PostsController extends Controller
         return view('modules.blog.view', [
             'post' => $post,
             'breadcrumbs' => $breadcrumbs,
+            'settingBlog' => $settingBlog,
         ]);
     }
 
@@ -240,6 +242,37 @@ class PostsController extends Controller
 
         return $rss->toResponse($request);
 
+    }
+
+    /**
+     * Get post data via AJAX request.
+     *
+     * @param Request $request
+     * @return array.
+     * @throws Throwable
+     */
+    public function getPostAjax(Request $request)
+    {
+        $response = [
+            'html' => "",
+            'posts' => [],
+        ];
+        $categoryId = $request->get('categoryId');
+        $perPage = $request->get('perPage', 30);
+        $currentView = $request->get('currentView', 30);
+
+        $posts = Posts::getPostsByCategoryId($categoryId, $perPage);
+
+        if ($request->isJson()) {
+
+            $response = [
+                'html' => view($currentView, ['posts' => $posts,])->render(),
+                'posts' => $posts->toArray(),
+            ];
+
+        }
+
+        return $response;
     }
 
 }

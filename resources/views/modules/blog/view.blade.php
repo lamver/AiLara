@@ -26,11 +26,32 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <div class="col-md-8 post_block">
+            <div class=" @if($settingBlog->load_posts_on_post_page) col-md-8 @else col-md-14 @endif  post_block">
                 <h1>{!! \App\Helpers\StrMaster::htmlTagClear($post->title) !!}</h1>
                 <img style="max-width: 100%" class="lazy-load-image" alt="{{ $post->seo_title }}" data-src="{!! $post->image !!}" src="{{ \App\Helpers\ImageMaster::getRandomSprite() }}"/>
                 {!! \App\Helpers\StrMaster::applyHtml($post->content) !!}
+
+                @if (Auth::check())
+                    @if(!$post->denied_comments)
+                        <div class="mb-3">
+                            <livewire:Comments.comment-form :post="$post"/>
+                        </div>
+                    @endif
+                @else
+                    <div class="mb-3">
+                        {{__('To leave a comment you need to')}}
+                        <a href="{{ route('login') }}">{{ __('Login') }}</a> /
+                        <a href="{{ route('register') }}">{{ __('Create account') }}</a>
+                    </div>
+                @endif
+                @if(!$post->hide_existed_comments)
+                    <livewire:Comments.comment-list :post="$post"/>
+                @endif
             </div>
+
+            @if($settingBlog->load_posts_on_post_page)
+                <div class="col-md-4 d-flex flex-column gap-3" id="autoLoad"></div>
+            @endif
         </div>
         @auth('web')
         @if(\Illuminate\Support\Facades\Auth::user()->can('posts.edit'))
@@ -40,25 +61,7 @@
                 </div>
         @endif
         @endauth
-    </div>
 
-    <div class="container">
-        @if (Auth::check())
-            @if(!$post->denied_comments)
-                <div class="mb-3">
-                    <livewire:Comments.comment-form :post="$post"/>
-                </div>
-            @endif
-        @else
-            <div class="mb-3">
-                {{__('To leave a comment you need to')}}
-                <a href="{{ route('login') }}">{{ __('Login') }}</a> /
-                <a href="{{ route('register') }}">{{ __('Create account') }}</a>
-            </div>
-        @endif
-        @if(!$post->hide_existed_comments)
-            <livewire:Comments.comment-list :post="$post"/>
-        @endif
     </div>
 
 @endsection
@@ -76,4 +79,73 @@
             });
         });
     </script>
+    @if($settingBlog->load_posts_on_post_page)
+        <script>
+        let postsLoader = {
+            HEADERS: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            },
+            postInfo: @json($post),
+            categoryId: null,
+            perPage: 2,
+            pageCount: 1,
+            isFetchingPage: false,
+            nextPageUrl: "",
+            currentView: '',
+            initialize: function(perPage, currentView) {
+                this.perPage = perPage;
+                this.currentView = currentView;
+                this.categoryId = this.postInfo.post_category_id;
+                window.addEventListener('scroll', () => this.handleScrollEvent());
+                this.fetchPostsResult();
+
+            },
+            fetchPostsPage: function() {
+                let requestUrl = this.generatePostPageRequestUrl();
+                return fetch(requestUrl, {headers: this.HEADERS}).then(response => response.json());
+            },
+            generatePostPageRequestUrl: function() {
+                let basePostsUrl = '{{route('blog.post.getPosts')}}';
+                basePostsUrl += `?page=${this.pageCount}&categoryId=${this.categoryId}&perPage=${this.perPage}`;
+                basePostsUrl += `&currentView=${this.currentView}`;
+                return basePostsUrl;
+            },
+            isInViewPort: function() {
+                let postsContainer = document.getElementById('autoLoad');
+                let rect = postsContainer.getBoundingClientRect();
+                return rect.bottom <= (window.innerHeight || document.documentElement.clientHeight);
+            },
+            appendPosts: function(json) {
+                console.log(json);
+                this.nextPageUrl = json.posts.next_page_url;
+
+                let postsContainer = document.getElementById('autoLoad');
+                postsContainer.insertAdjacentHTML('beforeend', json.html);
+            },
+            handleScrollEvent: function() {
+                if (this.isInViewPort() && !this.isFetchingPage && this.nextPageUrl !== null) {
+                    this.isFetchingPage = true;
+                    this.fetchPostsResult();
+                }
+            },
+            fetchPostsResult: function () {
+                this.fetchPostsPage().then(json => {
+                    this.appendPosts(json);
+                    this.pageCount++;
+                    this.isFetchingPage = false;
+                });
+            }
+
+        }
+
+        // Count Pre load page
+        let perPage = 2;
+        // The blade view
+        let bladeView = 'modules.blog.category_right_part';
+
+        postsLoader.initialize(perPage, bladeView);
+
+    </script>
+    @endif
 @endpush

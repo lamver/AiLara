@@ -216,4 +216,8 @@ return array (
     'File' => 'Файл',
 
     'Translation' => 'Перевод',
+    'Pagination type on category page' => 'Тип пагинации на странице категории',
+    'Pagination' => 'Пагинация',
+    'Load' => 'Подгрузка',
+    'Load posts on post page' => 'Подгрузка постов на странице поста',
 );

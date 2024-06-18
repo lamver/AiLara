@@ -211,4 +211,9 @@ return array (
     'Home page page image' => 'Home page page image',
     'User' => 'User',
     'Translation' => 'Translation',
+
+    'Pagination type on category page' => 'Pagination type on category page',
+    'Pagination' => 'Pagination',
+    'Load' => 'Load',
+    'Load posts on post page' => 'Load posts on post page',
 );

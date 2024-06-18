@@ -36,10 +36,13 @@ class SettingsController extends Controller
         $request->validate([
             'api_secret_key_rss_export' => 'required|string|min:10',
             'pagination_type' => 'required|string',
+            'load_posts_on_post_page' => 'sometimes',
         ]);
 
         $settingBlog->api_secret_key_rss_export = $request->get('api_secret_key_rss_export');
         $settingBlog->pagination_type = $request->get('pagination_type');
+        $settingBlog->load_posts_on_post_page = (bool) $request->get('load_posts_on_post_page');
+
         $settingBlog->save();
 
         return redirect(route('admin.blog.settings.index'));
